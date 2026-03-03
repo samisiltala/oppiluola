@@ -35,6 +35,7 @@ h1 {
 .leftPanel {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .settings {
@@ -142,6 +143,7 @@ box-shadow:0 0 8px #00ffff;
 <div class="leftPanel">
 <div class="settings">
 
+
 <label>Taso:</label>
 <select id="levelSelect">
 <option value="1">🟢 Helppo</option>
@@ -162,13 +164,14 @@ box-shadow:0 0 8px #00ffff;
 
 <button onclick="startGame()">Aloita</button>
 
+<div id="mascot" style="font-size:60px; margin-top:20px; text-align:center;">🐼</div>
+
 </div>
 </div>
 
 <!-- CENTER -->
 <div class="centerGame">
 
-<div id="mascot" style="font-size:60px;">🐼</div>
 
 <div class="scoreboard">
 <div id="timer">Aika: 60</div>
@@ -334,4 +337,5 @@ loadScores();
 
 </body>
 </html>
+
 
