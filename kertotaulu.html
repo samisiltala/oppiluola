@@ -164,6 +164,11 @@ box-shadow:0 0 8px #00ffff;
 <button onclick="startGame()">Aloita</button>
 
 <div id="mascot" style="font-size:60px; margin-top:20px; text-align:center;">🐼</div>
+<div style="text-align:center; margin-top:10px;">
+    <button id="musicToggle" onclick="toggleMusic()" style="font-size:14px; padding:6px 12px;">
+        🎵 Musiikki: ON
+    </button>
+</div>
 
 </div>
 </div>
@@ -206,6 +211,7 @@ box-shadow:0 0 8px #00ffff;
 
 <script>
 let bgMusic = document.getElementById("bgMusic");
+let musicOn = true;
 let WEB_APP_URL="https://script.google.com/macros/s/AKfycbx0iS5gOubgLfnn6PW8L876u8H6GuZUabl-Gccgj2TivLPcTvqXSSqNivg_wTxhBx6P/exec";
 
 let tables=[1,2,3,4,5,10];
@@ -213,6 +219,21 @@ let level=1;
 let a,b,correctAnswer;
 let score=0,lives=3,timeLeft=60;
 let timerInterval;
+
+function toggleMusic() {
+    let btn = document.getElementById("musicToggle");
+
+    if (musicOn) {
+        bgMusic.pause();
+        btn.innerText = "🎵 Musiikki: OFF";
+        musicOn = false;
+    } else {
+        bgMusic.volume = 0.3;
+        bgMusic.play().catch(()=>{});
+        btn.innerText = "🎵 Musiikki: ON";
+        musicOn = true;
+    }
+}
 
 function play(id){
  let s=document.getElementById(id);
@@ -278,9 +299,11 @@ function choose(i){
 }
 
 function startGame(){
- bgMusic.volume = 0.3;   // 30% voimakkuus
- bgMusic.currentTime = 0;
- bgMusic.play().catch(()=>{});
+if (musicOn) {
+    bgMusic.volume = 0.3;
+    bgMusic.currentTime = 0;
+    bgMusic.play().catch(()=>{});
+}
  let name=document.getElementById("name").value.trim();
  if(!name){ alert("Kirjoita nimi 🙂"); return; }
 
@@ -341,6 +364,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
