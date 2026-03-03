@@ -42,12 +42,6 @@ h1 {
     justify-content: center;
 }
 
-.left {
-    width: 520px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
 .right {
     background: rgba(0, 255, 255, 0.08);
@@ -188,15 +182,15 @@ box-shadow:0 0 10px #00ffff;
 
 <div class="leftPanel">
 
-<div>
-Taso:
-<select id="levelSelect">
-  <option value="1">🟢 Helppo</option>
-  <option value="2">🔵 Normaali</option>
-  <option value="3">🔴 Super</option>
-</select>
+    <div>
+    Taso:
+    <select id="levelSelect">
+    <option value="1">🟢 Helppo</option>
+    <option value="2">🔵 Normaali</option>
+    <option value="3">🔴 Super</option>
+    </select>
 
-Teema:
+    Teema:
 <select id="themeSelect">
   <option value="panda">🐼 Panda</option>
   <option value="frog">🐸 Sammakko</option>
@@ -209,6 +203,7 @@ Teema:
 Nimi:
 <input id="name">
 <button onclick="startGame()">Aloita</button>
+</div>
 </div>
 
 <div class="centerGame">
@@ -492,6 +487,7 @@ loadScores();
 </body>
 
 </html>
+
 
 
 
