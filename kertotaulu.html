@@ -230,6 +230,7 @@ box-shadow:0 0 8px #00ffff;
 <audio id="correctSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 <audio id="wrongSound" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
 <audio id="bgMusic" src="tausta.wav" loop></audio>
+<audio id="winSound" src="voitto.wav"></audio>
 
 <script>
 let bgMusic = document.getElementById("bgMusic");
@@ -407,6 +408,9 @@ function showPlusOne(){
 }
 
 function endGame(){
+  play("winSound");
+document.body.style.background = "gold";
+setTimeout(changeTheme, 500);
  clearInterval(timerInterval);
  document.getElementById("question").innerText="🏁 PELI OHI!";
  loadScores();
@@ -441,6 +445,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
