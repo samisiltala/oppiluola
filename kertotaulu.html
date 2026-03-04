@@ -387,6 +387,26 @@ function showStreak(){
     },1000);
 }
 
+function showNewRecord(){
+
+    let el = document.createElement("div");
+    el.innerText = "🔥 UUSI ENNÄTYS!";
+    el.style.position = "absolute";
+    el.style.top = "35%";
+    el.style.left = "50%";
+    el.style.transform = "translateX(-50%)";
+    el.style.fontSize = "45px";
+    el.style.color = "#ffd700";
+    el.style.textShadow = "0 0 20px #ffd700";
+    el.style.zIndex = "999";
+
+    document.body.appendChild(el);
+
+    setTimeout(()=>{
+        el.remove();
+    },1500);
+}
+
 function showPlusOne(){
     let el = document.createElement("div");
     el.innerText = "+1";
@@ -427,6 +447,7 @@ function endGame(){
       previousBest = score;
       document.getElementById("personalBest").innerText =
       "🔥 Oma ennätys: " + score + " (UUSI!)";
+      showNewRecord();
   }
 
   setTimeout(()=>{
@@ -497,6 +518,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
