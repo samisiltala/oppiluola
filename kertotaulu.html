@@ -494,7 +494,7 @@ function endGame(){
 
   setTimeout(()=>{
       loadScores();
-  },1200);
+  },1500);
 
   bgMusic.pause();
 
@@ -521,7 +521,11 @@ let name=document.getElementById("name").value.trim();
 let found=sorted.find(r=>r[0]===name);
 
 if(found){
-    previousBest = found[1];
+
+    if(found[1] > previousBest){
+        previousBest = found[1];
+    }
+
     document.getElementById("personalBest").innerText =
     "🔥 Oma ennätys: " + previousBest;
 }
@@ -563,6 +567,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
