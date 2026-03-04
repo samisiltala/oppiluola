@@ -139,39 +139,34 @@ button:hover {
     text-shadow: 0 0 10px #00ffff;
 }
 
-@media (max-width: 800px) {
+@media (max-width:800px){
 
 .container{
-    grid-template-columns: 1fr;
+    grid-template-columns:1fr;
 }
 
-.leftPanel{
-    order:1;
-}
-
-.centerGame{
-    order:2;
-}
-
-.right{
-    order:3;
-}
-
-#question{
-    font-size: clamp(40px, 10vw, 70px);
-    padding:20px;
+.buttonContainer{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
 }
 
 .buttonContainer button{
-    font-size:28px;
-    padding:16px;
-    width 100%;
+    font-size:26px;
+    padding:18px;
+    width:100%;
+}
+
+#question{
+    font-size:clamp(40px,10vw,70px);
+    padding:20px;
 }
 
 .scoreboard{
     font-size:24px;
 }
 
+}
 }
 
 </style>
@@ -603,6 +598,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
