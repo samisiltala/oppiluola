@@ -391,20 +391,22 @@ function showNewRecord(){
 
     let el = document.createElement("div");
     el.innerText = "🔥 UUSI ENNÄTYS!";
-    el.style.position = "absolute";
-    el.style.top = "35%";
-    el.style.left = "50%";
-    el.style.transform = "translateX(-50%)";
-    el.style.fontSize = "45px";
+
+    el.style.position = "fixed";
+    el.style.top = "90px";
+    el.style.right = "20px";
+
+    el.style.fontSize = "26px";
     el.style.color = "#ffd700";
-    el.style.textShadow = "0 0 20px #ffd700";
+    el.style.textShadow = "0 0 15px #ffd700";
+
     el.style.zIndex = "999";
 
     document.body.appendChild(el);
 
     setTimeout(()=>{
         el.remove();
-    },1500);
+    },2000);
 }
 
 function starRain(){
@@ -482,7 +484,7 @@ function endGame(){
       previousBest = score;
 
       document.getElementById("personalBest").innerText =
-      "🔥 Oma ennätys: " + score + " (UUSI!)";
+      "🔥 Oma ennätys: " + score;
 
       setTimeout(()=>{
           showNewRecord();
@@ -558,6 +560,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
