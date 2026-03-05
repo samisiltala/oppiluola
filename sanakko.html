@@ -588,14 +588,22 @@ addTile(e.target)
 
 })
 
-grid.addEventListener("pointermove",e=>{
+grid.addEventListener("pointermove", e => {
 
 if(!selecting) return
 
 pointerX = e.clientX
 pointerY = e.clientY
 
+let el = document.elementFromPoint(e.clientX, e.clientY)
+
+if(el && el.classList.contains("tile")){
+addTile(el)
+}
+
 drawLine()
+
+})
 
 let closest=null
 let minDist=9999
