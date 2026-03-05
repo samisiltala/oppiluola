@@ -2,94 +2,83 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Oppiluola</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
-<link rel="manifest" href="manifest.json">
+<title>Sanaluola</title>
 
 <style>
 
 body{
 margin:0;
-font-family:'Orbitron', sans-serif;
+background:#0b0b16;
 color:white;
+font-family:Arial;
 text-align:center;
-height:100vh;
-
-background-image:url("luola2.png");
-background-size:cover;
-background-position:center;
-background-repeat:no-repeat;
-
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
 }
-
-/* OTSIKKO */
 
 h1{
-font-size:60px;
-text-shadow:0 0 25px #00ffff;
-margin-bottom:60px;
+margin-top:40px;
+font-size:40px;
 }
 
-/* PELINAPIT */
+#grid{
+width:320px;
+margin:40px auto;
 
-.rooms{
-display:flex;
-gap:40px;
-flex-wrap:wrap;
-justify-content:center;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
 }
 
-.room{
+.cell{
 
-width:220px;
-height:110px;
+width:70px;
+height:70px;
 
-background:rgba(0,0,0,0.6);
+background:#1d1d3a;
 
-border-radius:18px;
+border-radius:10px;
 
 display:flex;
 align-items:center;
 justify-content:center;
 
-font-size:22px;
+font-size:32px;
 
-color:white;
-text-decoration:none;
+cursor:pointer;
 
-box-shadow:0 0 20px #00ffff;
+user-select:none;
 
-transition:0.25s;
+transition:0.2s;
 
-padding:10px;
 }
 
-.room:hover{
-transform:scale(1.08);
-box-shadow:0 0 35px #00ffff;
+.cell.active{
+background:#00cfff;
+color:black;
 }
 
-.locked{
-opacity:0.35;
+#word{
+font-size:28px;
+margin-top:20px;
+letter-spacing:4px;
 }
 
-/* mobiili */
+button{
 
-@media(max-width:700px){
-
-h1{font-size:36px;}
-
-.room{
-width:160px;
-height:90px;
+margin-top:20px;
+padding:10px 20px;
 font-size:18px;
+
+border:none;
+border-radius:8px;
+
+background:#00cfff;
+cursor:pointer;
+
 }
 
+#result{
+margin-top:15px;
+font-size:18px;
 }
 
 </style>
@@ -97,49 +86,142 @@ font-size:18px;
 
 <body>
 
-<h1>🕯️ Oppiluola</h1>
+<h1>🔤 Sanaluola</h1>
 
-<div class="rooms">
+<div id="grid"></div>
 
-<a href="kertotaulu.html" class="room">
-🧮 Kertotaululuola
-</a>
+<div id="word"></div>
 
-<a href="duel.html" class="room">
-⚔️ Kaksintaistelu
-</a>
+<button onclick="checkWord()">Tarkista</button>
 
-<a href="sanapeli.html" class="room">
-🔤 Sanaluola
-</a>
-
-<div class="room locked">
-⭐ Tulossa
-</div>
-
-</div>
-
-<audio id="music" src="tausta.wav" loop></audio>
+<div id="result"></div>
 
 <script>
 
-/* musiikki käynnistyy ensimmäisestä klikkauksesta */
+const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ"
 
-document.body.addEventListener("click",()=>{
+let grid=document.getElementById("grid")
+let currentWord=""
+let selected=[]
 
-let music=document.getElementById("music")
+/* luo ruudukko */
 
-music.volume=0.35
+function createGrid(){
 
-music.play().catch(()=>{})
+grid.innerHTML=""
 
-},{once:true})
+for(let i=0;i<16;i++){
 
-/* service worker */
+let letter=letters[Math.floor(Math.random()*letters.length)]
 
-if("serviceWorker" in navigator){
-navigator.serviceWorker.register("/sw.js")
+let cell=document.createElement("div")
+
+cell.className="cell"
+cell.textContent=letter
+
+cell.dataset.index=i
+
+cell.onmousedown=start
+cell.onmouseover=drag
+
+grid.appendChild(cell)
+
 }
+
+}
+
+let dragging=false
+
+function start(e){
+
+clearSelection()
+
+dragging=true
+
+addLetter(e.target)
+
+}
+
+function drag(e){
+
+if(!dragging) return
+
+if(e.target.classList.contains("cell")){
+addLetter(e.target)
+}
+
+}
+
+document.body.onmouseup=()=>dragging=false
+
+function addLetter(cell){
+
+if(selected.includes(cell)) return
+
+cell.classList.add("active")
+
+selected.push(cell)
+
+currentWord+=cell.textContent
+
+updateWord()
+
+}
+
+function updateWord(){
+
+document.getElementById("word").textContent=currentWord
+
+}
+
+function clearSelection(){
+
+selected.forEach(c=>c.classList.remove("active"))
+
+selected=[]
+
+currentWord=""
+
+updateWord()
+
+}
+
+/* sanalista */
+
+let words=[]
+
+fetch("sanat.txt")
+.then(r=>r.text())
+.then(data=>{
+words=data.split("\n").map(w=>w.trim().toLowerCase())
+   .filter(w => w.length > 2);
+
+dictionary = new Set(words);
+
+console.log("Sanoja ladattu:", dictionary.size);
+
+});
+
+
+function checkWord(){
+
+let w=currentWord.toLowerCase()
+
+if(words.includes(w)){
+
+document.getElementById("result").textContent="✔ Sana löytyy!"
+
+}else{
+
+document.getElementById("result").textContent="✖ Ei sanalistassa"
+
+}
+
+clearSelection()
+
+}
+
+createGrid()
 
 </script>
 
