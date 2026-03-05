@@ -215,7 +215,29 @@ let ctx = canvas.getContext("2d")
 
 let board=[]
 let tiles=[]
-let letters="AAAAAAEEEEEEIIIIOOOUUYYÄÄÖTTTNNNSSLLKKRRMPVHJD"
+let dice = [
+
+"AAEEGN",
+"ABBJOO",
+"ACHOPS",
+"AFFKPS",
+
+"AOOTTW",
+"CIMOTU",
+"DEILRX",
+"DELRVY",
+
+"DISTTY",
+"EEGHNW",
+"EEINSU",
+"EHRTVW",
+
+"EIOSST",
+"ELRTTY",
+"HIMNQU",
+"HLNNRZ"
+
+]
 
 let grid=document.getElementById("grid")
 
@@ -333,9 +355,12 @@ grid.innerHTML=""
 tiles=[]
 board=[]
 
+let shuffled=[...dice].sort(()=>Math.random()-0.5)
+
 for(let i=0;i<16;i++){
 
-let letter=randomLetter()
+let die=shuffled[i]
+let letter=die[Math.floor(Math.random()*6)]
 
 board.push(letter)
 
@@ -365,11 +390,11 @@ generateBoard()
 
 let words=findWords()
 
-if(words>6) break
+if(words>25) break
 
 attempts++
 
-if(attempts>100) break
+if(attempts>200) break
 
 }
 
