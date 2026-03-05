@@ -78,11 +78,13 @@ justify-content:center;
 font-size:32px;
 cursor:pointer;
 user-select:none;
+touch-action:none;
 }
 
 .tile.active{
 background:#00aaff;
 }
+
 
 #word{
 margin-top:20px;
@@ -486,12 +488,32 @@ addTile(e.target)
 
 grid.addEventListener("pointermove",e=>{
 
-if(!selecting)return
+if(!selecting) return
 
-let el=document.elementFromPoint(e.clientX,e.clientY)
+let closest=null
+let minDist=9999
 
-if(el && el.classList.contains("tile")){
-addTile(el)
+tiles.forEach(tile=>{
+
+let rect=tile.getBoundingClientRect()
+
+let cx=rect.left+rect.width/2
+let cy=rect.top+rect.height/2
+
+let dx=cx-e.clientX
+let dy=cy-e.clientY
+
+let dist=Math.sqrt(dx*dx+dy*dy)
+
+if(dist<minDist){
+minDist=dist
+closest=tile
+}
+
+})
+
+if(closest && minDist<60){
+addTile(closest)
 }
 
 })
