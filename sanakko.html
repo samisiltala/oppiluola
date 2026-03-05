@@ -495,7 +495,7 @@ setTimeout(()=>el.remove(),1000)
 
 }
 
-/ *PISTEANIMAATIO */
+/* PISTEANIMAATIO */
   function showPoints(x,y,pts){
 
 let el=document.createElement("div")
@@ -603,8 +603,6 @@ addTile(el)
 
 drawLine()
 
-})
-
 let closest=null
 let minDist=9999
 
@@ -633,7 +631,7 @@ addTile(closest)
 
 })
 
-window.addEventListener("pointerup",()=>{
+window.addEventListener("pointerup",(e)=>{
 
 if(!selecting)return
 
