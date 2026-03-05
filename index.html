@@ -9,129 +9,132 @@
 <style>
 
 body{
-    margin:0;
-    font-family:Arial;
-    color:white;
-    text-align:center;
-    overflow:hidden;
-
-    background:radial-gradient(circle at top,#0a0f2c,#000000);
+margin:0;
+font-family:Arial;
+color:white;
+text-align:center;
+overflow:hidden;
+background:black;
 }
 
-/* tähdet */
+/* LUOLATAUSTA */
+
+.background{
+position:fixed;
+width:100%;
+height:100%;
+background-image:url("luola.png");
+background-size:cover;
+background-position:center;
+z-index:-3;
+}
+
+/* SUMU */
+
+.fog{
+position:fixed;
+width:200%;
+height:200%;
+background:radial-gradient(circle,rgba(255,255,255,0.06),transparent 70%);
+animation:fogmove 40s linear infinite;
+z-index:-2;
+}
+
+@keyframes fogmove{
+from{transform:translateX(-10%) translateY(-10%)}
+to{transform:translateX(10%) translateY(10%)}
+}
+
+/* TÄHDET */
 
 .star{
-    position:absolute;
-    width:2px;
-    height:2px;
-    background:white;
-    animation:twinkle 3s infinite alternate;
+position:absolute;
+width:2px;
+height:2px;
+background:white;
+animation:twinkle 3s infinite alternate;
 }
 
 @keyframes twinkle{
-    from{opacity:0.2;}
-    to{opacity:1;}
+from{opacity:0.2;}
+to{opacity:1;}
 }
 
-/* otsikko */
+/* OTSIKKO */
 
 h1{
-    margin-top:40px;
-    font-size:52px;
-    text-shadow:0 0 25px #00ffff;
+margin-top:50px;
+font-size:60px;
+text-shadow:0 0 25px #00ffff;
 }
 
-/* soihtu */
+/* SOIHTU */
 
 .torch{
-    font-size:42px;
-    animation:flicker 1.5s infinite alternate;
+font-size:42px;
+animation:flicker 1.5s infinite alternate;
 }
 
 @keyframes flicker{
-    from{transform:scale(1);}
-    to{transform:scale(1.15);}
+from{transform:scale(1)}
+to{transform:scale(1.15)}
 }
 
-/* LUOLA */
+/* PELI-OVET */
 
-.cave{
-    width:700px;
-    height:420px;
-    margin:40px auto;
+.rooms{
+margin-top:60px;
 
-    background:
-        radial-gradient(circle at 50% 10%,#333,#000 70%);
-
-    border-radius:50% 50% 40% 40%;
-
-    box-shadow:
-        inset 0 0 80px black,
-        0 0 60px rgba(0,0,0,0.8);
-
-    position:relative;
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:40px;
 }
-
-/* peliluolat */
 
 .room{
-    position:absolute;
 
-    width:160px;
-    height:120px;
+width:200px;
+height:140px;
 
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 
-    background:rgba(0,255,255,0.15);
-    border-radius:18px;
+background:rgba(0,0,0,0.55);
+border-radius:20px;
 
-    text-decoration:none;
-    color:white;
+font-size:24px;
 
-    font-size:22px;
+text-decoration:none;
+color:white;
 
-    box-shadow:0 0 20px rgba(0,255,255,0.5);
+box-shadow:0 0 20px rgba(0,255,255,0.6);
 
-    transition:0.25s;
+transition:0.25s;
 }
 
 .room:hover{
-    transform:scale(1.1);
-    box-shadow:0 0 35px #00ffff;
+transform:scale(1.1);
+box-shadow:0 0 35px #00ffff;
 }
 
-/* huoneiden sijainnit */
-
-.room1{ left:60px; top:120px; }
-
-.room2{ right:60px; top:120px; }
-
-.room3{ left:200px; bottom:40px; }
-
-.room4{ right:200px; bottom:40px; }
-
-/* lukittu */
+/* LUKITTU */
 
 .locked{
-    opacity:0.35;
+opacity:0.35;
 }
 
-/* mobiili */
+/* MOBIILI */
 
-@media(max-width:750px){
+@media(max-width:700px){
 
-.cave{
-    width:95%;
-    height:360px;
-}
+h1{font-size:36px;}
 
 .room{
-    width:130px;
-    height:100px;
-    font-size:18px;
+width:150px;
+height:110px;
+font-size:18px;
 }
 
 }
@@ -141,27 +144,30 @@ h1{
 
 <body>
 
+<div class="background"></div>
+<div class="fog"></div>
+
 <h1>🕯️ Oppiluola</h1>
 <div class="torch">🔥</div>
 
-<div class="cave">
+<div class="rooms">
 
-<a href="kertotaulu.html" class="room room1">
+<a href="kertotaulu.html" class="room">
 🧮
-Kertotaulu
+Kertotaululuola
 </a>
 
-<a href="duel/index.html" class="room room2">
+<a href="duel/index.html" class="room">
 ⚔️
-Math Duel
+Kaksintaistelu
 </a>
 
-<div class="room room3 locked">
-🧠
-Tulossa
-</div>
+<a href="sanapeli.html" class="room">
+🔤
+Sanaluola
+</a>
 
-<div class="room room4 locked">
+<div class="room locked">
 ⭐
 Tulossa
 </div>
@@ -172,39 +178,40 @@ Tulossa
 
 <script>
 
-/* service worker */
-
-if("serviceWorker" in navigator){
-navigator.serviceWorker.register("/sw.js");
-}
-
-/* musiikki */
+/* MUSIIKKI (käynnistyy ensimmäisestä klikkauksesta) */
 
 document.body.addEventListener("click",()=>{
 
-let music=document.getElementById("music");
+let music=document.getElementById("music")
 
-music.volume=0.35;
+music.volume=0.35
 
-music.play().catch(()=>{});
+music.play().catch(()=>{})
 
-},{once:true});
+},{once:true})
 
-/* tähtitaivas */
+
+/* TÄHTITAIVAS */
 
 for(let i=0;i<120;i++){
 
-let star=document.createElement("div");
+let star=document.createElement("div")
 
-star.className="star";
+star.className="star"
 
-star.style.left=Math.random()*100+"vw";
-star.style.top=Math.random()*100+"vh";
+star.style.left=Math.random()*100+"vw"
+star.style.top=Math.random()*100+"vh"
 
-star.style.animationDuration=(2+Math.random()*3)+"s";
+star.style.animationDuration=(2+Math.random()*3)+"s"
 
-document.body.appendChild(star);
+document.body.appendChild(star)
 
+}
+
+/* SERVICE WORKER */
+
+if("serviceWorker" in navigator){
+navigator.serviceWorker.register("/sw.js")
 }
 
 </script>
