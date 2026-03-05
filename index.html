@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Oppiluola</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 <link rel="manifest" href="manifest.json">
 
 <style>
@@ -14,121 +14,43 @@ margin:0;
 font-family:'Orbitron', sans-serif;
 color:white;
 text-align:center;
-overflow:hidden;
-background:black;
-}
-
-/* LUOLATAUSTA */
-
-.cave{
-filter:drop-shadow(0 0 60px #8a2cff);
-position:relative;
-
-width:900px;
-height:700px;
-
-margin:20px auto;
+height:100vh;
 
 background-image:url("luola2.png");
-background-size:contain;
-background-repeat:no-repeat;
+background-size:cover;
 background-position:center;
-}
-.cave::after{
-content:"";
-position:absolute;
-inset:0;
-background:radial-gradient(circle at 50% 60%, #8a2cff40, transparent 65%);
-pointer-events:none;
-animation:caveGlow 6s ease-in-out infinite alternate;
-}
+background-repeat:no-repeat;
 
-@keyframes caveGlow{
-from{opacity:0.6;}
-to{opacity:1;}
-}
-  
-/* SUMU */
-
-.fog{
-position:fixed;
-width:200%;
-height:200%;
-background:radial-gradient(circle,rgba(255,255,255,0.06),transparent 70%);
-animation:fogmove 40s linear infinite;
-z-index:-2;
-}
-
-@keyframes fogmove{
-from{transform:translateX(-10%) translateY(-10%)}
-to{transform:translateX(10%) translateY(10%)}
-}
-
-/* TÄHDET */
-
-.star{
-position:absolute;
-width:2px;
-height:2px;
-background:white;
-animation:starMove linear infinite;
-}
-
-@keyframes twinkle{
-from{opacity:0.2;}
-to{opacity:1;}
-}
-
-@keyframes starMove{
-from{
-transform:translateY(0px);
-opacity:0.5;
-}
-to{
-transform:translateY(-200px);
-opacity:1;
-}
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
 }
 
 /* OTSIKKO */
 
 h1{
-margin-top:50px;
 font-size:60px;
 text-shadow:0 0 25px #00ffff;
+margin-bottom:60px;
 }
 
-/* SOIHTU */
-
-.torch{
-font-size:42px;
-animation:flicker 1.5s infinite alternate;
-}
-
-@keyframes flicker{
-from{transform:scale(1)}
-to{transform:scale(1.15)}
-}
-
-/* PELI-OVET */
+/* PELINAPIT */
 
 .rooms{
-margin-top:60px;
-
 display:flex;
-justify-content:center;
-flex-wrap:wrap;
 gap:40px;
+flex-wrap:wrap;
+justify-content:center;
 }
 
 .room{
 
-position:absolute;
-
-width:200px;
-height:100px;
+width:220px;
+height:110px;
 
 background:rgba(0,0,0,0.6);
+
 border-radius:18px;
 
 display:flex;
@@ -143,55 +65,28 @@ text-decoration:none;
 box-shadow:0 0 20px #00ffff;
 
 transition:0.25s;
+
+padding:10px;
 }
 
 .room:hover{
-transform:scale(1.1);
+transform:scale(1.08);
 box-shadow:0 0 35px #00ffff;
 }
-
-.r1{ left:110px; top:230px; }
-
-.r2{ left:330px; top:230px; }
-
-.r3{ left:550px; top:230px; }
-
-.r4{ left:770px; top:230px; opacity:0.4; }
-.flame{
-
-position:absolute;
-
-top:160px;
-left:450px;
-
-font-size:36px;
-
-animation:flicker 1.4s infinite alternate;
-
-}
-
-@keyframes flicker{
-
-from{transform:scale(1)}
-to{transform:scale(1.2)}
-
-}
-
-/* LUKITTU */
 
 .locked{
 opacity:0.35;
 }
 
-/* MOBIILI */
+/* mobiili */
 
 @media(max-width:700px){
 
 h1{font-size:36px;}
 
 .room{
-width:150px;
-height:110px;
+width:160px;
+height:90px;
 font-size:18px;
 }
 
@@ -202,23 +97,25 @@ font-size:18px;
 
 <body>
 
-<body>
-
-<div class="fog"></div>
-
 <h1>🕯️ Oppiluola</h1>
 
-<div class="cave">
+<div class="rooms">
 
-<div class="flame">🔥</div>
-  
-<a href="kertotaulu.html" class="room r1">🧮 Kertotaululuola</a>
+<a href="kertotaulu.html" class="room">
+🧮 Kertotaululuola
+</a>
 
-<a href="duel.html" class="room r2">⚔️ Kaksintaistelu</a>
+<a href="duel.html" class="room">
+⚔️ Kaksintaistelu
+</a>
 
-<a href="sanapeli.html" class="room r3">🔤 Sanaluola</a>
+<a href="sanapeli.html" class="room">
+🔤 Sanaluola
+</a>
 
-<div class="room r4 locked">⭐ Tulossa</div>
+<div class="room locked">
+⭐ Tulossa
+</div>
 
 </div>
 
@@ -226,7 +123,7 @@ font-size:18px;
 
 <script>
 
-/* MUSIIKKI (käynnistyy ensimmäisestä klikkauksesta) */
+/* musiikki käynnistyy ensimmäisestä klikkauksesta */
 
 document.body.addEventListener("click",()=>{
 
@@ -238,25 +135,7 @@ music.play().catch(()=>{})
 
 },{once:true})
 
-
-/* TÄHTITAIVAS */
-
-for(let i=0;i<120;i++){
-
-let star=document.createElement("div")
-
-star.className="star"
-
-star.style.left=Math.random()*100+"vw"
-star.style.top=Math.random()*100+"vh"
-
-star.style.animationDuration=(20+Math.random()*40)+"s"
-
-document.body.appendChild(star)
-
-}
-
-/* SERVICE WORKER */
+/* service worker */
 
 if("serviceWorker" in navigator){
 navigator.serviceWorker.register("/sw.js")
