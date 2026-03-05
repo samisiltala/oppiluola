@@ -482,6 +482,7 @@ grid.addEventListener("pointerdown",e=>{
 if(!e.target.classList.contains("tile"))return
 
 selecting=true
+grid.setPointerCapture(e.pointerId)
 addTile(e.target)
 
 })
@@ -523,6 +524,7 @@ window.addEventListener("pointerup",()=>{
 if(!selecting)return
 
 selecting=false
+grid.releasePointerCapture(e.pointerId)
 checkWord()
 
 clearSelection()
