@@ -9,9 +9,25 @@ const ASSETS = [
 ];
 
 self.addEventListener("install", e => {
+  self.skipWaiting();
+
   e.waitUntil(
     caches.open(CACHE).then(cache => {
       return cache.addAll(ASSETS);
+    })
+  );
+});
+
+self.addEventListener("activate", e => {
+  e.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.map(key => {
+          if (key !== CACHE) {
+            return caches.delete(key);
+          }
+        })
+      );
     })
   );
 });
