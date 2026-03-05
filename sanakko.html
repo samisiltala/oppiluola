@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Sanaluola</title>
 <a href="index.html" class="homeButton">🏠 Koti</a>
+<audio id="blip" src="blip.mp3"></audio>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 <style>
 .container{
@@ -201,9 +202,9 @@ let words = data.split("\n")
 dictionary = new Set(words)
 
 console.log("Sanoja:",dictionary.size)
-
-})
 generateGoodBoard()
+})
+
 
 function resizeCanvas(){
 
@@ -263,7 +264,7 @@ generateBoard()
 
 let words=findWords()
 
-if(words>15){
+if(words>8){
 console.log("Hyvä ruudukko löytyi:",words,"sanaa")
 break
 }
@@ -433,7 +434,10 @@ let w=currentWord.toLowerCase()
 
 if(dictionary.has(w) && !foundWords.has(w)){
 
-foundWords.add(w)
+document.getElementById("blip").currentTime=0
+document.getElementById("blip").play()
+
+foundWords.add(w)add(w)
 
 let pts=w.length-2
 
