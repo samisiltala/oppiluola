@@ -139,6 +139,17 @@ animation:pop 0.35s ease;
 box-shadow:0 0 15px #00ffff;
 }
 
+@keyframes floatUp{
+0%{transform:translateY(0);opacity:1;}
+100%{transform:translateY(-40px);opacity:0;}
+}
+
+@keyframes comboPop{
+0%{transform:translateX(-50%) scale(0.5);}
+70%{transform:translateX(-50%) scale(1.3);}
+100%{transform:translateX(-50%) scale(1);}
+}
+    
 @keyframes pop{
 
 0%{transform:scale(0)}
@@ -213,7 +224,9 @@ box-shadow:0 0 20px #00ffff;
 let canvas = document.getElementById("lineCanvas")
 let ctx = canvas.getContext("2d")
 let prefixes = new Set()
-
+let combo = 0
+let comboTimer
+  
 let board=[]
 let tiles=[]
 let dice = [
@@ -457,6 +470,51 @@ return found
 
 }
 
+/* COMBO-ANIMAATIO */
+function showCombo(text){
+
+let el = document.createElement("div")
+
+el.innerText = text
+
+el.style.position = "fixed"
+el.style.top = "30%"
+el.style.left = "50%"
+el.style.transform = "translateX(-50%)"
+el.style.fontSize = "50px"
+el.style.color = "#ffcc00"
+el.style.textShadow = "0 0 20px #ffcc00"
+el.style.zIndex = "2000"
+el.style.animation = "comboPop 1s ease"
+
+document.body.appendChild(el)
+
+setTimeout(()=>el.remove(),1000)
+
+}
+
+/ *PISTEANIMAATIO */
+  function showPoints(x,y,pts){
+
+let el=document.createElement("div")
+
+el.innerText="+"+pts
+
+el.style.position="absolute"
+el.style.left=x+"px"
+el.style.top=y+"px"
+el.style.color="#00ff88"
+el.style.fontSize="28px"
+el.style.fontWeight="bold"
+el.style.pointerEvents="none"
+el.style.animation="floatUp 1s ease"
+
+document.body.appendChild(el)
+
+setTimeout(()=>el.remove(),1000)
+
+}
+  
 /* VIEREKKÄISYYS */
 
 function isNeighbor(tile){
@@ -592,14 +650,26 @@ foundWords.add(w)
 
 let pts=w.length-2
 
-score+=pts
-streak++
+combo++
+clearTimeout(comboTimer)
 
+let multiplier = 1
+
+if(combo >= 5){
+multiplier = 3
+showCombo("🔥 x3 COMBO")
+}
+else if(combo >= 3){
+multiplier = 2
+showCombo("⚡ x2 COMBO")
+}
+
+score += pts * multiplier
 document.getElementById("score").textContent="Pisteet: "+score
 
-let div=document.createElement("div")
-div.textContent=w
-document.getElementById("found").appendChild(div)
+comboTimer = setTimeout(()=>{
+combo = 0
+},2500)
 
 /* VÄLÄHDYS */
 
