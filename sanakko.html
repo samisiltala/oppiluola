@@ -5,7 +5,37 @@
 <title>Sanaluola</title>
 
 <style>
+.container{
+display:grid;
+grid-template-columns:200px 1fr 220px;
+gap:30px;
+max-width:1000px;
+margin:0 auto;
+margin-top:30px;
+}
 
+.leftPanel{
+font-size:22px;
+}
+
+.centerGame{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+.rightPanel{
+background:#222;
+padding:15px;
+border-radius:15px;
+max-height:400px;
+overflow:auto;
+}
+
+#found div{
+padding:4px 0;
+border-bottom:1px solid #444;
+}
 body{
 font-family:Arial;
 background:#111;
@@ -73,18 +103,29 @@ text-align:left;
 
 <body>
 
+<body>
+
 <h1>🔤 Sanaluola</h1>
 
-<div id="timer">Aika: 120</div>
+<div class="container">
 
+<div class="leftPanel">
+<div id="timer">Aika: 120</div>
+<div id="score">Pisteet: 0</div>
+</div>
+
+<div class="centerGame">
 <div id="grid"></div>
 <canvas id="lineCanvas"></canvas>
-
 <div id="word"></div>
+</div>
 
-<div id="score">Pisteet: 0</div>
-
+<div class="rightPanel">
+<h3>Löydetyt sanat</h3>
 <div id="found"></div>
+</div>
+
+</div>
 
 <script>
 let canvas = document.getElementById("lineCanvas")
