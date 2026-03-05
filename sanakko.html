@@ -78,7 +78,7 @@ text-align:left;
 <div id="found"></div>
 
 <script>
-
+let board = []
 let letters =
 "AAAAAAEEEEEEIIIIOOOUUYYÄÄÖTTTNNNSSLLKKRRMPVHJD"
 
@@ -111,23 +111,52 @@ console.log("Sanoja:",dictionary.size)
 
 /* RUUDUKKO */
 
-function randomLetter(){
-return letters[Math.floor(Math.random()*letters.length)]
-}
+function generateBoard(){
 
-let tiles=[]
+grid.innerHTML=""
+tiles=[]
+board=[]
 
 for(let i=0;i<16;i++){
 
+let letter=randomLetter()
+
+board.push(letter)
+
 let div=document.createElement("div")
 div.className="tile"
-div.textContent=randomLetter()
+div.textContent=letter
 
 div.dataset.x = i % 4
 div.dataset.y = Math.floor(i / 4)
 
 grid.appendChild(div)
 tiles.push(div)
+
+}
+
+}
+/* GENEROI RUUDUKKO KUNNES SIINA SANOJA */
+function generateGoodBoard(){
+
+let attempts=0
+
+while(true){
+
+generateBoard()
+
+let words=findWords()
+
+if(words>15){
+console.log("Hyvä ruudukko löytyi:",words,"sanaa")
+break
+}
+
+attempts++
+
+if(attempts>100) break
+
+}
 
 }
   
@@ -196,7 +225,56 @@ currentWord+=tile.textContent
 document.getElementById("word").textContent=currentWord
 
 }
+/* ETSI SANAT RUUDUKOSTA */
+function findWords(){
 
+let found=0
+
+function dfs(x,y,word,visited){
+
+word+=board[y*4+x]
+
+if(word.length>2 && dictionary.has(word.toLowerCase())){
+found++
+}
+
+if(word.length>7) return
+
+for(let dx=-1;dx<=1;dx++){
+for(let dy=-1;dy<=1;dy++){
+
+let nx=x+dx
+let ny=y+dy
+
+if(nx<0||ny<0||nx>=4||ny>=4) continue
+
+let key=nx+"-"+ny
+if(visited.has(key)) continue
+
+let newVisited=new Set(visited)
+newVisited.add(key)
+
+dfs(nx,ny,word,newVisited)
+
+}
+}
+
+}
+
+for(let x=0;x<4;x++){
+for(let y=0;y<4;y++){
+
+let visited=new Set()
+visited.add(x+"-"+y)
+
+dfs(x,y,"",visited)
+
+}
+}
+
+return found
+
+}
 /* TARKISTUS */
 
 function checkWord(){
