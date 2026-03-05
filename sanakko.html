@@ -123,8 +123,28 @@ let div=document.createElement("div")
 div.className="tile"
 div.textContent=randomLetter()
 
+div.dataset.x = i % 4
+div.dataset.y = Math.floor(i / 4)
+
 grid.appendChild(div)
 tiles.push(div)
+
+}
+  
+/* VIEREKKAISYYSTARKISTUS */
+function isNeighbor(tile){
+
+if(usedTiles.length===0) return true
+
+let last = usedTiles[usedTiles.length-1]
+
+let x1 = Number(last.dataset.x)
+let y1 = Number(last.dataset.y)
+
+let x2 = Number(tile.dataset.x)
+let y2 = Number(tile.dataset.y)
+
+return Math.abs(x1-x2)<=1 && Math.abs(y1-y2)<=1
 
 }
 
@@ -165,6 +185,7 @@ clearSelection()
 function addTile(tile){
 
 if(usedTiles.includes(tile))return
+if(!isNeighbor(tile)) return
 
 tile.classList.add("active")
 
