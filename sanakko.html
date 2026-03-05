@@ -7,78 +7,57 @@
 <style>
 
 body{
-margin:0;
-background:#0b0b16;
-color:white;
 font-family:Arial;
+background:#111;
+color:white;
 text-align:center;
 }
 
 h1{
-margin-top:40px;
-font-size:40px;
+margin-top:20px;
 }
 
 #grid{
-width:320px;
-margin:40px auto;
-
 display:grid;
-grid-template-columns:repeat(4,1fr);
+grid-template-columns:repeat(4,80px);
 gap:10px;
+justify-content:center;
+margin-top:30px;
 }
 
-.cell{
-
-width:70px;
-height:70px;
-
-background:#1d1d3a;
-
+.tile{
+width:80px;
+height:80px;
+background:#222;
 border-radius:10px;
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 font-size:32px;
-
 cursor:pointer;
-
 user-select:none;
-
-transition:0.2s;
-
 }
 
-.cell.active{
-background:#00cfff;
-color:black;
+.tile.active{
+background:#00aaff;
 }
 
 #word{
+margin-top:20px;
 font-size:28px;
-margin-top:20px;
-letter-spacing:4px;
 }
 
-button{
-
-margin-top:20px;
-padding:10px 20px;
-font-size:18px;
-
-border:none;
-border-radius:8px;
-
-background:#00cfff;
-cursor:pointer;
-
+#score{
+margin-top:10px;
+font-size:20px;
 }
 
-#result{
-margin-top:15px;
-font-size:18px;
+#found{
+margin-top:20px;
+max-width:400px;
+margin-left:auto;
+margin-right:auto;
+text-align:left;
 }
 
 </style>
@@ -88,140 +67,172 @@ font-size:18px;
 
 <h1>🔤 Sanaluola</h1>
 
+<div id="timer">Aika: 120</div>
+
 <div id="grid"></div>
 
 <div id="word"></div>
 
-<button onclick="checkWord()">Tarkista</button>
+<div id="score">Pisteet: 0</div>
 
-<div id="result"></div>
+<div id="found"></div>
 
 <script>
 
-const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ"
+let letters =
+"AAAAAAEEEEEEIIIIOOOUUYYÄÄÖTTTNNNSSLLKKRRMPVHJD"
 
-let grid=document.getElementById("grid")
-let currentWord=""
-let selected=[]
+let grid = document.getElementById("grid")
 
-/* luo ruudukko */
+let dictionary = new Set()
 
-function createGrid(){
+let currentWord = ""
+let score = 0
+let foundWords = new Set()
 
-grid.innerHTML=""
+let selecting = false
+let usedTiles = []
+
+/* SANALISTA */
+
+fetch("sanat.txt")
+.then(r=>r.text())
+.then(data=>{
+
+let words = data.split("\n")
+.map(w=>w.trim().toLowerCase())
+.filter(w=>w.length>2)
+
+dictionary = new Set(words)
+
+console.log("Sanoja:",dictionary.size)
+
+})
+
+/* RUUDUKKO */
+
+function randomLetter(){
+return letters[Math.floor(Math.random()*letters.length)]
+}
+
+let tiles=[]
 
 for(let i=0;i<16;i++){
 
-let letter=letters[Math.floor(Math.random()*letters.length)]
+let div=document.createElement("div")
+div.className="tile"
+div.textContent=randomLetter()
 
-let cell=document.createElement("div")
-
-cell.className="cell"
-cell.textContent=letter
-
-cell.dataset.index=i
-
-cell.onmousedown=start
-cell.onmouseover=drag
-
-grid.appendChild(cell)
+grid.appendChild(div)
+tiles.push(div)
 
 }
 
+/* POINTER EVENTS */
+
+grid.addEventListener("pointerdown",e=>{
+
+if(!e.target.classList.contains("tile"))return
+
+selecting=true
+addTile(e.target)
+
+})
+
+grid.addEventListener("pointermove",e=>{
+
+if(!selecting)return
+
+let el=document.elementFromPoint(e.clientX,e.clientY)
+
+if(el && el.classList.contains("tile")){
+addTile(el)
 }
 
-let dragging=false
+})
 
-function start(e){
+window.addEventListener("pointerup",()=>{
+
+if(!selecting)return
+
+selecting=false
+checkWord()
 
 clearSelection()
 
-dragging=true
+})
 
-addLetter(e.target)
+function addTile(tile){
 
-}
+if(usedTiles.includes(tile))return
 
-function drag(e){
+tile.classList.add("active")
 
-if(!dragging) return
+usedTiles.push(tile)
 
-if(e.target.classList.contains("cell")){
-addLetter(e.target)
-}
-
-}
-
-document.body.onmouseup=()=>dragging=false
-
-function addLetter(cell){
-
-if(selected.includes(cell)) return
-
-cell.classList.add("active")
-
-selected.push(cell)
-
-currentWord+=cell.textContent
-
-updateWord()
-
-}
-
-function updateWord(){
+currentWord+=tile.textContent
 
 document.getElementById("word").textContent=currentWord
 
 }
 
-function clearSelection(){
-
-selected.forEach(c=>c.classList.remove("active"))
-
-selected=[]
-
-currentWord=""
-
-updateWord()
-
-}
-
-/* sanalista */
-
-let words=[]
-
-fetch("sanat.txt")
-.then(r=>r.text())
-.then(data=>{
-words=data.split("\n").map(w=>w.trim().toLowerCase())
-   .filter(w => w.length > 2);
-
-dictionary = new Set(words);
-
-console.log("Sanoja ladattu:", dictionary.size);
-
-});
-
+/* TARKISTUS */
 
 function checkWord(){
 
 let w=currentWord.toLowerCase()
 
-if(words.includes(w)){
+if(dictionary.has(w) && !foundWords.has(w)){
 
-document.getElementById("result").textContent="✔ Sana löytyy!"
+foundWords.add(w)
 
-}else{
+let pts=w.length-2
 
-document.getElementById("result").textContent="✖ Ei sanalistassa"
+score+=pts
+
+document.getElementById("score").textContent="Pisteet: "+score
+
+let div=document.createElement("div")
+div.textContent=w
+
+document.getElementById("found").appendChild(div)
 
 }
 
-clearSelection()
+}
+
+/* NOLLAUS */
+
+function clearSelection(){
+
+usedTiles.forEach(t=>t.classList.remove("active"))
+
+usedTiles=[]
+currentWord=""
+
+document.getElementById("word").textContent=""
 
 }
 
-createGrid()
+/* TIMER */
+
+let time=120
+
+let timer=setInterval(()=>{
+
+time--
+
+document.getElementById("timer").textContent="Aika: "+time
+
+if(time<=0){
+
+clearInterval(timer)
+
+alert("Peli ohi! Pisteet: "+score)
+
+}
+
+},1000)
 
 </script>
 
