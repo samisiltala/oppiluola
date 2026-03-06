@@ -216,6 +216,16 @@ pointer-events:none;
 z-index:1;
 }
 
+#countdown{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:120px;
+z-index:2000;
+display:none;
+}
+  
 /* DUEL BAR */
 
 #duelBar{
@@ -475,6 +485,8 @@ J K L
 
 <div id="samuraiBG"></div>
 
+<div id="countdown"></div>
+  
 <div class="menuLeft">
 
 <div class="menuTitle">LASKU</div>
@@ -645,10 +657,11 @@ modeText[mode] + "<br>" + diffText[difficulty]
 document.getElementById("keyPanel").style.display="block"
 
 let overlay=document.getElementById("overlay")
-
+let countdown=document.getElementById("countdown")
 let count=3
 
-overlay.innerHTML="<div class='countdown'>3</div>"
+countdown.style.display="block"
+countdown.innerText="3"
 play("bip")
 
 let timer=setInterval(()=>{
@@ -656,12 +669,12 @@ let timer=setInterval(()=>{
 count--
 
 if(count>0){
-overlay.innerHTML="<div class='countdown'>"+count+"</div>"
+countdown.innerText=count
 play("bip")
 }
 
 else if(count===0){
-overlay.innerHTML="<div class='countdown'>GO!</div>"
+countdown.innerText="GO!"
 play("goSound")
 }
 
@@ -669,6 +682,7 @@ else{
 
 clearInterval(timer)
 overlay.style.display="none"
+countdown.style.display="none"
 gameActive=true
 
 document.getElementById("levelLabel").style.display="block"
@@ -993,6 +1007,7 @@ buttons[id].click()
 
 </body>
 </html>
+
 
 
 
