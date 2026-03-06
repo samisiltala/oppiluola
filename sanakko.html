@@ -405,6 +405,8 @@ document.getElementById("word").textContent=currentWord
 
 return
 }
+if(usedTiles.includes(tile)) return
+if(!isNeighbor(tile)) return
 
 function checkWord(){
 
