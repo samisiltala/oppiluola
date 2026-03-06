@@ -723,6 +723,7 @@ if(scoreDiff <= -10){
 endGame("B")
 return
 }
+updateBar()
 newQuestion()
 
 }
@@ -791,11 +792,39 @@ backToMenu()
 },6000)
 
 }
+document.addEventListener("keydown", function(e){
 
+if(!gameActive) return
+
+let key = e.key.toLowerCase()
+
+// pelaaja A
+if(key==="a") pressButton("buttonsA",0)
+if(key==="s") pressButton("buttonsA",1)
+if(key==="d") pressButton("buttonsA",2)
+
+// pelaaja B
+if(key==="j") pressButton("buttonsB",0)
+if(key==="k") pressButton("buttonsB",1)
+if(key==="l") pressButton("buttonsB",2)
+
+})
+
+function pressButton(container,id){
+
+let buttons=document.getElementById(container).children
+
+if(buttons[id]){
+buttons[id].click()
+}
+
+}
+  
 </script>
 
 </body>
 </html>
+
 
 
 
