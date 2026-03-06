@@ -135,6 +135,7 @@ user-select:none;
 
 animation:pop 0.35s ease;
 }
+    
 .tile:hover{
 box-shadow:0 0 15px #00ffff;
 }
@@ -188,6 +189,12 @@ border-radius:15px;
 background:#00ffff;
 cursor:pointer;
 box-shadow:0 0 20px #00ffff;
+}
+
+@keyframes foundFlash{
+0% { background:#00ff88; transform:scale(1); }
+50% { background:#00ffff; transform:scale(1.2); }
+100% { background:#222; transform:scale(1); }
 }
 </style>
 </head>
