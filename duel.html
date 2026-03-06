@@ -456,8 +456,12 @@ btn.classList.add("selected")
 }
 
 function startCountdown(){
+scoreA = 0
+scoreB = 0
 scoreDiff = 0
+updateScores()
 updateBar()
+
 gameActive=false
 answered=false
 
@@ -580,16 +584,18 @@ answered=false
 function generateQuestion(){
 
 if(mode==="*"){
-let tables=[1,2,3,4,5,6,7,8,9,10]
-a=tables[rand(0,9)]
-b=rand(1,10)
-correctAnswer=a*b
-}
 
-if(mode==="/"){
-b=rand(1,10)
-correctAnswer=rand(1,10)
-a=b*correctAnswer
+let tables
+
+if(difficulty==="easy") tables=[1,2,5,10]
+if(difficulty==="normal") tables=[1,2,3,4,5,10]
+if(difficulty==="hard") tables=[1,2,3,4,5,6,7,8,9,10]
+
+a = tables[rand(0, tables.length-1)]
+b = rand(1,10)
+
+correctAnswer = a*b
+
 }
 
 if(mode==="+"){
@@ -620,6 +626,7 @@ generateQuestion()
 
 let symbol=mode
 if(mode==="*") symbol="×"
+if(mode===""/") symbol=":"
 
 document.getElementById("question").innerText=a+" "+symbol+" "+b
 
@@ -725,8 +732,10 @@ document.getElementById("scoreB").innerText=scoreB
 
 function updateBar(){
 
+let diff = scoreA - scoreB
+
 let center = 50
-let change = scoreDiff * 5
+let change = diff * 5   // 10 pisteen ero = 50%
 
 let white = center + change
 let red = center - change
@@ -785,6 +794,7 @@ backToMenu()
 
 </body>
 </html>
+
 
 
 
