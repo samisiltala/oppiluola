@@ -7,10 +7,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 
-<a href="index.html" class="homeButton">KOTI</a>
-<a href="#" class="homeButton musicButton" onclick="toggleMusic()" id="musicBtn">
-MUSIIKKI ON
-</a>
+
   
 <audio id="winSound" src="voitto.wav"></audio>
 <audio id="scoreSoundA" src="miekka1.wav"></audio>
@@ -276,6 +273,11 @@ opacity:0.7;
 
 <body>
 
+<a href="index.html" class="homeButton">KOTI</a>
+<a href="#" class="homeButton musicButton" onclick="toggleMusic()" id="musicBtn">
+MUSIIKKI ON
+</a>
+
 <div class="centerQuestion" id="question"></div>
 <img id="ninja" src="ninja.jpg">
 
@@ -296,26 +298,30 @@ justify-content:center;
 align-items:center;
 z-index:999;
 ">
+
 <div id="samuraiBG"></div>
+
+<!-- VASEN VALIKKO -->
+
 <div class="menuLeft">
 
-<input id="nameInputA" class="nameInput" placeholder="PELAAJA 1">
-<input id="nameInputB" class="nameInput" placeholder="PELAAJA 2">
+<div class="menuTitle">LASKU</div>
 
-<div class="menuButtons">
-
-<div>LASKU</div>
 <button onclick="setMode('+')">+</button>
 <button onclick="setMode('-')">−</button>
 <button onclick="setMode('*')">×</button>
 <button onclick="setMode('/')">÷</button>
 
-<div>TASO</div>
+<div class="menuTitle">TASO</div>
+
 <button onclick="setDifficulty('easy')">HELPPO</button>
 <button onclick="setDifficulty('normal')">NORMAALI</button>
 <button onclick="setDifficulty('hard')">VAIKEA</button>
 
 </div>
+
+<!-- KESKIMENU -->
+
 <div class="centerMenu">
 
 <input id="nameInputA" class="nameInput" placeholder="PELAAJA 1">
@@ -756,6 +762,7 @@ ALOITA
 
 </body>
 </html>
+
 
 
 
