@@ -513,6 +513,10 @@ document.getElementById("levelLabel").style.display="block"
 let overlay=document.getElementById("overlay")
 let countdown=document.getElementById("countdown")
 
+overlay.style.background="black"
+overlay.style.display="flex"
+overlay.style.zIndex="9999"
+
 let count=3
 
 countdown.style.display="block"
@@ -538,8 +542,9 @@ else{
 
 clearInterval(timer)
 
-overlay.style.display="none"
 countdown.style.display="none"
+overlay.style.display="none"
+
 
 gameActive=true
 newQuestion()
@@ -779,3 +784,4 @@ if(buttons[id]) buttons[id].click()
 
 </body>
 </html>
+
