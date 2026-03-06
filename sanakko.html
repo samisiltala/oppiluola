@@ -6,38 +6,31 @@
 
 <audio id="blip" src="blip.mp3"></audio>
 <audio id="win" src="voitto.wav"></audio>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 
-  <style>
+<style>
+
+body{
+font-family:'Orbitron',sans-serif;
+background:#111;
+color:white;
+text-align:center;
+}
+
 .container{
 display:grid;
 grid-template-columns:200px 1fr 220px;
 gap:30px;
 max-width:1000px;
-margin:0 auto;
-margin-top:30px;
+margin:30px auto;
 }
 
 .leftPanel{
-font-size:22px;
 display:flex;
 flex-direction:column;
 gap:20px;
 align-items:flex-start;
-}
-
-.centerGame{
-display:flex;
-flex-direction:column;
-align-items:center;
-}
-
-.rightPanel{
-background:#222;
-padding:15px;
-border-radius:15px;
-max-height:400px;
-overflow:auto;
 }
 
 #timer{
@@ -50,34 +43,16 @@ font-size:36px;
 font-weight:bold;
 }
 
-#found div{
-padding:4px 0;
-border-bottom:1px solid #444;
-}
-body{
-font-family:'Orbitron', sans-serif;
-background:#111;
-color:white;
-text-align:center;
+.centerGame{
+display:flex;
+flex-direction:column;
+align-items:center;
 }
 
-h1{
-margin-top:20px;
-}
-
-#lineCanvas{
-position:absolute;
-left:0;
-top:0;
-pointer-events:none;
-}
-  
 #grid{
-position:relative;
 display:grid;
 grid-template-columns:repeat(4,80px);
 gap:14px;
-justify-content:center;
 margin-top:30px;
 }
 
@@ -92,7 +67,6 @@ justify-content:center;
 font-size:32px;
 cursor:pointer;
 user-select:none;
-touch-action:none;
 }
 
 .tile.active{
@@ -100,23 +74,17 @@ background:#00aaff;
 transform:scale(1.15);
 }
 
-
-#word{
-margin-top:20px;
-font-size:28px;
+.rightPanel{
+background:#222;
+padding:15px;
+border-radius:15px;
+max-height:400px;
+overflow:auto;
 }
 
-#score{
-margin-top:10px;
-font-size:20px;
-}
-
-#found{
-margin-top:20px;
-max-width:400px;
-margin-left:auto;
-margin-right:auto;
-text-align:left;
+#found div{
+padding:4px 0;
+border-bottom:1px solid #444;
 }
 
 .homeButton{
@@ -128,67 +96,15 @@ color:black;
 padding:8px 14px;
 border-radius:10px;
 text-decoration:none;
-font-size:14px;
-box-shadow:0 0 10px #00ffff;
 }
 
-.homeButton:hover{
-transform:scale(1.05);
-}
-
-.leftPanel button{
-font-family:'Orbitron', sans-serif;
-font-size:16px;
-padding:8px 14px;
+button{
+font-family:'Orbitron';
+padding:10px 16px;
 border:none;
 border-radius:10px;
 background:#00ffff;
 cursor:pointer;
-box-shadow:0 0 10px #00ffff;
-}
-
-.tile{
-width:80px;
-height:80px;
-background:#222;
-border-radius:10px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:32px;
-cursor:pointer;
-user-select:none;
-
-animation:pop 0.35s ease;
-}
-    
-.tile:hover{
-box-shadow:0 0 15px #00ffff;
-}
-
-@keyframes foundFlash{
-0%{background:#00ff88; transform:scale(1)}
-50%{background:#00ffff; transform:scale(1.2)}
-100%{background:#222; transform:scale(1)}
-}
-
-@keyframes floatUp{
-0%{transform:translateY(0);opacity:1;}
-100%{transform:translateY(-40px);opacity:0;}
-}
-
-@keyframes comboPop{
-0%{transform:translateX(-50%) scale(0.5);}
-70%{transform:translateX(-50%) scale(1.3);}
-100%{transform:translateX(-50%) scale(1);}
-}
-    
-@keyframes pop{
-
-0%{transform:scale(0)}
-70%{transform:scale(1.2)}
-100%{transform:scale(1)}
-
 }
 
 #overlay{
@@ -206,34 +122,17 @@ gap:20px;
 z-index:1000;
 }
 
-#overlay button{
-font-family:'Orbitron', sans-serif;
-font-size:28px;
-padding:20px 40px;
-border:none;
-border-radius:15px;
-background:#00ffff;
-cursor:pointer;
-box-shadow:0 0 20px #00ffff;
-}
-
-@keyframes foundFlash{
-0% { background:#00ff88; transform:scale(1); }
-50% { background:#00ffff; transform:scale(1.2); }
-100% { background:#222; transform:scale(1); }
-}
 </style>
 </head>
 
 <body>
 
 <a href="index.html" class="homeButton">🏠 Koti</a>
+
 <div id="overlay">
-
 <h2>🔤 Sanaluola</h2>
-
 <button onclick="startGame()">🎮 Aloita peli</button>
-
+<div id="leaderboard"></div>
 </div>
 
 <div class="container">
@@ -246,12 +145,9 @@ box-shadow:0 0 20px #00ffff;
 
 <div class="centerGame">
 <div id="grid"></div>
-<canvas id="lineCanvas"></canvas>
 <div id="word"></div>
 </div>
 
-
-  
 <div class="rightPanel">
 <h3>Löydetyt sanat</h3>
 <div id="found"></div>
@@ -260,65 +156,30 @@ box-shadow:0 0 20px #00ffff;
 </div>
 
 <script>
-let canvas = document.getElementById("lineCanvas")
-let ctx = canvas.getContext("2d")
-let prefixes = new Set()
-let combo = 0
-let comboTimer
-let pointerX = 0
-let pointerY = 0
-  
-let board=[]
-let tiles=[]
-let dice = [
-
-"AAEIOU",
-"AAEIOU",
-"AEIOUY",
-"AEIOUY",
-
-"ÄÄÖEEA",
-"ÄÖAEIO",
-"EEEAAA",
-"EEEIII",
-
-"IIIOOO",
-"IOOUUY",
-"NNNRST",
-"NNRSTL",
-
-"RSTLNA",
-"STLNRK",
-"KKRTLN",
-"HMPLVK"
-
-]
 
 let grid=document.getElementById("grid")
 
-let dictionary=new Set()
+let board=[]
+let tiles=[]
 
 let currentWord=""
 let score=0
-let foundWords=new Set()
+let time=120
+let timer
 
 let selecting=false
 let usedTiles=[]
 
-let timer
-let time=120
-let streak=0
-let musicOn=true
+let playerName=""
 
-let bgMusic=new Audio("sanatausta.mp3")
-bgMusic.loop=true
-bgMusic.volume=0.3
+let dictionary=new Set()
 
-let blip=document.getElementById("blip")
-let win=document.getElementById("win")
-let longword=new Audio("longword.mp3")
-
-/* SANALISTA */
+let dice=[
+"AAEIOU","AAEIOU","AEIOUY","AEIOUY",
+"ÄÄÖEEA","ÄÖAEIO","EEEAAA","EEEIII",
+"IIIOOO","IOOUUY","NNNRST","NNRSTL",
+"RSTLNA","STLNRK","KKRTLN","HMPLVK"
+]
 
 fetch("sanat.txt")
 .then(r=>r.text())
@@ -328,63 +189,27 @@ let words=data.split("\n")
 .map(w=>w.trim().toLowerCase())
 .filter(w=>w.length>2)
 
-dictionary = new Set(words)
-
-words.forEach(w=>{
-for(let i=1;i<=w.length;i++){
-prefixes.add(w.slice(0,i))
-}
-})
-
-console.log("Sanoja:",dictionary.size)
+dictionary=new Set(words)
 
 })
-
-/* CANVAS */
-
-function resizeCanvas(){
-
-let rect=grid.getBoundingClientRect()
-
-canvas.width=rect.width
-canvas.height=rect.height
-
-canvas.style.left=rect.left+"px"
-canvas.style.top=rect.top+"px"
-
-}
-
-resizeCanvas()
-window.addEventListener("resize",resizeCanvas)
-
-/* PELIN ALOITUS */
 
 function startGame(){
+
+playerName=prompt("Nimesi?")||"Pelaaja"
 
 document.getElementById("overlay").style.display="none"
 
 score=0
 time=120
-streak=0
-
-foundWords.clear()
 
 document.getElementById("score").textContent="Pisteet: 0"
 document.getElementById("found").innerHTML=""
-document.getElementById("timer").textContent="Aika: 120"
 
-generateGoodBoard()
-
-if(musicOn){
-bgMusic.currentTime=0
-bgMusic.play().catch(()=>{})
-}
+generateBoard()
 
 startTimer()
 
 }
-
-/* TIMER */
 
 function startTimer(){
 
@@ -396,18 +221,10 @@ time--
 
 document.getElementById("timer").textContent="Aika: "+time
 
-if(time<=0){
-endGame()
-}
+if(time<=0) endGame()
 
 },1000)
 
-}
-
-/* RUUDUKKO */
-
-function randomLetter(){
-return letters[Math.floor(Math.random()*letters.length)]
 }
 
 function generateBoard(){
@@ -439,125 +256,6 @@ tiles.push(div)
 
 }
 
-/* ETSI SANOJA */
-
-function generateGoodBoard(){
-
-let attempts=0
-
-while(true){
-
-generateBoard()
-
-let words=findWords()
-
-if(words>25) break
-
-attempts++
-
-if(attempts>200) break
-
-}
-
-}
-
-function findWords(){
-
-let found=0
-
-function dfs(x,y,word,visited){
-
-word+=board[y*4+x]
-
-if(!prefixes.has(word.toLowerCase())) return
-
-if(word.length>2 && dictionary.has(word.toLowerCase())){
-found++
-}
-
-for(let dx=-1;dx<=1;dx++){
-for(let dy=-1;dy<=1;dy++){
-
-let nx=x+dx
-let ny=y+dy
-
-if(nx<0||ny<0||nx>=4||ny>=4) continue
-
-let key=nx+"-"+ny
-if(visited.has(key)) continue
-
-let newVisited=new Set(visited)
-newVisited.add(key)
-
-dfs(nx,ny,word,newVisited)
-
-}
-}
-
-}
-
-for(let x=0;x<4;x++){
-for(let y=0;y<4;y++){
-
-let visited=new Set()
-visited.add(x+"-"+y)
-
-dfs(x,y,"",visited)
-
-}
-}
-
-return found
-
-}
-
-/* COMBO-ANIMAATIO */
-function showCombo(text){
-
-let el = document.createElement("div")
-
-el.innerText = text
-
-el.style.position = "fixed"
-el.style.top = "30%"
-el.style.left = "50%"
-el.style.transform = "translateX(-50%)"
-el.style.fontSize = "50px"
-el.style.color = "#ffcc00"
-el.style.textShadow = "0 0 20px #ffcc00"
-el.style.zIndex = "2000"
-el.style.animation = "comboPop 1s ease"
-
-document.body.appendChild(el)
-
-setTimeout(()=>el.remove(),1000)
-
-}
-
-/* PISTEANIMAATIO */
-  function showPoints(x,y,pts){
-
-let el=document.createElement("div")
-
-el.innerText="+"+pts
-
-el.style.position="absolute"
-el.style.left=x+"px"
-el.style.top=y+"px"
-el.style.color="#00ff88"
-el.style.fontSize="28px"
-el.style.fontWeight="bold"
-el.style.pointerEvents="none"
-el.style.animation="floatUp 1s ease"
-
-document.body.appendChild(el)
-
-setTimeout(()=>el.remove(),1000)
-
-}
-  
-/* VIEREKKÄISYYS */
-
 function isNeighbor(tile){
 
 if(usedTiles.length===0) return true
@@ -570,143 +268,29 @@ let y1=Number(last.dataset.y)
 let x2=Number(tile.dataset.x)
 let y2=Number(tile.dataset.y)
 
-return Math.abs(x1-x2)<=2 && Math.abs(y1-y2)<=1
+return Math.abs(x1-x2)<=1 && Math.abs(y1-y2)<=1
 
 }
-
-function tryFillGap(tile){
-
-if(usedTiles.length === 0) return
-
-let last = usedTiles[usedTiles.length-1]
-
-let x1 = Number(last.dataset.x)
-let y1 = Number(last.dataset.y)
-
-let x2 = Number(tile.dataset.x)
-let y2 = Number(tile.dataset.y)
-
-let dx = x2 - x1
-let dy = y2 - y1
-
-if(Math.abs(dx) === 2 || Math.abs(dy) === 2){
-
-let midX = x1 + Math.sign(dx)
-let midY = y1 + Math.sign(dy)
-
-let midTile = tiles.find(t =>
-Number(t.dataset.x) === midX &&
-Number(t.dataset.y) === midY
-)
-
-if(midTile && !usedTiles.includes(midTile)){
-addTile(midTile)
-}
-
-}
-
-}
-
-/* VIIVA */
-
-function drawLine(){
-
-ctx.clearRect(0,0,canvas.width,canvas.height)
-
-if(usedTiles.length === 0) return
-
-ctx.strokeStyle="#00ffff"
-ctx.lineWidth=8
-ctx.lineCap="round"
-ctx.shadowBlur=12
-ctx.shadowColor="#00ffff"
-
-ctx.beginPath()
-
-let gridRect = grid.getBoundingClientRect()
-
-for(let i=0;i<usedTiles.length;i++){
-
-let rect = usedTiles[i].getBoundingClientRect()
-
-let x = rect.left - gridRect.left + rect.width/2
-let y = rect.top - gridRect.top + rect.height/2
-
-if(i===0) ctx.moveTo(x,y)
-else ctx.lineTo(x,y)
-
-}
-
-/* live pointer */
-
-let px = pointerX - gridRect.left
-let py = pointerY - gridRect.top
-
-ctx.lineTo(px,py)
-
-ctx.stroke()
-
-}
-
-/* POINTER */
-
-grid.addEventListener("pointerdown",e=>{
-
-if(!e.target.classList.contains("tile"))return
-
-selecting=true
-grid.setPointerCapture(e.pointerId)
-addTile(e.target)
-
-})
-
-grid.addEventListener("pointermove", e => {
-
-if(!selecting) return
-
-pointerX = e.clientX
-pointerY = e.clientY
-
-let tile = getNearbyTile(e.clientX,e.clientY)
-
-  
-if(tile && tile !== usedTiles[usedTiles.length-1]){
-addTile(tile)
-}
-
-drawLine()
-
-})
-
-window.addEventListener("pointerup",(e)=>{
-
-if(!selecting)return
-
-selecting=false
-grid.releasePointerCapture(e.pointerId)
-checkWord()
-
-clearSelection()
-
-})
 
 function getNearbyTile(x,y){
 
-let candidates = []
+let candidates=[]
 
-if(usedTiles.length === 0){
-candidates = tiles
+if(usedTiles.length===0){
+
+candidates=tiles
+
 }else{
 
-let last = usedTiles[usedTiles.length-1]
+let last=usedTiles[usedTiles.length-1]
 
-let lx = Number(last.dataset.x)
-let ly = Number(last.dataset.y)
+let lx=Number(last.dataset.x)
+let ly=Number(last.dataset.y)
 
 tiles.forEach(tile=>{
 
-let tx = Number(tile.dataset.x)
-let ty = Number(tile.dataset.y)
+let tx=Number(tile.dataset.x)
+let ty=Number(tile.dataset.y)
 
 if(Math.abs(tx-lx)<=1 && Math.abs(ty-ly)<=1){
 candidates.push(tile)
@@ -716,36 +300,73 @@ candidates.push(tile)
 
 }
 
-let closest = null
-let minDist = 9999
+let closest=null
+let minDist=9999
 
 candidates.forEach(tile=>{
 
-let rect = tile.getBoundingClientRect()
+let rect=tile.getBoundingClientRect()
 
-let cx = rect.left + rect.width/2
-let cy = rect.top + rect.height/2
+let cx=rect.left+rect.width/2
+let cy=rect.top+rect.height/2
 
-let dx = cx - x
-let dy = cy - y
+let dx=cx-x
+let dy=cy-y
 
-let dist = Math.sqrt(dx*dx + dy*dy)
+let dist=Math.sqrt(dx*dx+dy*dy)
 
-if(dist < minDist){
-minDist = dist
-closest = tile
+if(dist<minDist){
+minDist=dist
+closest=tile
 }
 
 })
 
-if(minDist < 180) return closest
+if(minDist<200) return closest
 return null
 
 }
-  
+
+grid.addEventListener("pointerdown",e=>{
+
+if(!e.target.classList.contains("tile"))return
+
+selecting=true
+
+grid.setPointerCapture(e.pointerId)
+
+addTile(e.target)
+
+})
+
+grid.addEventListener("pointermove",e=>{
+
+if(!selecting)return
+
+let tile=getNearbyTile(e.clientX,e.clientY)
+
+if(tile && tile!==usedTiles[usedTiles.length-1]){
+addTile(tile)
+}
+
+})
+
+window.addEventListener("pointerup",e=>{
+
+if(!selecting)return
+
+selecting=false
+
+grid.releasePointerCapture(e.pointerId)
+
+checkWord()
+
+clearSelection()
+
+})
+
 function addTile(tile){
-tryFillGap(tile)
-tile.style.transform = "scale(1.2)"
+
 if(usedTiles.includes(tile)) return
 if(!isNeighbor(tile)) return
 
@@ -757,145 +378,101 @@ currentWord+=tile.textContent
 
 document.getElementById("word").textContent=currentWord
 
-let rect = tile.getBoundingClientRect()
-pointerX = rect.left + rect.width/2
-pointerY = rect.top + rect.height/2
-
-drawLine()
-
 }
-
-/* SANA */
 
 function checkWord(){
 
 let w=currentWord.toLowerCase()
 
-if(dictionary.has(w) && !foundWords.has(w)){
-
-foundWords.add(w)
+if(dictionary.has(w)){
 
 let pts=w.length-2
-  
-combo++
-clearTimeout(comboTimer)
 
-let multiplier = 1
+score+=pts
 
-if(combo >= 5){
-multiplier = 3
-showCombo("🔥 x3 COMBO")
-}
-else if(combo >= 3){
-multiplier = 2
-showCombo("⚡ x2 COMBO")
-}
-let div = document.createElement("div")
-div.textContent = w + "  +" + (pts * multiplier)
-document.getElementById("found").prepend(div)
-  
-score += pts * multiplier
 document.getElementById("score").textContent="Pisteet: "+score
 
-comboTimer = setTimeout(()=>{
-combo = 0
-},2500)
+let div=document.createElement("div")
+div.textContent=w+" +"+pts
+document.getElementById("found").prepend(div)
 
-/* VÄLÄHDYS */
-
-usedTiles.forEach(t=>{
-t.style.animation="foundFlash 0.4s ease"
-
-setTimeout(()=>{
-t.style.animation=""
-},400)
-})
-
-/* ÄÄNET */
-
-if(w.length>=5){
-longword.currentTime=0
-longword.play().catch(()=>{})
-}
-else{
-blip.currentTime=0
-blip.play().catch(()=>{})
-}
-
-/* COMBO */
-
-if(streak>=3){
-longword.currentTime=0
-longword.play().catch(()=>{})
-streak=0
-}
-
-}else{
-
-streak=0
+document.getElementById("blip").play()
 
 }
 
 }
-
-/* NOLLAUS */
 
 function clearSelection(){
 
-tiles.forEach(t=>t.style.transform="")
-usedTiles.forEach(t=>{
-t.classList.remove("active")
-t.style.transform=""
-})
+usedTiles.forEach(t=>t.classList.remove("active"))
 
 usedTiles=[]
 currentWord=""
 
 document.getElementById("word").textContent=""
 
-ctx.clearRect(0,0,canvas.width,canvas.height)
-
-usedTiles.forEach(t=>{
-t.classList.remove("active")
-t.style.animation=""
-})
-
 }
-
-/* LOPPU */
 
 function endGame(){
 
 clearInterval(timer)
 
-bgMusic.pause()
+document.getElementById("win").play()
 
-win.currentTime=0
-win.play().catch(()=>{})
+saveScore()
 
 let overlay=document.getElementById("overlay")
 
 overlay.style.display="flex"
 
 overlay.innerHTML=
+
 "<h2>Peli ohi!</h2>"+
-"<h3>Pisteet: "+score+"</h3>"+
-"<button onclick='startGame()'>🔁 Uusi peli</button>"
+"<h3>"+playerName+": "+score+" pistettä</h3>"+
+"<button onclick='startGame()'>🔁 Uusi peli</button>"+
+"<a href='index.html'><button>🏠 Kotivalikko</button></a>"+
+"<div id='leaderboard'></div>"
+
+renderLeaderboard()
 
 }
 
-/* MUSIIKKI NAPPI */
+function saveScore(){
+
+let scores=JSON.parse(localStorage.getItem("oppiluola_scores")||"[]")
+
+scores.push({name:playerName,score:score})
+
+scores.sort((a,b)=>b.score-a.score)
+
+scores=scores.slice(0,5)
+
+localStorage.setItem("oppiluola_scores",JSON.stringify(scores))
+
+}
+
+function renderLeaderboard(){
+
+let scores=JSON.parse(localStorage.getItem("oppiluola_scores")||"[]")
+
+let html="<h3>🏆 Top 5</h3>"
+
+scores.forEach(s=>{
+html+="<div>"+s.name+" — "+s.score+"</div>"
+})
+
+document.getElementById("leaderboard").innerHTML=html
+
+}
+
+renderLeaderboard()
 
 function toggleMusic(){
 
-musicOn=!musicOn
+let music=new Audio("sanatausta.mp3")
 
-if(musicOn){
-bgMusic.play().catch(()=>{})
-}
-else{
-bgMusic.pause()
-}
+if(music.paused) music.play()
+else music.pause()
 
 }
 
