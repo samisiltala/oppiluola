@@ -37,31 +37,6 @@ z-index:1000;
 pointer-events:none;
 }
 
-.fullscreenButton{
-
-position:absolute;
-left:190px;
-bottom:40px;
-
-font-size:16px;
-padding:8px 18px;
-
-border:2px solid white;
-border-radius:10px;
-
-background:black;
-color:white;
-
-font-family:'Orbitron';
-
-z-index:2000;
-
-}
-
-.fullscreenButton:hover{
-background:white;
-color:black;
-}
 .musicButton{
 top:70px;
 }
@@ -138,17 +113,6 @@ font-size:60px;
 margin-bottom:30px;
 }
 
-.victoryText,
-.victoryWinner{
-
-text-shadow:
-0 0 10px black,
-0 0 20px black,
-0 0 40px #ff0000;
-
-letter-spacing:6px;
-
-}
 .buttons{
 display:flex;
 flex-direction:column;
@@ -277,44 +241,6 @@ animation:samuraiZoom 14s ease infinite alternate;
 @keyframes samuraiZoom{
 0%{transform:scale(1)}
 100%{transform:scale(1.15)}
-}
-
-@keyframes victoryZoom{
-
-0%{
-opacity:0;
-transform:scale(0.6);
-}
-
-60%{
-opacity:1;
-transform:scale(1.15);
-}
-
-100%{
-transform:scale(1);
-}
-
-}
-
-.victoryText{
-animation:victoryZoom 1.2s ease-out forwards;
-}
-
-.victoryWinner{
-animation:victoryZoom 1.2s ease-out forwards;
-animation-delay:0.8s;
-opacity:0;
-}
-
-@keyframes screenShake{
-
-0%{transform:translate(0,0)}
-25%{transform:translate(-6px,4px)}
-50%{transform:translate(6px,-4px)}
-75%{transform:translate(-4px,3px)}
-100%{transform:translate(0,0)}
-
 }
 
 /* CENTER MENU */
@@ -490,12 +416,11 @@ J K L
 <input id="nameInputB" class="nameInput" placeholder="PELAAJA 2">
 
 <button onclick="startCountdown()" class="startButton">ALOITA</button>
-</div>
-<button onclick="toggleFullscreen()" class="fullscreenButton" id="fullscreenBtn">
-KOKO NÄYTTÖ ON
+<button onclick="goFullscreen()" class="startButton">
+KOKO NÄYTTÖ
 </button>
 
-
+</div>
 
 </div>
 
@@ -567,22 +492,18 @@ let answered=false
 
 let a,b,correctAnswer
 
-function toggleFullscreen(){
+function goFullscreen(){
 
-let btn=document.getElementById("fullscreenBtn")
+let elem = document.documentElement
 
-if(!document.fullscreenElement){
-
-document.documentElement.requestFullscreen()
-
-btn.innerText="POISTU KOKO NÄYTÖSTÄ"
-
-}else{
-
-document.exitFullscreen()
-
-btn.innerText="KOKO NÄYTTÖ ON"
-
+if(elem.requestFullscreen){
+elem.requestFullscreen()
+}
+else if(elem.webkitRequestFullscreen){
+elem.webkitRequestFullscreen()
+}
+else if(elem.msRequestFullscreen){
+elem.msRequestFullscreen()
 }
 
 }
@@ -830,31 +751,37 @@ if(value === correctAnswer){
 
 answered = true
 
-if(player==="A"){
+if(player === "A"){
 scoreA++
+scoreDiff++       // valkoinen lisää
 play("scoreSoundA")
 }
 else{
 scoreB++
+scoreDiff--       // punainen lisää
 play("scoreSoundB")
 }
 
-}else{
+}
+else{
 
-if(player==="A"){
-scoreA = Math.max(0, scoreA-1)
+if(player === "A"){
+scoreB++
+scoreDiff--       // punainen saa pisteen
 play("ouchWhite")
 }
 
 else{
-scoreB = Math.max(0, scoreB-1)
+scoreA++
+scoreDiff++
 play("ouchBlack")
 }
 
 }
 
-duelPosition=Math.max(0,Math.min(20,duelPosition))
 updateScores()
+
+duelPosition=Math.max(0,Math.min(20,duelPosition))
 updateBar()
 
 if(scoreA >= 10){
@@ -890,7 +817,7 @@ function updateBar(){
 let diff = scoreA - scoreB
 
 let center = 50
-let change = diff * 5
+let change = diff * 5   // 10 pisteen ero = 50%
 
 let white = center + change
 let red = center - change
@@ -916,9 +843,6 @@ let name=winner==="A"
 overlay.style.display="flex"
 
 overlay.innerHTML=`
-
-document.body.style.animation="screenShake 0.4s";
-setTimeout(()=>{document.body.style.animation=""},400);
 
 <div style="
 position:absolute;
@@ -979,12 +903,6 @@ buttons[id].click()
 
 </body>
 </html>
-
-
-
-
-
-
 
 
 
