@@ -20,6 +20,10 @@ margin-top:30px;
 
 .leftPanel{
 font-size:22px;
+display:flex;
+flex-direction:column;
+gap:20px;
+align-items:flex-start;
 }
 
 .centerGame{
@@ -34,6 +38,16 @@ padding:15px;
 border-radius:15px;
 max-height:400px;
 overflow:auto;
+}
+
+#timer{
+font-size:42px;
+font-weight:bold;
+}
+
+#score{
+font-size:36px;
+font-weight:bold;
 }
 
 #found div{
@@ -119,6 +133,17 @@ box-shadow:0 0 10px #00ffff;
 
 .homeButton:hover{
 transform:scale(1.05);
+}
+
+.leftPanel button{
+font-family:'Orbitron', sans-serif;
+font-size:16px;
+padding:8px 14px;
+border:none;
+border-radius:10px;
+background:#00ffff;
+cursor:pointer;
+box-shadow:0 0 10px #00ffff;
 }
 
 .tile{
@@ -654,7 +679,7 @@ closest=tile
 
 })
 
-if(minDist<70) return closest
+if(minDist<150) return closest
 return null
 
 }
