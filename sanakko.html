@@ -76,7 +76,7 @@ pointer-events:none;
 position:relative;
 display:grid;
 grid-template-columns:repeat(4,80px);
-gap:10px;
+gap:14px;
 justify-content:center;
 margin-top:30px;
 }
@@ -97,6 +97,7 @@ touch-action:none;
 
 .tile.active{
 background:#00aaff;
+transform:scale(1.15);
 }
 
 
@@ -635,7 +636,8 @@ pointerY = e.clientY
 
 let tile = getNearbyTile(e.clientX,e.clientY)
 
-if(tile){
+  
+if(tile && tile !== usedTiles[usedTiles.length-1]){
 addTile(tile)
 }
 
@@ -679,7 +681,7 @@ closest=tile
 
 })
 
-if(minDist<160) return closest
+if(minDist<180) return closest
 return null
 
 }
