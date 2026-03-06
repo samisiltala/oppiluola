@@ -11,7 +11,7 @@ body {
     margin: 0;
     font-family: 'Orbitron', sans-serif;
     overflow: hidden;
-    background: #111;
+    background: black;
     color: white;
 }
 
@@ -29,11 +29,11 @@ body {
 }
 
 .leftPlayer {
-    background: #1e3a8a;
+    background: black;
 }
 
 .rightPlayer {
-    background: #7f1d1d;
+    background: black;
 }
 
 .score {
@@ -53,6 +53,18 @@ body {
     font-weight: bold;
 }
 
+<img id="ninja" src="ninja.jpg">
+
+#ninja{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+height:200px;
+opacity:0.25;
+pointer-events:none;
+}
+
 .buttons {
     display: flex;
     flex-direction: column;
@@ -63,9 +75,11 @@ button {
     font-size: 50px;
     font-family: 'Orbitron', sans-serif;
     padding: 30px 50px;
-    border: none;
+    border: 3px solid white;
     border-radius: 20px;
     cursor: pointer;
+    background: black;
+    color: white;
 }
 
 .leftPlayer button {
@@ -127,7 +141,7 @@ border:none;
 border-radius:20px;
 cursor:pointer;
 ">
-🎮 ALOITA PELI
+ALOITA PELI
 </button>
 
 </div>
@@ -158,6 +172,9 @@ z-index:998;
 <audio id="winSound" src="voitto.wav"></audio>
 <audio id="scoreSoundA" src="miekka1.wav"></audio>
 <audio id="scoreSoundB" src="miekka2.wav"></audio>
+<audio id="bip" src="bip.mp3"></audio>
+<audio id="goSound" src="go.mp3"></audio>
+<audio id="music" src="duelmusa.mp3" loop></audio>
 
 <script>
 
@@ -191,13 +208,16 @@ function startCountdown(){
   let interval=setInterval(()=>{
     count--;
 
-    if(count>0){
-      overlay.innerHTML=count;
-    }
-    else if(count===0){
-      overlay.innerHTML="GO!";
-      
-    }
+if(count>0){
+  overlay.innerHTML=count;
+  play("bip");
+}
+else if(count===0){
+  overlay.innerHTML="GO!";
+  play("goSound");
+  document.getElementById("music").volume = 0.25;
+  document.getElementById("music").play();
+}
     else{
       clearInterval(interval);
       overlay.style.display="none";
@@ -308,8 +328,9 @@ function endGame(winner){
 
  let overlay=document.getElementById("overlay");
  overlay.style.display="flex";
- overlay.style.background= winner==="A" ? "#1e3a8a" : "#7f1d1d";
- overlay.innerHTML="🏆 PELI OHI<br>Pelaaja "+winner+" voitti!";
+overlay.style.background="black";
+overlay.style.color="white";
+ overlay.innerHTML="PELI OHI<br>Pelaaja "+winner+" voitti!";
 
   play("winSound");
 
@@ -322,6 +343,7 @@ function endGame(winner){
 
 </body>
 </html>
+
 
 
 
