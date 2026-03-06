@@ -316,7 +316,7 @@ padding:40px;
 
 <a href="#" class="homeButton restartButton" onclick="backToMenu()">
 ALKUUN
-<div class="homeButton levelButton" id="levelLabel">
+<div class="levelButton" id="levelLabel">
 KERTOLASKU<br>VAIKEA
 </div>
 </a>
@@ -692,12 +692,12 @@ updateScores()
 duelPosition=Math.max(0,Math.min(20,duelPosition))
 updateBar()
 
-if(duelPosition>=20){
+if(scoreA >= 10){
 endGame("A")
 return
 }
 
-if(duelPosition<=0){
+if(scoreB >= 10){
 endGame("B")
 return
 }
@@ -713,11 +713,11 @@ document.getElementById("scoreB").innerText=scoreB
 
 function updateBar(){
 
-let white=(duelPosition/20)*100
-let red=100-white
+let white = (scoreA / 10) * 100
+let red = (scoreB / 10) * 100
 
-document.getElementById("barWhite").style.width=white+"%"
-document.getElementById("barRed").style.width=red+"%"
+document.getElementById("barWhite").style.width = white + "%"
+document.getElementById("barRed").style.width = red + "%"
 
 }
 
@@ -765,6 +765,7 @@ setTimeout(()=>location.reload(),6000)
 
 </body>
 </html>
+
 
 
 
