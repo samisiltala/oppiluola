@@ -890,7 +890,12 @@ backToMenu()
 }
 document.addEventListener("keydown", function(e){
 if(e.key==="Escape"){
+
+if(!gameActive) return
+
+gameActive=false
 backToMenu()
+
 return
 }
 
@@ -924,6 +929,7 @@ buttons[id].click()
 
 </body>
 </html>
+
 
 
 
