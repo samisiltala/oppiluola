@@ -725,12 +725,9 @@ overlay.style.display="flex"
 
 overlay.innerHTML=`
 
-<div style="
-position:absolute;
-inset:0;
-background:url('samurai.png') center/cover no-repeat;
-animation:samuraiZoom 6s ease forwards;
-"></div>
+<div id="samuraiBG"></div>
+
+<div id="countdown"></div>
 
 <div style="
 position:absolute;
@@ -746,6 +743,7 @@ width:100%;
 <div class="victoryWinner">${name} VOITTI!</div>
 
 </div>
+`
 `
 
 play("winSound")
@@ -784,4 +782,5 @@ if(buttons[id]) buttons[id].click()
 
 </body>
 </html>
+
 
