@@ -7,42 +7,17 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 
-
-  
-<audio id="winSound" src="voitto.wav"></audio>
-<audio id="scoreSoundA" src="miekka1.wav"></audio>
-<audio id="scoreSoundB" src="miekka2.wav"></audio>
-<audio id="bip" src="bip.mp3"></audio>
-<audio id="goSound" src="go.mp3"></audio>
-<audio id="music" src="duelmusa.mp3" loop></audio>
-<audio id="ouchBlack" src="ouchmusta.mp3"></audio>
-<audio id="ouchWhite" src="ouchvalk.mp3"></audio>
-
-
 <style>
 
 body{
 margin:0;
 font-family:'Orbitron',sans-serif;
-overflow:hidden;
 background:black;
 color:white;
+overflow:hidden;
 }
 
-/* ARENA */
-
-.arena{
-display:flex;
-height:100vh;
-}
-
-.player{
-flex:1;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-}
+/* HOME BUTTONS */
 
 .homeButton{
 position:fixed;
@@ -60,40 +35,62 @@ z-index:1000;
 
 .musicButton{
 top:70px;
-left:20px;
 }
 
-.centerMenu{
-position:relative;
-z-index:2;
+/* ARENA */
+
+.arena{
+display:flex;
+height:100vh;
+}
+
+.player{
+flex:1;
 display:flex;
 flex-direction:column;
+justify-content:center;
 align-items:center;
-gap:20px;
 }
 
-.startButton{
-font-size:42px;
-padding:20px 60px;
-border-radius:20px;
-background:white;
-color:black;
-font-family:'Orbitron';
-cursor:pointer;
+.playerName{
+font-size:32px;
+margin-bottom:10px;
 }
-  
-.countdown{
-font-size:120px;
-}
+
 .score{
 font-size:60px;
 margin-bottom:30px;
 }
 
-.playerName{
-font-size:32px;
-letter-spacing:3px;
-margin-bottom:10px;
+.buttons{
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+button{
+font-family:'Orbitron';
+cursor:pointer;
+}
+
+/* ANSWER BUTTONS */
+
+.leftPlayer button{
+font-size:50px;
+padding:30px 50px;
+background:white;
+color:black;
+border:none;
+border-radius:20px;
+}
+
+.rightPlayer button{
+font-size:50px;
+padding:30px 50px;
+background:#e0001a;
+color:white;
+border:none;
+border-radius:20px;
 }
 
 /* QUESTION */
@@ -104,7 +101,6 @@ top:15%;
 left:50%;
 transform:translateX(-50%);
 font-size:90px;
-z-index:2;
 }
 
 /* NINJA */
@@ -117,18 +113,6 @@ transform:translate(-50%,-50%);
 height:300px;
 opacity:0.7;
 pointer-events:none;
-}
-
-#samuraiBG{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:url("samurai.png") center/cover no-repeat;
-opacity:0.35;
-z-index:0;
-animation:samuraiZoom 14s ease infinite alternate;
 }
 
 /* DUEL BAR */
@@ -146,17 +130,6 @@ overflow:hidden;
 display:flex;
 }
 
-#duelBar::after{
-content:"";
-position:absolute;
-left:50%;
-top:0;
-height:100%;
-width:2px;
-background:white;
-opacity:0.6;
-}
-
 #barWhite{
 background:white;
 width:50%;
@@ -169,79 +142,71 @@ width:50%;
 transition:0.3s;
 }
 
-/* BUTTONS */
+/* OVERLAY */
 
-.buttons{
+#overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
 display:flex;
-flex-direction:column;
-gap:20px;
-}
-
-button{
-font-family:'Orbitron';
-font-size:50px;
-padding:30px 50px;
-border-radius:20px;
-border:none;
-cursor:pointer;
-touch-action:manipulation;
-}
-
-.leftPlayer button{
-background:white;
-color:black;
-}
-
-.rightPlayer button{
-background:#e0001a;
-color:white;
-}
-
-/* MENU */
-
-.nameInput{
-font-family:'Orbitron';
-font-size:24px;
-padding:10px;
-margin:10px;
-text-align:center;
-text-transform:uppercase;
-background:black;
-color:white;
-border:2px solid white;
-border-radius:10px;
-}
-
-.menuButtons button{
-font-size:20px;
-padding:10px 20px;
-margin:5px;
+justify-content:center;
+align-items:center;
+z-index:999;
 }
 
 /* SAMURAI BACKGROUND */
 
-
-/* ANIMATIONS */
+#samuraiBG{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:url("samurai.png") center/cover no-repeat;
+opacity:0.35;
+animation:samuraiZoom 14s ease infinite alternate;
+}
 
 @keyframes samuraiZoom{
 0%{transform:scale(1)}
 100%{transform:scale(1.15)}
 }
 
-@keyframes textFade{
-0%{opacity:0; transform:translateY(40px)}
-100%{opacity:1; transform:translateY(0)}
+/* CENTER MENU */
+
+.centerMenu{
+position:relative;
+z-index:2;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:20px;
 }
 
-.victoryText{
-animation:textFade 1s forwards
+.nameInput{
+font-size:26px;
+padding:10px;
+text-align:center;
+background:black;
+color:white;
+border:2px solid white;
+border-radius:10px;
+text-transform:uppercase;
 }
 
-.victoryWinner{
-animation:textFade 1s forwards;
-animation-delay:1s;
-opacity:0
+.startButton{
+font-size:42px;
+padding:20px 60px;
+border-radius:20px;
+background:white;
+color:black;
+border:none;
 }
+
+/* LEFT MENU */
+
 .menuLeft{
 position:absolute;
 left:30px;
@@ -259,26 +224,48 @@ border:2px solid white;
 border-radius:10px;
 background:black;
 color:white;
-font-family:'Orbitron';
-cursor:pointer;
 }
 
 .menuTitle{
-margin-top:10px;
 font-size:16px;
 opacity:0.7;
 }
+
+/* COUNTDOWN */
+
+.countdown{
+font-size:120px;
+}
+
+/* VICTORY */
+
+.victoryText{
+font-size:80px;
+animation:textFade 1s forwards;
+}
+
+.victoryWinner{
+font-size:70px;
+animation:textFade 1s forwards;
+animation-delay:1s;
+opacity:0;
+}
+
+@keyframes textFade{
+0%{opacity:0;transform:translateY(40px)}
+100%{opacity:1;transform:translateY(0)}
+}
+
 </style>
 </head>
 
 <body>
 
 <a href="index.html" class="homeButton">KOTI</a>
-<a href="#" class="homeButton musicButton" onclick="toggleMusic()" id="musicBtn">
-MUSIIKKI ON
-</a>
+<a href="#" class="homeButton musicButton" onclick="toggleMusic()" id="musicBtn">MUSIIKKI ON</a>
 
 <div class="centerQuestion" id="question"></div>
+
 <img id="ninja" src="ninja.jpg">
 
 <div id="duelBar">
@@ -286,22 +273,9 @@ MUSIIKKI ON
 <div id="barRed"></div>
 </div>
 
-<div id="overlay" class="startScreen" style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-z-index:999;
-">
+<div id="overlay">
 
 <div id="samuraiBG"></div>
-
-<!-- VASEN VALIKKO -->
 
 <div class="menuLeft">
 
@@ -319,38 +293,18 @@ z-index:999;
 <button onclick="setDifficulty('hard')">VAIKEA</button>
 
 </div>
-
-<!-- KESKIMENU -->
 
 <div class="centerMenu">
 
 <input id="nameInputA" class="nameInput" placeholder="PELAAJA 1">
 <input id="nameInputB" class="nameInput" placeholder="PELAAJA 2">
 
-<button onclick="startCountdown()" class="startButton">
-ALOITA
-</button>
+<button onclick="startCountdown()" class="startButton">ALOITA</button>
 
 </div>
 
 </div>
 
-<div class="menuLeft">
-
-<div class="menuTitle">LASKU</div>
-
-<button onclick="setMode('+')">+</button>
-<button onclick="setMode('-')">−</button>
-<button onclick="setMode('*')">×</button>
-<button onclick="setMode('/')">÷</button>
-
-<div class="menuTitle">TASO</div>
-
-<button onclick="setDifficulty('easy')">HELPPO</button>
-<button onclick="setDifficulty('normal')">NORMAALI</button>
-<button onclick="setDifficulty('hard')">VAIKEA</button>
-
-</div>
 <div class="arena">
 
 <div class="player leftPlayer">
@@ -367,32 +321,38 @@ ALOITA
 
 </div>
 
+<audio id="winSound" src="voitto.wav"></audio>
+<audio id="scoreSoundA" src="miekka1.wav"></audio>
+<audio id="scoreSoundB" src="miekka2.wav"></audio>
+<audio id="bip" src="bip.mp3"></audio>
+<audio id="goSound" src="go.mp3"></audio>
+<audio id="music" src="duelmusa.mp3" loop></audio>
+<audio id="ouchBlack" src="ouchmusta.mp3"></audio>
+<audio id="ouchWhite" src="ouchvalk.mp3"></audio>
+
 <script>
 
-window.addEventListener("load",()=>{
+/* MUSIC */
 
+window.addEventListener("load",()=>{
 let music=document.getElementById("music")
 music.volume=0.25
 music.play().catch(()=>{})
-
 })
 
-
 function toggleMusic(){
-
 let music=document.getElementById("music")
 let btn=document.getElementById("musicBtn")
 
 if(music.paused){
 music.play()
 btn.innerText="MUSIIKKI ON"
-}
-else{
+}else{
 music.pause()
 btn.innerText="MUSIIKKI OFF"
 }
-
 }
+
 /* GAME STATE */
 
 let mode="*"
@@ -406,12 +366,10 @@ let answered=false
 
 let a,b,correctAnswer
 
-/* MENU */
-
 function setMode(m){mode=m}
 function setDifficulty(d){difficulty=d}
 
-/* START */
+/* COUNTDOWN */
 
 function startCountdown(){
 
@@ -427,27 +385,24 @@ document.getElementById("nameA").innerText=nameA
 document.getElementById("nameB").innerText=nameB
 
 let overlay=document.getElementById("overlay")
-overlay.innerHTML=count
-play("bip")
-
-overlay.innerHTML="<div class='countdown'>GO!</div>"
-play("goSound")
-
-
-overlay.innerHTML="3"
 
 let count=3
+
+overlay.innerHTML="<div class='countdown'>3</div>"
+play("bip")
 
 let timer=setInterval(()=>{
 
 count--
 
 if(count>0){
-overlay.innerHTML=count
+overlay.innerHTML="<div class='countdown'>"+count+"</div>"
+play("bip")
 }
 
 else if(count===0){
-overlay.innerHTML="GO!"
+overlay.innerHTML="<div class='countdown'>GO!</div>"
+play("goSound")
 }
 
 else{
@@ -465,6 +420,8 @@ newQuestion()
 
 }
 
+/* SOUND */
+
 function play(id){
 
 let s=document.getElementById(id)
@@ -476,12 +433,14 @@ s.currentTime=0
 s.play().catch(()=>{})
 
 }
-  
-/* QUESTION GENERATOR */
+
+/* RANDOM */
 
 function rand(min,max){
 return Math.floor(Math.random()*(max-min+1))+min
 }
+
+/* QUESTION GENERATION */
 
 function generateQuestion(){
 
@@ -496,7 +455,6 @@ if(difficulty==="hard") tables=[1,2,3,4,5,6,7,8,9,10]
 a=tables[rand(0,tables.length-1)]
 b=rand(1,10)
 correctAnswer=a*b
-
 }
 
 if(mode==="/"){
@@ -510,7 +468,6 @@ if(difficulty==="hard") tables=[1,2,3,4,5,6,7,8,9,10]
 b=tables[rand(0,tables.length-1)]
 correctAnswer=rand(1,10)
 a=b*correctAnswer
-
 }
 
 if(mode==="+"){
@@ -522,7 +479,6 @@ if(difficulty==="hard") max=100
 a=rand(1,max)
 b=rand(1,max)
 correctAnswer=a+b
-
 }
 
 if(mode==="−"){
@@ -537,7 +493,6 @@ b=rand(1,max)
 if(b>a)[a,b]=[b,a]
 
 correctAnswer=a-b
-
 }
 
 }
@@ -603,37 +558,28 @@ if(player==="A"){
 scoreA++
 duelPosition++
 play("scoreSoundA")
-}
-
-else{
+}else{
 scoreB++
 duelPosition--
 play("scoreSoundB")
 }
 
-}
-
-else{
+}else{
 
 if(player==="A"&&scoreA>0){
 scoreA--
 duelPosition--
+play("ouchWhite")
 }
 
 if(player==="B"&&scoreB>0){
 scoreB--
 duelPosition++
-}
-
-}
-
-if(player==="A"){
-play("ouchWhite")
-}
-
-if(player==="B"){
 play("ouchBlack")
 }
+
+}
+
 updateScores()
 
 duelPosition=Math.max(0,Math.min(20,duelPosition))
@@ -670,7 +616,7 @@ document.getElementById("barRed").style.width=red+"%"
 
 }
 
-/* END */
+/* END GAME */
 
 function endGame(winner){
 
@@ -699,16 +645,19 @@ animation:samuraiZoom 6s ease forwards;
 
 <div style="position:relative;text-align:center">
 
-<div class="victoryText" style="font-size:80px">
+<div class="victoryText">
 TAISTELU OHI
 </div>
 
-<div class="victoryWinner" style="font-size:70px">
+<div class="victoryWinner">
 ${name} VOITTI!
 </div>
 
 </div>
+
 `
+
+play("winSound")
 
 setTimeout(resetGame,6000)
 
@@ -717,52 +666,10 @@ setTimeout(resetGame,6000)
 /* RESET */
 
 function resetGame(){
-
-scoreA=0
-scoreB=0
-duelPosition=10
-
-updateScores()
-updateBar()
-
-let overlay=document.getElementById("overlay")
-
-overlay.className="startScreen"
-overlay.style.display="flex"
-
-overlay.innerHTML=`
-
-<input id="nameInputA" class="nameInput" placeholder="PELAAJA 1">
-<input id="nameInputB" class="nameInput" placeholder="PELAAJA 2">
-
-<div class="menuButtons">
-
-<div>LASKU</div>
-<button onclick="setMode('+')">+</button>
-<button onclick="setMode('-')">−</button>
-<button onclick="setMode('*')">×</button>
-<button onclick="setMode('/')">÷</button>
-
-<div>TASO</div>
-<button onclick="setDifficulty('easy')">HELPPO</button>
-<button onclick="setDifficulty('normal')">NORMAALI</button>
-<button onclick="setDifficulty('hard')">VAIKEA</button>
-
-</div>
-
-<button onclick="startCountdown()" style="font-size:40px;margin-top:20px">
-ALOITA
-</button>
-
-`
-
+location.reload()
 }
 
 </script>
 
 </body>
 </html>
-
-
-
-
