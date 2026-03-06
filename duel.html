@@ -416,9 +416,6 @@ J K L
 <input id="nameInputB" class="nameInput" placeholder="PELAAJA 2">
 
 <button onclick="startCountdown()" class="startButton">ALOITA</button>
-<button onclick="goFullscreen()" class="startButton" id="fullscreenBtn">
-KOKO NÄYTTÖ
-</button>
 
 </div>
 
@@ -554,6 +551,10 @@ btn.classList.add("selected")
 }
 
 function startCountdown(){
+if(!document.fullscreenElement){
+document.documentElement.requestFullscreen().catch(()=>{})
+}
+
 scoreA = 0
 scoreB = 0
 scoreDiff = 0
@@ -924,6 +925,7 @@ buttons[id].click()
 
 </body>
 </html>
+
 
 
 
