@@ -405,7 +405,7 @@ div.textContent=letter
 
 div.dataset.x=i%4
 div.dataset.y=Math.floor(i/4)
-div.textContent = w + "  +" + (pts * multiplier)
+
 grid.appendChild(div)
 tiles.push(div)
 
@@ -684,7 +684,7 @@ if(dictionary.has(w) && !foundWords.has(w)){
 foundWords.add(w)
 
 let div = document.createElement("div")
-div.textContent = w
+div.textContent = w + "  +" + (pts * multiplier)
 document.getElementById("found").prepend(div)
 
 let pts=w.length-2
