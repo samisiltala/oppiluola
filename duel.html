@@ -19,9 +19,7 @@ overflow:hidden;
 
 /* HOME */
 
-.restartButton{
-top:120px;
-}
+
 
 .levelButton{
 top:180px;
@@ -356,9 +354,6 @@ padding:40px;
 MUSIIKKI ON
 </a>
 
-<a href="#" class="homeButton restartButton" onclick="backToMenu()">
-ALKUUN
-</a>
 
 <div class="levelButton" id="levelLabel">
 KERTOLASKU<br>VAIKEA
@@ -894,6 +889,10 @@ backToMenu()
 
 }
 document.addEventListener("keydown", function(e){
+if(e.key==="Escape"){
+backToMenu()
+return
+}
 
 if(!gameActive) return
 
@@ -925,6 +924,7 @@ buttons[id].click()
 
 </body>
 </html>
+
 
 
 
