@@ -686,12 +686,8 @@ if(dictionary.has(w) && !foundWords.has(w)){
 
 foundWords.add(w)
 
-let div = document.createElement("div")
-div.textContent = w + "  +" + (pts * multiplier)
-document.getElementById("found").prepend(div)
-
 let pts=w.length-2
-
+  
 combo++
 clearTimeout(comboTimer)
 
@@ -705,7 +701,10 @@ else if(combo >= 3){
 multiplier = 2
 showCombo("⚡ x2 COMBO")
 }
-
+let div = document.createElement("div")
+div.textContent = w + "  +" + (pts * multiplier)
+document.getElementById("found").prepend(div)
+  
 score += pts * multiplier
 document.getElementById("score").textContent="Pisteet: "+score
 
@@ -762,6 +761,11 @@ currentWord=""
 document.getElementById("word").textContent=""
 
 ctx.clearRect(0,0,canvas.width,canvas.height)
+
+usedTiles.forEach(t=>{
+t.classList.remove("active")
+t.style.animation=""
+})
 
 }
 
