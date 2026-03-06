@@ -624,10 +624,12 @@ function newQuestion(){
 answered=false
 generateQuestion()
 
-let symbol=mode
-if(mode==="*") symbol="×"
-if(mode==="/") symbol=":"
+let symbol
 
+if(mode === "*") symbol = "×"
+else if(mode === "/") symbol = ":"
+else if(mode === "-") symbol = "−"
+else symbol = "+"
 document.getElementById("question").innerText=a+" "+symbol+" "+b
 
 let answers=[correctAnswer]
@@ -794,6 +796,7 @@ backToMenu()
 
 </body>
 </html>
+
 
 
 
