@@ -45,15 +45,15 @@ body {
     font-family: 'Orbitron', sans-serif;
 }
 .centerQuestion {
-    position: absolute;
-    top: 15%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 90px;
-    font-weight: bold;
+    position:absolute;
+    top:15%;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:90px;
+    font-weight:bold;
+    z-index:2;
 }
 
-<img id="ninja" src="ninja.jpg">
 
 #ninja{
 position:absolute;
@@ -117,6 +117,8 @@ box-shadow:0 0 10px #00ffff;
 <!-- muu sisältö jatkuu tästä -->
 
 <div class="centerQuestion" id="question"></div>
+
+<img id="ninja" src="ninja.jpg">
 
 <div id="overlay" style="
 position:fixed;
@@ -343,6 +345,7 @@ overlay.style.color="white";
 
 </body>
 </html>
+
 
 
 
