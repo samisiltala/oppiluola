@@ -119,16 +119,14 @@ z-index:5;
 
 /* LEVEL LABEL */
 
-#levelLabel{
-position:absolute;
-top:25px;
-left:50%;
-transform:translateX(-50%);
-font-size:24px;
-letter-spacing:3px;
-color:white;
-z-index:10;
+.levelButton{
+top:170px;
+font-size:16px;
+line-height:1.3;
+text-align:center;
+cursor:default;
 pointer-events:none;
+display:none;
 }
 
 /* NINJA */
@@ -311,7 +309,7 @@ padding:40px;
 
 <a href="#" class="homeButton restartButton" onclick="backToMenu()">
 ALKUUN
-<div id="levelLabel">
+<div class="homeButton levelButton" id="levelLabel">
 KERTOLASKU<br>VAIKEA
 </div>
 </a>
@@ -494,6 +492,9 @@ else{
 clearInterval(timer)
 overlay.style.display="none"
 gameActive=true
+
+document.getElementById("levelLabel").style.display="block"
+  
 updateBar()
 newQuestion()
 
@@ -516,6 +517,8 @@ return Math.floor(Math.random()*(max-min+1))+min
 }
 
 function backToMenu(){
+
+document.getElementById("levelLabel").style.display="none"
 
 let nameA=document.getElementById("nameA").innerText
 let nameB=document.getElementById("nameB").innerText
@@ -754,6 +757,7 @@ setTimeout(()=>location.reload(),6000)
 
 </body>
 </html>
+
 
 
 
