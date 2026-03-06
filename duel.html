@@ -416,7 +416,7 @@ J K L
 <input id="nameInputB" class="nameInput" placeholder="PELAAJA 2">
 
 <button onclick="startCountdown()" class="startButton">ALOITA</button>
-<button onclick="goFullscreen()" class="startButton">
+<button onclick="goFullscreen()" class="startButton" id="fullscreenBtn">
 KOKO NÄYTTÖ
 </button>
 
@@ -495,6 +495,9 @@ let a,b,correctAnswer
 function goFullscreen(){
 
 let elem = document.documentElement
+let btn = document.getElementById("fullscreenBtn")
+
+if(!document.fullscreenElement){
 
 if(elem.requestFullscreen){
 elem.requestFullscreen()
@@ -504,6 +507,24 @@ elem.webkitRequestFullscreen()
 }
 else if(elem.msRequestFullscreen){
 elem.msRequestFullscreen()
+}
+
+if(btn) btn.innerText="POISTU KOKO NÄYTÖSTÄ"
+
+}else{
+
+if(document.exitFullscreen){
+document.exitFullscreen()
+}
+else if(document.webkitExitFullscreen){
+document.webkitExitFullscreen()
+}
+else if(document.msExitFullscreen){
+document.msExitFullscreen()
+}
+
+if(btn) btn.innerText="KOKO NÄYTTÖ"
+
 }
 
 }
@@ -903,6 +924,7 @@ buttons[id].click()
 
 </body>
 </html>
+
 
 
 
