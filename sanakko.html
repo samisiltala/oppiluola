@@ -394,20 +394,29 @@ clearSelection()
 
 function addTile(tile){
 
+// backtrack jos palataan edelliseen
 if(usedTiles.length>1 && tile===usedTiles[usedTiles.length-2]){
 
 let last=usedTiles.pop()
 last.classList.remove("active")
 
 currentWord=currentWord.slice(0,-1)
-
 document.getElementById("word").textContent=currentWord
 
 return
 }
+
 if(usedTiles.includes(tile)) return
 if(!isNeighbor(tile)) return
 
+tile.classList.add("active")
+
+usedTiles.push(tile)
+
+currentWord+=tile.textContent
+document.getElementById("word").textContent=currentWord
+
+}
 function checkWord(){
 
 let w=currentWord.toLowerCase()
