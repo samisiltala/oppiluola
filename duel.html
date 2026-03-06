@@ -389,7 +389,7 @@ KERTOLASKU<br>VAIKEA
 <audio id="ouchWhite" src="ouchvalk.mp3"></audio>
 
 <script>
-
+let scoreDiff = 0
 window.addEventListener("load",()=>{
 let music=document.getElementById("music")
 music.volume=0.25
@@ -456,6 +456,8 @@ btn.classList.add("selected")
 }
 
 function startCountdown(){
+scoreDiff = 0
+updateBar()
 gameActive=false
 answered=false
 
@@ -530,6 +532,8 @@ document.getElementById("levelLabel").style.display="none"
 
 let nameA=document.getElementById("nameA").innerText
 let nameB=document.getElementById("nameB").innerText
+value="${nameA}"
+value="${nameB}"
 
 let overlay=document.getElementById("overlay")
 
@@ -655,33 +659,33 @@ function choose(player,value){
 
 if(!gameActive||answered)return
 
-if(value===correctAnswer){
+if(value === correctAnswer){
 
-answered=true
+answered = true
 
-if(player==="A"){
+if(player === "A"){
 scoreA++
-duelPosition++
+scoreDiff++       // valkoinen lisää
 play("scoreSoundA")
-}else{
+}
+else{
 scoreB++
-duelPosition--
+scoreDiff--       // punainen lisää
 play("scoreSoundB")
 }
 
-}else{
-
-// väärä vastaus antaa pisteen vastustajalle
+}
+else{
 
 if(player === "A"){
 scoreB++
-duelPosition--     // B saa pisteen → palkki vasemmalle
+scoreDiff--       // punainen saa pisteen
 play("ouchWhite")
 }
 
 else{
 scoreA++
-duelPosition++     // A saa pisteen → palkki oikealle
+scoreDiff++
 play("ouchBlack")
 }
 
@@ -701,7 +705,15 @@ if(scoreB >= 10){
 endGame("B")
 return
 }
+if(scoreDiff >= 10){
+endGame("A")
+return
+}
 
+if(scoreDiff <= -10){
+endGame("B")
+return
+}
 newQuestion()
 
 }
@@ -713,8 +725,14 @@ document.getElementById("scoreB").innerText=scoreB
 
 function updateBar(){
 
-let white = (scoreA / 10) * 100
-let red = (scoreB / 10) * 100
+let center = 50
+let change = scoreDiff * 5
+
+let white = center + change
+let red = center - change
+
+white = Math.max(0, Math.min(100, white))
+red = Math.max(0, Math.min(100, red))
 
 document.getElementById("barWhite").style.width = white + "%"
 document.getElementById("barRed").style.width = red + "%"
@@ -757,7 +775,9 @@ ${name} VOITTI!
 
 play("winSound")
 
-setTimeout(()=>location.reload(),6000)
+setTimeout(()=>{
+backToMenu()
+},6000)
 
 }
 
@@ -765,6 +785,7 @@ setTimeout(()=>location.reload(),6000)
 
 </body>
 </html>
+
 
 
 
