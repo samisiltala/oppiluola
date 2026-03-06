@@ -574,6 +574,39 @@ return Math.abs(x1-x2)<=2 && Math.abs(y1-y2)<=1
 
 }
 
+function tryFillGap(tile){
+
+if(usedTiles.length === 0) return
+
+let last = usedTiles[usedTiles.length-1]
+
+let x1 = Number(last.dataset.x)
+let y1 = Number(last.dataset.y)
+
+let x2 = Number(tile.dataset.x)
+let y2 = Number(tile.dataset.y)
+
+let dx = x2 - x1
+let dy = y2 - y1
+
+if(Math.abs(dx) === 2 || Math.abs(dy) === 2){
+
+let midX = x1 + Math.sign(dx)
+let midY = y1 + Math.sign(dy)
+
+let midTile = tiles.find(t =>
+Number(t.dataset.x) === midX &&
+Number(t.dataset.y) === midY
+)
+
+if(midTile && !usedTiles.includes(midTile)){
+addTile(midTile)
+}
+
+}
+
+}
+
 /* VIIVA */
 
 function drawLine(){
@@ -711,7 +744,7 @@ return null
 }
   
 function addTile(tile){
-
+tryFillGap(tile)
 tile.style.transform = "scale(1.2)"
 if(usedTiles.includes(tile)) return
 if(!isNeighbor(tile)) return
@@ -810,7 +843,10 @@ streak=0
 function clearSelection(){
 
 tiles.forEach(t=>t.style.transform="")
-usedTiles.forEach(t=>t.classList.remove("active"))
+usedTiles.forEach(t=>{
+t.classList.remove("active")
+t.style.transform=""
+})
 
 usedTiles=[]
 currentWord=""
