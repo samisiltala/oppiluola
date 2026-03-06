@@ -42,7 +42,7 @@ border-radius:10px;
 background:black;
 color:white;
 text-decoration:none;
-z-index:2000;
+z-index:3000;
 }
 
 .musicButton{
@@ -423,14 +423,22 @@ let a,b,correctAnswer
 
 function setMode(btn,m){
 mode=m
-document.querySelectorAll(".menuLeft button").forEach(b=>b.classList.remove("selected"))
+document.querySelectorAll(".menuLeft button").forEach(b=>{
+if(["+","-","×","÷"].includes(b.innerText)) b.classList.remove("selected")
+})
 btn.classList.add("selected")
 }
 
 function setDifficulty(btn,d){
+
 difficulty=d
-btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("selected"))
+
+document.querySelectorAll(".menuLeft button").forEach(b=>{
+if(["HELPPO","NORMAALI","VAIKEA"].includes(b.innerText)) b.classList.remove("selected")
+})
+
 btn.classList.add("selected")
+
 }
 
 function startCountdown(){
@@ -561,18 +569,18 @@ a=b*correctAnswer
 }
 
 if(mode==="+"){
-let max=20
-if(difficulty==="normal") max=50
-if(difficulty==="hard") max=100
+let max=10
+if(difficulty==="normal") max=20
+if(difficulty==="hard") max=50
 a=rand(1,max)
 b=rand(1,max)
 correctAnswer=a+b
 }
 
 if(mode==="-" ){
-let max=20
-if(difficulty==="normal") max=50
-if(difficulty==="hard") max=100
+let max=10
+if(difficulty==="normal") max=20
+if(difficulty==="hard") max=50
 a=rand(1,max)
 b=rand(1,max)
 if(b>a)[a,b]=[b,a]
@@ -633,11 +641,13 @@ answered=true
 
 if(player==="A"){
 scoreA++
-duelPosition++
-play("scoreSoundA")
-}else{
-scoreB++
 duelPosition--
+play("scoreSoundA")
+}
+
+else{
+scoreB++
+duelPosition++
 play("scoreSoundB")
 }
 
@@ -735,6 +745,7 @@ setTimeout(()=>location.reload(),6000)
 
 </body>
 </html>
+
 
 
 
