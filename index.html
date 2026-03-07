@@ -136,7 +136,71 @@ text-shadow:0 0 25px #00ffff;
 margin-bottom:60px;
 }
 
-/* PELINAPIT */
+/* AARTEET ELI LINKIT */
+  
+.treasures{
+
+position:absolute;
+
+bottom:18%;
+
+width:100%;
+
+display:flex;
+
+justify-content:center;
+
+gap:120px;
+
+flex-wrap:wrap;
+
+}
+
+.treasure{
+
+position:relative;
+
+width:240px;
+
+cursor:pointer;
+
+transition:0.3s;
+
+}
+
+.treasure img{
+width:100%;
+display:block;
+}
+
+.treasure span{
+
+position:absolute;
+
+top:50%;
+left:50%;
+
+transform:translate(-50%,-50%);
+
+font-family:'IM Fell English', serif;
+
+font-size:28px;
+
+color:#3a2b14;
+
+text-shadow:
+0 2px 3px rgba(255,255,255,0.4),
+0 3px 6px rgba(0,0,0,0.6);
+
+}
+
+.treasure:hover{
+
+transform:scale(1.06);
+
+filter:drop-shadow(0 0 20px rgba(255,220,120,0.6));
+
+}
 
 
 
@@ -192,6 +256,24 @@ font-size:18px;
 <span>A</span>
 </h1>
 
+<div class="treasures">
+
+<a href="kertotaulu.html" class="treasure">
+<img src="taulu.png">
+<span>Kertotaulu</span>
+</a>
+
+<a href="duel.html" class="treasure">
+<img src="miekka.png">
+<span>Kaksintaistelu</span>
+</a>
+
+<a href="sanakko.html" class="treasure">
+<img src="scroll.png">
+<span>Sanaluola</span>
+</a>
+
+</div>
 
 
 <audio id="music" src="tausta.wav" loop></audio>
