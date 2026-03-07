@@ -809,7 +809,19 @@ b=rand(1,max)
 if(b>a)[a,b]=[b,a]
 correctAnswer=a-b
 }
+if(mode==="/"){
 
+let tables
+
+if(difficulty==="easy") tables=[1,2,5,10]
+if(difficulty==="normal") tables=[1,2,3,4,5,10]
+if(difficulty==="hard") tables=[1,2,3,4,5,6,7,8,9,10]
+
+b = tables[rand(0, tables.length-1)]   // jakaja
+correctAnswer = rand(1,10)             // tulos
+a = correctAnswer * b                  // jaettava
+
+}
 }
 
 function newQuestion(){
@@ -1026,6 +1038,7 @@ buttons[id].click()
 
 </body>
 </html>
+
 
 
 
