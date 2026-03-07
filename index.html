@@ -158,9 +158,12 @@ flex-wrap:wrap;
 
 .treasure{
 
-position:relative;
+position:absolute;
+bottom:18%;
+left:50%;
+transform:translateX(-50%);
 
-width:240px;
+width:320px;
 
 cursor:pointer;
 
@@ -196,7 +199,7 @@ text-shadow:
 
 .treasure:hover{
 
-transform:scale(1.06);
+transform:translateX(-50%) scale(1.06);
 
 filter:drop-shadow(0 0 20px rgba(255,220,120,0.6));
 
@@ -258,6 +261,8 @@ font-size:18px;
 
 <div class="treasures">
 
+
+
 <a href="kertotaulu.html" class="treasure">
 <img src="taulu.png">
 <span>Kertotaulu</span>
@@ -268,8 +273,8 @@ font-size:18px;
 <span>Kaksintaistelu</span>
 </a>
 
-<a href="sanakko.html" class="treasure">
-<img src="scroll.png">
+<a href="sanakko.html" class="treasure scroll">
+<img src="kaaro.png">
 <span>Sanaluola</span>
 </a>
 
