@@ -411,6 +411,8 @@ J K L
 
 <div id="overlay">
 
+<div id="countdown" class="countdown" style="display:none;"></div>
+
 <div id="samuraiBG"></div>
 
 <div class="gameGuide">
@@ -681,6 +683,7 @@ return Math.floor(Math.random()*(max-min+1))+min
 }
 
 function backToMenu(){
+
 let overlay=document.getElementById("overlay")
 overlay.style.display="flex"
   
@@ -692,22 +695,15 @@ if(guide) guide.style.display="block"
 
 document.querySelectorAll(".homeButton").forEach(el=>el.style.display="block")
 
-gameActive=false
-answered=false
-}
 let keys=document.getElementById("keyPanel")
 if(keys) keys.style.display="block"
 
-let nameA=document.getElementById("nameA").innerText
-let nameB=document.getElementById("nameB").innerText
-value="${nameA}"
-value="${nameB}"
+gameActive=false
+answered=false
 
-let overlay=document.getElementById("overlay")
-
-overlay.style.display="flex"
-
-overlay.innerHTML=`
+}
+let keys=document.getElementById("keyPanel")
+if(keys) keys.style.display="block"
 
 <div id="samuraiBG"></div>
 
@@ -997,6 +993,7 @@ buttons[id].click()
 
 </body>
 </html>
+
 
 
 
