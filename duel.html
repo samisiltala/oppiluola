@@ -589,10 +589,11 @@ function startCountdown(){
 document.querySelector(".menuLeft").style.display="none"
 document.querySelector(".centerMenu").style.display="none"
 
-document.querySelector(".homeButton").style.display="none"
-document.querySelector(".musicButton").style.display="none"
 let keys=document.getElementById("keyPanel")
 if(keys) keys.style.display="none"
+
+document.querySelector(".homeButton").style.display="none"
+document.querySelector(".musicButton").style.display="none"
 
 let guide=document.querySelector(".gameGuide")
 if(guide) guide.style.display="none"
@@ -680,14 +681,20 @@ return Math.floor(Math.random()*(max-min+1))+min
 }
 
 function backToMenu(){
+let overlay=document.getElementById("overlay")
+overlay.style.display="flex"
+  
 document.querySelector(".menuLeft").style.display="flex"
 document.querySelector(".centerMenu").style.display="flex"
 
 let guide=document.querySelector(".gameGuide")
 if(guide) guide.style.display="block"
 
-document.querySelector(".homeButton").style.display="block"
-document.querySelector(".musicButton").style.display="block"
+document.querySelectorAll(".homeButton").forEach(el=>el.style.display="block")
+
+gameActive=false
+answered=false
+}
 let keys=document.getElementById("keyPanel")
 if(keys) keys.style.display="block"
 
@@ -990,6 +997,7 @@ buttons[id].click()
 
 </body>
 </html>
+
 
 
 
