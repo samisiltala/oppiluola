@@ -26,6 +26,7 @@ font-family:'Orbitron', sans-serif;
 color:white;
 text-align:center;
 min-height:100vh;
+overflow:hidden;
 
 display:flex;
 flex-direction:column;
@@ -263,22 +264,21 @@ margin-bottom:60px;
 /* MOBIILI */
 
 @media(max-width:700px){
-
 .title{
 font-size:34px;
 letter-spacing:4px;
 top:5%;
 }
 
-/* pienennetään artefaktit */
+/* suuremmat kosketusalueet */
 .treasure{
-width:110px;
+width:130px;
 }
 
-/* miekka vasemmalle */
+/* miekka hieman oikealle */
 .sword{
-left:5%;
-bottom:25%;
+left:12%;
+bottom:28%;
 transform:rotate(-54deg);
 }
 
@@ -286,13 +286,13 @@ transform:rotate(-54deg);
 .abacus{
 left:50%;
 transform:translateX(-50%) rotate(-12deg);
-bottom:38%;
+bottom:40%;
 }
 
 /* käärö oikealle */
 .scroll{
-right:5%;
-top:70%;
+right:6%;
+top:72%;
 }
 .treasure:active img{
 transform:scale(1.08);
