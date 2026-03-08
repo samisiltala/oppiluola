@@ -524,27 +524,28 @@ function showNewRecord(){
     el.innerText = "🔥 UUSI ENNÄTYS!";
 
     el.style.position = "absolute";
-    el.style.top = "75%";
+    el.style.top = "75%";        // alkaa alempaa
     el.style.left = "50%";
     el.style.transform = "translateX(-50%)";
 
     el.style.fontSize = "30px";
     el.style.color = "#ffd700";
     el.style.textShadow = "0 0 20px #ffd700";
-    el.style.transition = "all 1,2s ease-out";
+
+    el.style.transition = "all 1.2s ease-out";
 
     el.style.zIndex = "999";
 
     document.body.appendChild(el);
 
     setTimeout(()=>{
-    el.style.top = "68%";
-    el.style.opacity = "0";
-},100);
+        el.style.top = "68%";    // nousee vain vähän
+        el.style.opacity = "0";
+    },100);
 
     setTimeout(()=>{
         el.remove();
-    },3500);
+    },3500);   // näkyy pidempään
 }
 
 function starRain(){
@@ -705,6 +706,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
