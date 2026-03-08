@@ -428,6 +428,14 @@ font-size:70px;
 margin-top:30px;
 }
 
+.wrongFlash{
+
+animation:screenShake 0.25s;
+
+background:#ff4040 !important;
+color:white !important;
+
+}
   /* MOBILE ROTATE */
 
 /* @media (orientation:portrait){
@@ -730,7 +738,7 @@ newQuestion()
 
 }
 
-},1000)
+},1500)
 
 }
 
@@ -934,6 +942,7 @@ play("scoreSoundB")
 if(player==="A"){
 duelPosition--
 play("ouchWhite")
+flashButtons("buttonsA")
 lockA=true
 setTimeout(()=>{lockA=false},1500)
 }
@@ -941,6 +950,7 @@ setTimeout(()=>{lockA=false},1500)
 else{
 duelPosition++
 play("ouchBlack")
+flashButtons("buttonsB")
 lockB=true
 setTimeout(()=>{lockB=false},1500)
 }
@@ -1082,12 +1092,29 @@ if(buttons[id]){
 buttons[id].click()
 }
 
+function flashButtons(container){
+
+let buttons=document.getElementById(container).children
+
+for(let b of buttons){
+
+b.classList.add("wrongFlash")
+
+setTimeout(()=>{
+b.classList.remove("wrongFlash")
+},250)
+
+}
+
+}
+
 }
   
 </script>
 
 </body>
 </html>
+
 
 
 
