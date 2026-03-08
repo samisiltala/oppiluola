@@ -821,7 +821,7 @@ function endGame(){
       previousBest = score;
       
 document.getElementById("personalBest").innerHTML =
-"🔥 Oma ennätys<br>" + name + "<br>" + previousBest;
+"🔥 Oma ennätys<br>" + name + "<br><span style='font-size:26px'>" + previousBest + "</span>";
       
       setTimeout(()=>{
           showNewRecord();
@@ -916,6 +916,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
