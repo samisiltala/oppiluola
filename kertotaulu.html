@@ -840,6 +840,7 @@ document.getElementById("personalBest").innerHTML =
 }
 
 function loadScores(){
+let name = document.getElementById("name").value.trim();
 
 const levelNames = {
 1:"HELPPO",
@@ -872,8 +873,8 @@ if(found){
         previousBest = found[1];
     }
 
-    document.getElementById("personalBest").innerText =
-    "🔥 Oma ennätys: " + previousBest;
+ document.getElementById("personalBest").innerHTML =
+"🔥 Oma ennätys<br>" + name + "<br>" + previousBest;
 }
 
    // TOP-3
@@ -916,6 +917,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
