@@ -921,7 +921,7 @@ container.appendChild(btn)
 function choose(player,value){
 
 
-if(!gameActive||answered)return
+if(!gameActive) return
 if(player==="A" && lockA) return
 if(player==="B" && lockB) return
 
@@ -1094,6 +1094,8 @@ let buttons=document.getElementById(container).children
 if(buttons[id]){
 buttons[id].click()
 }
+}
+
 
 function flashButtons(container){
 
@@ -1111,12 +1113,13 @@ b.classList.remove("wrongFlash")
 
 }
 
-}
+
   
 </script>
 
 </body>
 </html>
+
 
 
 
