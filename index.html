@@ -321,6 +321,33 @@ transform:scale(1.08);
 }
 }
 
+/* LEPAKKO START */
+
+.bat{
+position:absolute;
+top:6%;
+left:50%;
+transform:translateX(-50%);
+width:120px;
+cursor:pointer;
+z-index:5;
+animation:batSwing 3s ease-in-out infinite;
+}
+
+.bat img{
+width:100%;
+}
+
+.bat:hover{
+transform:translateX(-50%) scale(1.08);
+}
+
+@keyframes batSwing{
+0%{transform:translateX(-50%) rotate(-6deg);}
+50%{transform:translateX(-50%) rotate(6deg);}
+100%{transform:translateX(-50%) rotate(-6deg);}
+}
+
 </style>
 
 </head>
@@ -330,6 +357,10 @@ transform:scale(1.08);
 <video autoplay muted loop playsinline id="bg-video">
 <source src="luolatausta.mp4" type="video/mp4">
 </video>
+
+<div class="bat" onclick="startExperience()">
+<img src="bat.png">
+</div>
 
 <div class="overlay"></div>
 
@@ -365,17 +396,21 @@ transform:scale(1.08);
 
 <script>
 
-/* Taustamusiikki käynnistyy ensimmäisestä klikkauksesta */
+function startExperience(){
 
-document.body.addEventListener("pointerdown",()=>{
+/* fullscreen */
+
+if(!document.fullscreenElement){
+document.documentElement.requestFullscreen()
+}
+
+/* musiikki */
 
 const music=document.getElementById("music")
-
 music.volume=0.35
-
 music.play().catch(()=>{})
 
-},{once:true})
+}
 
 
 /* Service Worker */
