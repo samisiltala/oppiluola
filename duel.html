@@ -738,7 +738,7 @@ newQuestion()
 
 }
 
-},1500)
+},1000)
 
 }
 
@@ -939,6 +939,8 @@ play("scoreSoundB")
 
 }else{
 
+answered = true
+  
 if(player==="A"){
 duelPosition--
 play("ouchWhite")
@@ -971,8 +973,7 @@ endGame("B")
 return
 }
 
-newQuestion()
-
+setTimeout(newQuestion,300)
 }
 
 function updateScores(){
@@ -1114,6 +1115,7 @@ b.classList.remove("wrongFlash")
 
 </body>
 </html>
+
 
 
 
