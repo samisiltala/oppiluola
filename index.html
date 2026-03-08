@@ -57,7 +57,7 @@ font-family:'MedievalSharp', serif;
 font-size:60px;
 letter-spacing:7px;
 
-color:#c89a4a;
+color:#b8873c;
 
 /* kivimäinen syvyys */
 text-shadow:
@@ -74,7 +74,8 @@ filter:
 drop-shadow(0 0 12px rgba(255,200,120,0.4))
 drop-shadow(0 0 30px rgba(255,170,60,0.25));
 
-animation:torch 6s infinite ease-in-out;
+animation:torch 4.5s infinite ease-in-out;
+floatTitle 7s infinite ease-in-out;
 
 white-space:nowrap;
 
@@ -96,13 +97,19 @@ animation:float 4s ease-in-out infinite;
 .title span:nth-child(8){animation-delay:1.4s}
 .title span:nth-child(9){animation-delay:1.6s}
 
-.title:hover{
+@keyframes floatTitle {
 
-transform:translate(-42%, -50%) scale(1.05);
+0%{
+transform:translate(-50%, -50%);
+}
 
-filter:
-drop-shadow(0 0 18px rgba(255,220,120,0.8))
-drop-shadow(0 0 40px rgba(255,170,60,0.6));
+50%{
+transform:translate(-50%, -53%);
+}
+
+100%{
+transform:translate(-50%, -50%);
+}
 
 }
 
