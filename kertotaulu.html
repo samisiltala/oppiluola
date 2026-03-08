@@ -15,6 +15,7 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+   animation: spaceZoom 60s linear infinite alternate;
 }
 
 body::before{
@@ -36,7 +37,7 @@ h1 {
     display: grid;
     grid-template-columns: 220px 1fr 260px;
     gap: 20px;
-    padding: 20px;
+    padding: 10px 20px 20px 20px;
     max-width: 1300px;
     margin: 0 auto;
 }
@@ -100,10 +101,10 @@ h1 {
 
 button {
     font-family: 'Orbitron', sans-serif;
-    font-size: 20px;
+    font-size: 34px;
     text-shadow: 0 0 5px white;
-    padding: 12px;
-    border-radius: 12px;
+    padding: 24px;
+    border-radius: 16px;
     border: none;
     cursor: pointer;
     background: #ffd700;
@@ -143,6 +144,18 @@ button:hover {
     background:#f44336 !important;
 }
 
+@keyframes spaceZoom {
+
+0%{
+background-size:100%;
+}
+
+100%{
+background-size:110%;
+}
+
+}
+    
 @keyframes correctPop{
     0%{ transform:scale(1); }
     50%{ transform:scale(1.2); }
@@ -171,7 +184,9 @@ button:hover {
 .buttonContainer{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:12px;
+    gap:20px;
+    width:100%;
+    max-width:500px;
 }
 
 .buttonContainer button{
@@ -210,7 +225,7 @@ font-size:14px;
 box-shadow:0 0 8px #00ffff;
 ">🏠 KOTI</a>
 
-<h1>⭐ 2B:n kertotaulukisa ⭐</h1>
+
 
 <div class="container">
 
@@ -230,7 +245,7 @@ box-shadow:0 0 8px #00ffff;
 <select id="themeSelect">
 <option value="panda">🐼 Panda</option>
 <option value="frog">🐸 Sammakko</option>
-<option value="space">🚀 Avaruus</option>
+<option value="space" selected>🚀 Avaruus</option>
 <option value="ice">🧊 Jää</option>
 </select>
 
@@ -651,6 +666,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
