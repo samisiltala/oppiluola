@@ -657,6 +657,11 @@ btn.classList.add("selected")
 
 function startCountdown(){
 duelPosition = 10
+document.querySelectorAll(".homeButton").forEach(el=>{
+el.style.display="none"
+})
+
+document.getElementById("keyPanel").style.display="none"
 scoreA = 0
 scoreB = 0
 scoreDiff = 0
@@ -706,12 +711,6 @@ else{
 
 clearInterval(timer)
 overlay.style.display="none"
-
-document.querySelectorAll(".homeButton").forEach(el=>{
-el.style.display="none"
-})
-
-document.querySelector(".musicButton").style.display="none"
 
 
 document.getElementById("keyPanel").style.display="block"
@@ -1082,6 +1081,7 @@ buttons[id].click()
 
 </body>
 </html>
+
 
 
 
