@@ -740,7 +740,7 @@ el.style.transform = "translateX(-50%)";
 }
 function starRain(){
 
-    for(let i=0;i<30;i++){
+    for(let i=0;i<18;i++){
 
         let star = document.createElement("div");
 
@@ -750,21 +750,25 @@ function starRain(){
         star.style.left = Math.random()*100 + "vw";
         star.style.top = "-20px";
 
-        star.style.fontSize = (20 + Math.random()*30) + "px";
+        star.style.fontSize = (18 + Math.random()*26) + "px";
+
+        star.style.opacity = 0.35 + Math.random()*0.45;   // läpikuultavuus
+        star.style.filter = "drop-shadow(0 0 6px rgba(255,255,200,0.6))";
 
         star.style.pointerEvents = "none";
-        star.style.zIndex = "999";
+        star.style.zIndex = "900";
 
         document.body.appendChild(star);
 
-        let fall = 2 + Math.random()*2;
+        let fall = 2.8 + Math.random()*2.5;
+        let drift = (Math.random()*120 - 60); // sivuliike
 
         star.animate([
-            { transform: "translateY(0)", opacity:1 },
-            { transform: "translateY(100vh)", opacity:0 }
+            { transform: "translate(0px,0px)", opacity: star.style.opacity },
+            { transform: `translate(${drift}px,100vh)`, opacity:0 }
         ],{
             duration: fall*1000,
-            easing: "linear"
+            easing: "ease-in"
         });
 
         setTimeout(()=>{
@@ -905,6 +909,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
