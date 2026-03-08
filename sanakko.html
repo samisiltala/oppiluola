@@ -58,7 +58,9 @@ display:grid;
 grid-template-columns:repeat(4,80px);
 gap:14px;
 margin-top:30px;
+touch-action:none;
 }
+
 
 #overlay h2{
 font-size:56px;
@@ -309,60 +311,6 @@ return Math.abs(x1-x2)<=1 && Math.abs(y1-y2)<=1
 
 }
 
-function getNearbyTile(x,y){
-
-let candidates=[]
-
-if(usedTiles.length===0){
-
-candidates=tiles
-
-}else{
-
-let last=usedTiles[usedTiles.length-1]
-
-let lx=Number(last.dataset.x)
-let ly=Number(last.dataset.y)
-
-tiles.forEach(tile=>{
-
-let tx=Number(tile.dataset.x)
-let ty=Number(tile.dataset.y)
-
-if(Math.abs(tx-lx)<=1 && Math.abs(ty-ly)<=1){
-candidates.push(tile)
-}
-
-})
-
-}
-
-let closest=null
-let minDist=9999
-
-candidates.forEach(tile=>{
-
-let rect=tile.getBoundingClientRect()
-
-let cx=rect.left+rect.width/2
-let cy=rect.top+rect.height/2
-
-let dx=cx-x
-let dy=cy-y
-
-let dist=Math.sqrt(dx*dx+dy*dy)
-
-if(dist<minDist){
-minDist=dist
-closest=tile
-}
-
-})
-
-if(minDist<300 && !usedTiles.includes(closest)) return closest
-return null
-
-}
 
 grid.addEventListener("pointerdown",e=>{
 
@@ -378,11 +326,13 @@ addTile(e.target)
 
 grid.addEventListener("pointermove",e=>{
 
-if(!selecting)return
+if(!selecting) return
 
-let tile=getNearbyTile(e.clientX,e.clientY)
+let tile = document.elementFromPoint(e.clientX, e.clientY)
 
-if(tile && tile!==usedTiles[usedTiles.length-1]){
+if(!tile || !tile.classList.contains("tile")) return
+
+if(tile !== usedTiles[usedTiles.length-1]){
 addTile(tile)
 }
 
