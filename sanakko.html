@@ -359,7 +359,7 @@ closest=tile
 
 })
 
-if(minDist<220) return closest
+if(minDist<300 && !usedTiles.includes(closest)) return closest
 return null
 
 }
