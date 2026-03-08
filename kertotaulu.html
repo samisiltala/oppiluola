@@ -807,7 +807,11 @@ function endGame(){
   play("winSound");
   clearInterval(timerInterval);
 
-  document.getElementById("question").innerText="🏁 PELI OHI!";
+  let q = document.getElementById("question");
+    q.innerText = "🏁 PELI OHI!";
+    q.style.animation = "none";
+    void q.offsetWidth;
+    q.style.animation = "questionPop 0.5s ease-out";
 
   let name=document.getElementById("name").value.trim();
 
@@ -909,6 +913,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
