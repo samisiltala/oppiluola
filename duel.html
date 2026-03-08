@@ -452,6 +452,28 @@ gap:8px;
 width:50px;
 text-align:center;
 }
+
+.keyGrid{
+display:flex;
+gap:16px;
+}
+
+.keyGroup{
+border:2px solid white;
+border-radius:8px;
+padding:6px 10px;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:6px;
+font-size:14px;
+width:30px;
+}
+
+.redKeys{
+color:#e0001a;
+}
+  
   /* MOBILE ROTATE */
 
 /* @media (orientation:portrait){
@@ -496,18 +518,16 @@ KERTOLASKU<br>VAIKEA
 
 <div class="keyGrid">
 
-<div class="keyColumn whiteKeys">
-<div class="keyBox">A</div>
-<div class="keyBox">S</div>
-<div class="keyBox">D</div>
+<div class="keyGroup whiteKeys">
+<div>A</div>
+<div>S</div>
+<div>D</div>
 </div>
 
-<div class="keyColumn redKeys">
-<div class="keyBox">J</div>
-<div class="keyBox">K</div>
-<div class="keyBox">L</div>
-</div>
-
+<div class="keyGroup redKeys">
+<div>J</div>
+<div>K</div>
+<div>L</div>
 </div>
 
 </div>
@@ -1143,6 +1163,7 @@ b.classList.remove("wrongFlash")
 
 </body>
 </html>
+
 
 
 
