@@ -424,15 +424,15 @@ transform:translateX(-50%) scale(1.08);
 </h1>
 
 
-<a href="kertotaulu.html" class="treasure abacus">
+<a href="kertotaulu.html" onclick="enterFullscreen()" class="treasure abacus">
 <img src="helmitaulu.png">
 </a>
 
-<a href="duel.html" class="treasure sword">
+<a href="duel.html" onclick="enterFullscreen()" class="treasure sword">
 <img src="miekka.png">
 </a>
 
-<a href="sanakko.html" class="treasure scroll">
+<a href="sanakko.html" onclick="enterFullscreen()" class="treasure scroll">
 <img src="kaaro.png">
 </a>
 
@@ -460,6 +460,13 @@ music.play().catch(()=>{})
 
 }
 
+function enterFullscreen(){
+
+if(!document.fullscreenElement){
+document.documentElement.requestFullscreen()
+}
+
+}
 
 /* Service Worker */
 
