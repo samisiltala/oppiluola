@@ -108,6 +108,11 @@ h1 {
     margin: 15px 0;
 }
 
+#btn0{top:0;left:40px;}
+#btn1{top:40px;right:0;}
+#btn2{bottom:0;left:40px;}
+#btn3{top:40px;left:0;}
+
 #statusMessage {
     min-height: 30px;
     font-size: 20px;
@@ -224,6 +229,18 @@ background-size:110%;
 
 }
     
+@keyframes orbit {
+
+0%{
+transform:rotate(0deg) translateX(40px) rotate(0deg);
+}
+
+100%{
+transform:rotate(360deg) translateX(40px) rotate(-360deg);
+}
+
+}
+    
 @keyframes questionPop{
 
 0%{transform:scale(0.7);opacity:0;}
@@ -238,7 +255,7 @@ background-size:110%;
 100%{ transform:scale(1); }
 }
 
-    @keyframes popEffect{
+@keyframes popEffect{
 
 0%{
 transform:translateX(-50%) scale(0.6);
@@ -282,6 +299,10 @@ display:grid;
 grid-template-columns:1fr 1fr;
 gap:20px;
 justify-items:center;
+position:relative;
+width:140px;
+height:140px;
+margin-top:20px;
 
 }
 
@@ -306,6 +327,17 @@ border:none;
 background:#ffd700;
 
 box-shadow:0 0 18px #ffd700, 0 0 40px rgba(255,215,0,0.5);
+
+
+position:absolute;
+width:60px;
+height:60px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+animation:orbit 6s linear infinite;
 
 }
 
@@ -876,6 +908,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
