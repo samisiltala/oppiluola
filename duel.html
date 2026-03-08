@@ -436,6 +436,22 @@ background:#ff4040 !important;
 color:white !important;
 
 }
+
+.keyGrid{
+display:flex;
+gap:20px;
+}
+
+.keyColumn{
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+.keyBox{
+width:50px;
+text-align:center;
+}
   /* MOBILE ROTATE */
 
 /* @media (orientation:portrait){
@@ -470,20 +486,24 @@ MUSIIKKI ON
 </a>
 
 
-<div class="levelButton" id="levelLabel">
-KERTOLASKU<br>VAIKEA
-</div>
-
 <div class="keyPanel" id="keyPanel" style="display:none;">
 
 <div class="keyTitle">NÄPPÄIMET</div>
 
-<div class="keyBox whiteKeys">
-A S D
+<div class="keyGrid">
+
+<div class="keyColumn whiteKeys">
+<div class="keyBox">A</div>
+<div class="keyBox">S</div>
+<div class="keyBox">D</div>
 </div>
 
-<div class="keyBox redKeys">
-J K L
+<div class="keyColumn redKeys">
+<div class="keyBox">J</div>
+<div class="keyBox">K</div>
+<div class="keyBox">L</div>
+</div>
+
 </div>
 
 </div>
@@ -1119,6 +1139,7 @@ b.classList.remove("wrongFlash")
 
 </body>
 </html>
+
 
 
 
