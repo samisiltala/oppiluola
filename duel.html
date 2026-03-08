@@ -937,7 +937,8 @@ duelPosition--
 play("scoreSoundB")
 }
 
-}else{
+}
+else{
 
 if(player==="A"){
 duelPosition--
@@ -954,7 +955,6 @@ flashButtons("buttonsB")
 lockB=true
 setTimeout(()=>{lockB=false},1500)
 }
-
 }
 
 duelPosition=Math.max(0,Math.min(20,duelPosition))
@@ -1115,6 +1115,7 @@ b.classList.remove("wrongFlash")
 
 </body>
 </html>
+
 
 
 
