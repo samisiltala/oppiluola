@@ -511,9 +511,16 @@ function choose(i){
 
     showPlusOne();
 
-    if(streak === 3){
-        showStreak();
-    }
+if(streak === 3){
+    showStreak();
+    rocketIgnite();
+}
+
+if(streak === 6){
+    showDoubleStreak();
+    rocketLaunch();
+    streak = 0;
+}
 
 } else {
 
@@ -588,6 +595,55 @@ el.style.transform = "translateX(-50%)";
     },1000);
 }
 
+function showDoubleStreak(){
+
+    let el = document.createElement("div");
+    el.innerText = "🚀 DOUBLE STREAK!";
+
+    el.style.position = "absolute";
+    el.style.bottom = "-7px";
+    el.style.left = "50%";
+    el.style.transform = "translateX(-50%)";
+
+    el.style.fontSize = "48px";
+    el.style.color = "#ffd700";
+    el.style.textShadow = "0 0 15px #ffd700, 0 0 40px #ffd700";
+
+    el.style.whiteSpace = "nowrap";
+
+    document.querySelector(".centerGame").appendChild(el);
+
+    setTimeout(()=>{
+        el.remove();
+    },2000);
+}
+
+function rocketIgnite(){
+
+    let rocket = document.getElementById("mascot");
+
+    rocket.style.transition = "0.2s";
+    rocket.style.transform = "scale(1.3)";
+    rocket.innerText = "🚀🔥";
+
+    setTimeout(()=>{
+        rocket.style.transform = "scale(1)";
+        rocket.innerText = "🚀";
+    },500);
+}
+    
+function rocketLaunch(){
+
+    let rocket = document.getElementById("mascot");
+
+    rocket.style.transition = "1s";
+    rocket.style.transform = "translateY(-200px)";
+
+    setTimeout(()=>{
+        rocket.style.transform = "translateY(0)";
+    },1000);
+}
+    
 function showNewRecord(){
 
     let el = document.createElement("div");
@@ -797,6 +853,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
