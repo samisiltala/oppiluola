@@ -29,7 +29,7 @@ content:"";
 position:fixed;
 inset:0;
 
-background-image:url("space.jpg");
+background-image:var(--bg-image);
 background-size:cover;
 background-position:center;
 
@@ -391,29 +391,28 @@ function changeTheme(){
  let mascot=document.getElementById("mascot");
 
  if(theme==="panda"){
-    body.style.backgroundImage="url('panda.jpg')";
-    body.style.color="black";
+    document.body.style.setProperty('--bg-image',"url('panda.jpg')");
+    body.style.color="white";
     mascot.innerText="🐼";
- }
+}
 
- if(theme==="frog"){
-    body.style.backgroundImage="url('frog.jpg')";
-    body.style.color="black";
+if(theme==="frog"){
+    document.body.style.setProperty('--bg-image',"url('frog.jpg')");
+    body.style.color="white";
     mascot.innerText="🐸";
- }
+}
 
- if(theme==="space"){
-    body.style.backgroundImage="url('space.jpg')";
+if(theme==="space"){
+    document.body.style.setProperty('--bg-image',"url('space.jpg')");
     body.style.color="white";
     mascot.innerText="🚀";
- }
+}
 
- if(theme==="ice"){
-    body.style.backgroundImage="url('ice.jpg')";
+if(theme==="ice"){
+    document.body.style.setProperty('--bg-image',"url('ice.jpg')");
     body.style.color="black";
     mascot.innerText="🧊";
- }
-
+}
 }
 
 function newQuestion(){
@@ -728,6 +727,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
