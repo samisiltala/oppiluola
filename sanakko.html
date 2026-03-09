@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Sanaluola</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fontds.googleapis.com/css2?family=Cinzel:wght@500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -30,7 +30,7 @@ width:100%;
 height:100%;
 pointer-events:none;
 opacity:0.12;
-z-index:0;
+z-index:900;
 }
 
 #overlay{
@@ -39,7 +39,7 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.35);
+background:rgba(0,0,0,0.7);
 display:flex;
 justify-content:center;
 align-items:center;
@@ -218,7 +218,7 @@ prefixes.add(word.slice(0,i))
 })
 
 function startGame(){
-
+document.getElementById("matrixCanvas").style.display="none"
 let name=document.getElementById("nameInput").value.trim().toUpperCase()
 
 if(name===""){
