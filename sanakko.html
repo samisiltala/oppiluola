@@ -256,10 +256,10 @@ let validWords=new Set()
 let maxScore=0
 
 let dice=[
-"AAEEIN","ABBJOO","ACHOPS","AFFKPS",
-"AOOTTU","AEIOUY","DEILRX","DELRVY",
-"DISTTY","EEGHNW","EEINSU","EHRTVW",
-"EIOSST","ELRTTY","HIMNOU","HLNNRS"
+"AAEIOU","AEIOUY","AEIOUY","AAEIOU",
+"NNRSTL","NNRSTL","RSTLNA","RSTLNA",
+"KKRTLN","HMPLVK","DEIINS","TLAEIN",
+"ÄÄÖEEA","ÄÖAEIO","EEEAAA","EEEIII"
 ]
 fetch("sanat.txt")
 .then(r=>r.text())
@@ -306,27 +306,8 @@ foundWords.clear()
 document.getElementById("score").textContent="Pisteet: 0"
 document.getElementById("found").innerHTML=""
 
-let minWords = 80
-let minVowels = 4
-let attempts = 0
 
-while(true){
-
-generateBoard()
-findAllWords()
-attempts++
-
-if(validWords.size >= minWords && countVowels() >= minVowels){
-break
-}
-
-if(attempts > 100){
-console.log("Fallback ruudukko:", validWords.size)
-break
-}
-
-}
-
+generateGoodBoard()
 startTimer()
 music.play()
 
@@ -372,6 +353,31 @@ div.dataset.y=Math.floor(i/4)
 
 grid.appendChild(div)
 tiles.push(div)
+
+}
+
+}
+
+function generateGoodBoard(){
+
+let minWords = 100
+let minVowels = 4
+let attempts = 0
+
+while(true){
+
+generateBoard()
+findAllWords()
+attempts++
+
+if(validWords.size >= minWords && countVowels() >= minVowels){
+break
+}
+
+if(attempts > 100){
+console.log("Fallback ruudukko:", validWords.size)
+break
+}
 
 }
 
@@ -629,27 +635,7 @@ document.getElementById("word").textContent=""
 
 document.getElementById("overlay").style.display="none"
 
-let minWords = 80
-let minVowels = 4
-let attempts = 0
-
-while(true){
-
-generateBoard()
-findAllWords()
-attempts++
-
-if(validWords.size >= minWords && countVowels() >= minVowels){
-break
-}
-
-if(attempts > 100){
-console.log("Fallback ruudukko:", validWords.size)
-break
-}
-
-}
-
+generateGoodBoard()
 startTimer()
 
 }
