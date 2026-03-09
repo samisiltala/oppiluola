@@ -309,8 +309,14 @@ foundWords.clear()
 document.getElementById("score").textContent="Pisteet: 0"
 document.getElementById("found").innerHTML=""
 
+let minWords = 80
+
+do{
 generateBoard()
 findAllWords()
+}
+while(validWords.size < minWords)
+
 startTimer()
 
 music.play()
