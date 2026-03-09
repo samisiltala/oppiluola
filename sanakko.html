@@ -672,28 +672,6 @@ document.getElementById("win").play()
 let overlay=document.getElementById("overlay")
 overlay.style.display="flex"
 
-let words=[...validWords].sort()
-
-let wordHTML=""
-
-words.forEach(w=>{
-
-if(foundWords.has(w)){
-
-wordHTML+=`<span class="wordFound">${w}</span> `
-
-}else if(w.length>=7){
-
-wordHTML+=`<span class="wordLong">${w}</span> `
-
-}else{
-
-wordHTML+=`<span class="wordMissed">${w}</span> `
-
-}
-
-})
-
 overlay.innerHTML=`
 <div class="overlayBox">
 
@@ -705,9 +683,7 @@ overlay.innerHTML=`
 
 <div class="endGrid">
 
-<div class="wordWall">
-${wordHTML}
-</div>
+<div class="wordWall" id="wordWall"></div>
 
 <div>
 
@@ -726,7 +702,57 @@ ${wordHTML}
 </div>
 `
 
+startWordWall()
+
 }
+
+function startWordWall(){
+
+let wall=document.getElementById("wordWall")
+
+let words=[...validWords].sort()
+
+let i=0
+
+let interval=setInterval(()=>{
+
+if(i>=words.length){
+
+clearInterval(interval)
+return
+
+}
+
+let w=words[i]
+
+let span=document.createElement("span")
+
+if(foundWords.has(w)){
+
+span.className="wordFound"
+
+}else if(w.length>=7){
+
+span.className="wordLong"
+
+}else{
+
+span.className="wordMissed"
+
+}
+
+span.textContent=w+" "
+
+wall.appendChild(span)
+
+wall.scrollTop=wall.scrollHeight
+
+i++
+
+},20)
+
+}
+
 function newGame(){
 
 clearInterval(timer)
