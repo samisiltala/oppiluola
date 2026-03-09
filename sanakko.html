@@ -49,7 +49,7 @@ left:0;
 width:100%;
 height:100%;
 pointer-events:none;
-opacity:0.12;
+opacity:0.18;
 z-index:0;
 }
 
@@ -66,10 +66,6 @@ align-items:center;
 gap:20px;
 z-index:10;
 position:relative;
-
-box-shadow:
-0 0 30px rgba(0,0,0,0.8),
-0 0 80px rgba(0,0,0,0.4);
 }
 
 .overlayBox h2{
@@ -78,14 +74,14 @@ margin:0;
 color:#e8e8e8;
 }
 
-.startButton{
+#nameInput{
 font-family:'Cinzel', serif;
-letter-spacing:2px;
-background:#e6e6e6;
-color:#111;
-padding:16px 40px;
-border-radius:12px;
-cursor:pointer;
+font-size:24px;
+padding:10px;
+border:none;
+border-radius:8px;
+text-align:center;
+text-transform:uppercase;
 }
 
 /* PELI */
@@ -179,7 +175,7 @@ font-weight:bold;
 <div class="overlayBox">
 <h2 id="gameTitle">SALAISET SANAT</h2>
 <input id="nameInput" placeholder="Nimesi" maxlength="6">
-<button class="startButton" onclick="startGame()">Aloita peli</button>
+<button onclick="startGame()">Aloita peli</button>
 </div>
 
 </div>
@@ -210,6 +206,17 @@ font-weight:bold;
 
 let grid=document.getElementById("grid")
 
+document.addEventListener("input",(e)=>{
+
+if(e.target.id!=="nameInput") return
+if(e.inputType==="deleteContentBackward") return
+
+let bip=document.getElementById("bip")
+bip.currentTime=0
+bip.play()
+
+})
+
 let board=[]
 let tiles=[]
 
@@ -231,6 +238,7 @@ let playerName=""
 let dictionary=new Set()
 let prefixes=new Set()
 let validWords=new Set()
+let maxScore=0
 
 let dice=[
 "AAEIOU","AEIOUY","AEIOUY","AAEIOU",
@@ -257,6 +265,52 @@ prefixes.add(word.slice(0,i))
 
 })
 
+function startMatrix(){
+
+const canvas=document.getElementById("matrixCanvas")
+const ctx=canvas.getContext("2d")
+
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
+
+const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const fontSize=18
+const columns=Math.floor(canvas.width/fontSize)
+
+const drops=[]
+
+for(let x=0;x<columns;x++){
+drops[x]=1
+}
+
+function draw(){
+
+ctx.fillStyle="rgba(0,0,0,0.05)"
+ctx.fillRect(0,0,canvas.width,canvas.height)
+
+ctx.fillStyle="#6aff9c"
+ctx.font=fontSize+"px monospace"
+
+for(let i=0;i<drops.length;i++){
+
+let text=letters[Math.floor(Math.random()*letters.length)]
+
+ctx.fillText(text,i*fontSize,drops[i]*fontSize)
+
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975){
+drops[i]=0
+}
+
+drops[i]++
+
+}
+
+}
+
+setInterval(draw,50)
+
+}
+
 function startGame(){
 
 document.getElementById("matrixCanvas").style.display="none"
@@ -264,7 +318,7 @@ document.getElementById("matrixCanvas").style.display="none"
 let name=document.getElementById("nameInput").value.trim().toUpperCase()
 
 if(name===""){
-alert("Kirjoita nimesi")
+alert("Kirjoita nimesi ensin")
 return
 }
 
@@ -277,28 +331,32 @@ score=0
 time=120
 foundWords.clear()
 
-document.getElementById("score").textContent="Pisteet: 0"
-document.getElementById("found").innerHTML=""
-
-generateBoard()
-findAllWords()
+generateGoodBoard()
 startTimer()
 music.play()
 
 }
 
-function startTimer(){
+function generateGoodBoard(){
 
-clearInterval(timer)
+let minWords=100
+let attempts=0
 
-timer=setInterval(()=>{
+while(true){
 
-time--
-document.getElementById("timer").textContent="Aika: "+time
+generateBoard()
+findAllWords()
+attempts++
 
-if(time<=0) endGame()
+if(validWords.size>=minWords){
+break
+}
 
-},1000)
+if(attempts>100){
+break
+}
+
+}
 
 }
 
@@ -331,58 +389,148 @@ tiles.push(div)
 
 }
 
+function isNeighbor(tile){
+
+if(usedTiles.length===0) return true
+
+let last=usedTiles[usedTiles.length-1]
+
+let x1=Number(last.dataset.x)
+let y1=Number(last.dataset.y)
+
+let x2=Number(tile.dataset.x)
+let y2=Number(tile.dataset.y)
+
+return Math.abs(x1-x2)<=1 && Math.abs(y1-y2)<=1
+
+}
+
+grid.addEventListener("pointerdown",e=>{
+
+if(!e.target.classList.contains("tile"))return
+
+selecting=true
+grid.setPointerCapture(e.pointerId)
+addTile(e.target)
+
+})
+
+grid.addEventListener("pointermove",e=>{
+
+if(!selecting) return
+
+let tile=document.elementFromPoint(e.clientX,e.clientY)
+
+if(!tile || !tile.classList.contains("tile")) return
+
+if(tile===usedTiles[usedTiles.length-1]) return
+if(!isNeighbor(tile)) return
+
+addTile(tile)
+
+})
+
+window.addEventListener("pointerup",()=>{
+
+if(!selecting)return
+
+selecting=false
+
+checkWord()
+clearSelection()
+
+})
+
+function addTile(tile){
+
+if(usedTiles.includes(tile)) return
+
+tile.classList.add("active")
+usedTiles.push(tile)
+
+currentWord+=tile.textContent
+document.getElementById("word").textContent=currentWord
+
+}
+
+function getPoints(len){
+
+if(len<=4) return 1
+if(len==5) return 2
+if(len==6) return 3
+if(len==7) return 5
+return 11
+
+}
+
+function checkWord(){
+
+let w=currentWord.toLowerCase()
+
+if(validWords.has(w) && !foundWords.has(w)){
+
+foundWords.add(w)
+
+let pts=getPoints(w.length)
+
+score+=pts
+
+document.getElementById("score").textContent="Pisteet: "+score
+
+let div=document.createElement("div")
+div.textContent=w+" +"+pts
+document.getElementById("found").prepend(div)
+
+document.getElementById("blip").play()
+
+}
+
+}
+
+function clearSelection(){
+
+usedTiles.forEach(t=>t.classList.remove("active"))
+
+usedTiles=[]
+currentWord=""
+
+document.getElementById("word").textContent=""
+
+}
+
+function startTimer(){
+
+clearInterval(timer)
+
+timer=setInterval(()=>{
+
+time--
+document.getElementById("timer").textContent="Aika: "+time
+
+if(time<=0) endGame()
+
+},1000)
+
+}
+
+function endGame(){
+
+clearInterval(timer)
+
+document.getElementById("win").play()
+
+alert("Peli ohi! Pisteet: "+score)
+
+}
+
 function toggleMusic(){
+
 if(music.paused) music.play()
 else music.pause()
-}
-
-function startMatrix(){
-
-const canvas = document.getElementById("matrixCanvas")
-const ctx = canvas.getContext("2d")
-
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
-
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-const fontSize = 18
-
-const columns = Math.floor(canvas.width / fontSize)
-const drops = []
-
-for(let x = 0; x < columns; x++){
-drops[x] = 1
-}
-
-function draw(){
-
-ctx.fillStyle = "rgba(0,0,0,0.05)"
-ctx.fillRect(0,0,canvas.width,canvas.height)
-
-ctx.fillStyle = "#6aff9c"
-ctx.font = fontSize + "px JetBrains Mono"
-
-for(let i=0;i<drops.length;i++){
-
-const text = letters[Math.floor(Math.random()*letters.length)]
-
-ctx.fillText(text,i*fontSize,drops[i]*fontSize)
-
-if(drops[i]*fontSize > canvas.height && Math.random() > 0.975){
-drops[i]=0
-}
-
-drops[i]++
 
 }
 
-}
-
-setInterval(draw,50)
-
-}
-
-window.addEventListener("load", () => {
+window.addEventListener("load",()=>{
 startMatrix()
 })
 
