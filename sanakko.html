@@ -593,7 +593,7 @@ overlay.innerHTML=
 <h3>Maksimi: ${maxScore}</h3>
 <h3>Osuus: ${Math.round(score/maxScore*100)}%</h3>
 
-<button class="startButton" onclick="restartGame()">Uusi peli</button>
+<button class="startButton" onclick="newGame()">Uusi peli</button>
 <a href="index.html"><button class="startButton">Kotivalikko</button></a>
 
 </div>
@@ -608,20 +608,32 @@ else music.pause()
 
 }
 
-function restartGame(){
+function newGame(){
 
-let overlay=document.getElementById("overlay")
+clearInterval(timer)
 
-overlay.innerHTML=`
-<div class="overlayBox">
-<h2>Salaiset sanat</h2>
-<input id="nameInput" placeholder="Nimesi" maxlength="6">
-<button class="startButton" onclick="startGame()">Aloita peli</button>
-<div id="leaderboard"></div>
-</div>
-`
+score=0
+time=120
+foundWords.clear()
 
-overlay.style.display="flex"
+document.getElementById("score").textContent="Pisteet: 0"
+document.getElementById("found").innerHTML=""
+document.getElementById("word").textContent=""
+
+document.getElementById("overlay").style.display="none"
+
+let minWords = 80
+let minVowels = 4
+let attempts = 0
+
+do{
+generateBoard()
+findAllWords()
+attempts++
+}
+while((validWords.size < minWords || countVowels() < minVowels) && attempts < 50)
+
+startTimer()
 
 }
 
