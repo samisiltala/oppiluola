@@ -310,12 +310,14 @@ document.getElementById("score").textContent="Pisteet: 0"
 document.getElementById("found").innerHTML=""
 
 let minWords = 80
+let attempts = 0
 
 do{
 generateBoard()
 findAllWords()
+attempts++
 }
-while(validWords.size < minWords)
+while(validWords.size < minWords && attempts < 50)
 
 startTimer()
 
