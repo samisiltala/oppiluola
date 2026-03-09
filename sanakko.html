@@ -426,7 +426,7 @@ canvas.height = window.innerHeight
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ"
 const fontSize = 18
 
-const columns = canvas.width / fontSize
+const columns = Math.floor(canvas.width / fontSize)
 const drops = []
 
 for(let x = 0; x < columns; x++){
@@ -488,10 +488,28 @@ document.getElementById("score").textContent="Pisteet: 0"
 document.getElementById("found").innerHTML=""
 
 
-generateGoodBoard()
-startTimer()
-music.play()
-document.getElementById("grid").style.display="grid"
+function generateGoodBoard(){
+
+let attempts = 0
+
+while(attempts < 20){
+
+generateBoard()
+
+attempts++
+
+if(
+countVowels() >= 4 &&
+!tooManySameLetters() &&
+goodLetterPairs() >= 2
+){
+break
+}
+
+}
+
+findAllWords()
+
 }
 
 function startTimer(){
