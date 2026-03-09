@@ -710,27 +710,27 @@ overlay.innerHTML=`
 
 <div class="endTitle">Peli ohi!</div>
 
-<div class="endStats">${playerName}: ${score} pistettä</div>
-<div class="endStats">Maksimi: ${maxScore}</div>
-<div class="endStats">Osuus: ${Math.round(score/maxScore*100)}%</div>
-<div class="wordLegend">
 <div class="endGrid">
 
 <div class="wordWallWrapper">
 
-
+<div class="wordLegend">
 <span class="legendFound">■ löydetty</span> 
 <span class="legendMissed">■ puuttuu</span> 
 <span class="legendLong">■ pitkä sana</span>
 </div>
 
-<div class="wordWall" id="wordWall">
-${wordHTML}
-</div>
+<div class="wordWall" id="wordWall"></div>
 
 </div>
 
-<div>
+<div class="endRight">
+
+<div class="endStats">${playerName}: ${score} pistettä</div>
+<div class="endStats">Maksimi: ${maxScore}</div>
+<div class="endStats">Osuus: ${Math.round(score/maxScore*100)}%</div>
+
+<br>
 
 <button class="startButton" onclick="newGame()">Uusi peli</button>
 
@@ -746,11 +746,6 @@ ${wordHTML}
 
 </div>
 `
-
-startWordWall()
-
-}
-
 function startWordWall(){
 
 let wall=document.getElementById("wordWall")
