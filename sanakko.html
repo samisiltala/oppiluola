@@ -191,6 +191,10 @@ inset 0 2px 4px rgba(255,255,255,0.8);
 
 }
 
+.titleFloat{
+animation:titleFloat 3s ease-in-out infinite alternate;
+}
+
 .rightPanel{
 background:#222;
 padding:15px;
@@ -239,14 +243,14 @@ text-align:center;
 font-size:56px;
 letter-spacing:6px;
 
-animation:titleFloat 3s ease-in-out infinite alternate;
 
 text-shadow:
 0 0 8px rgba(255,255,255,0.25),
 0 0 30px rgba(0,0,0,0.8);
 
-display:inline-block;
-min-width:14ch;
+display:block;
+width:520px;
+margin:auto;
 text-align:center;
 white-space:nowrap;
 font-variant-ligatures:none;
@@ -799,11 +803,20 @@ text+=chars[Math.floor(Math.random()*chars.length)]
 
 el.textContent=text
 
+// bip ääni
+if(bip){
+bip.currentTime=0
+bip.play().catch(()=>{})
+}
+
 iteration += 0.5
 
 if(iteration >= original.length){
 clearInterval(interval)
 el.textContent = original
+
+// käynnistetään leijunta vasta lopuksi
+el.classList.add("titleFloat")
 }
 
 },50)
