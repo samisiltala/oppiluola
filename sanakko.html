@@ -332,6 +332,12 @@ setInterval(draw,50)
 
 function startGame(){
 
+console.log("dictionary size:",dictionary.size)
+
+if(dictionary.size===0){
+alert("Sanakirja latautuu vielä...")
+return
+}
 document.getElementById("matrixCanvas").style.display="none"
 
 let name=document.getElementById("nameInput").value.trim().toUpperCase()
