@@ -734,13 +734,18 @@ document.getElementById("debugWords").textContent =
 
 function clearSelection(){
 
-usedTiles.forEach(t=>t.classList.remove("active"))
+usedTiles.forEach(t=>{
+t.classList.remove("active")
+t.classList.remove("error")
+})
 
 usedTiles=[]
 currentWord=""
 
 document.getElementById("word").textContent=""
+
 ctx.clearRect(0,0,lineCanvas.width,lineCanvas.height)
+
 }
 
 function startTimer(){
