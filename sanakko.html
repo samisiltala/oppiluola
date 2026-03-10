@@ -151,14 +151,31 @@ margin:4px 0;
 
 .endGrid{
 display:grid;
-grid-template-columns:2fr 1fr;
-gap:30px;
-margin-top:20px;
-align-items:start;
+grid-template-columns:3fr 1.3fr;
+gap:40px;
+align-items:center;
 }
 
 .overlayBox.endScreen{
 max-width:1000px;
+}
+
+.endStats{
+font-size:30px;
+line-height:1.4;
+}
+
+.endStatsSmall{
+font-size:18px;
+opacity:0.85;
+line-height:1.4;
+}
+
+.wordWallTitle{
+font-size:16px;
+letter-spacing:2px;
+opacity:0.7;
+margin-bottom:8px;
 }
   
 .wordWall{
@@ -862,6 +879,8 @@ overlay.innerHTML=`
 <div class="endGrid">
 
 <div class="wordWallWrapper">
+
+<div class="wordWallTitle">Kaikki sanat</div>
 
 <div class="wordLegend">
 <span class="legendFound">■ löydetty</span> 
