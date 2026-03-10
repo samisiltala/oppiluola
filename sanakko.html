@@ -120,7 +120,8 @@ text-shadow:0 0 8px rgba(106,255,156,0.4);
 }
 
 .overlayBox{
-min-width:560px;
+width:90%;
+max-width:1000px;
 }
 
 .overlayBox button{
@@ -347,6 +348,7 @@ font-weight:bold;
 margin-top:25px;
 font-size:22px;
 line-height:1.7;
+text-align:left;
 }
 
 #leaderboard h3{
@@ -1164,8 +1166,9 @@ löysit ${Math.round(foundWords.size/validWords.size*100)} % sanoista
 
 <br>
 
-<button class="startButton" onclick="newGame()">Uusi peli</button>
 <div id="leaderboard"></div>
+<button class="startButton" onclick="newGame()">Uusi peli</button>
+
 
 
 
