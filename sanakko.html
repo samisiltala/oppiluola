@@ -524,7 +524,7 @@ transform:translate(-50%,-140%);
 </div>
 
 <script>
-
+const WEB_APP_URL="https://script.google.com/macros/s/AKfycbx0iS5gOubgLfnn6PW8L876u8H6GuZUabl-Gccgj2TivLPcTvqXSSqNivg_wTxhBx6P/exec";
 let grid=document.getElementById("grid")
 
 document.addEventListener("input",(e)=>{
@@ -954,9 +954,6 @@ if(w.length>=8) bonus = 20
 
 let pts = basePts + bonus
 
-if(w.length==6) pts+=5
-if(w.length==7) pts+=10
-if(w.length>=8) pts+=20
 
 if(w.length>=6){
 
@@ -976,13 +973,9 @@ document.getElementById("score").textContent="Pisteet: "+score
 
 let div=document.createElement("div")
 if(bonus>0){
-div.textContent = w+" +"+pts+" (+"+bonus+" bonus)"
-}else{
-if(bonus>0){
 div.innerHTML = w+" +"+pts+" <span class='bonus'>⭐ +"+bonus+"</span>"
 }else{
 div.textContent = w+" +"+pts
-}
 }
 document.getElementById("found").prepend(div)
 
@@ -1326,10 +1319,6 @@ startMatrix()
 animateTitle()
 })
 
-let greek=document.createElement("div")
-greek.id="greekGlow"
-greek.textContent="ἐν ἀρχῇ ἦν ὁ λόγος"
-document.body.appendChild(greek)
   
 document.addEventListener("keydown",e=>{
 if(e.key==="End"){
