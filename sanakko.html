@@ -249,6 +249,19 @@ border-radius:12px;
 font-weight:bold;
 }
 
+#lineCanvas{
+position:absolute;
+top:0;
+left:0;
+pointer-events:none;
+z-index:5;
+}
+
+#grid{
+position:relative;
+z-index:10;
+}
+
 </style>
 </head>
 
@@ -279,7 +292,10 @@ font-weight:bold;
 </div>
 
 <div class="centerGame">
+<div style="position:relative">
+<canvas id="lineCanvas"></canvas>
 <div id="grid"></div>
+</div>
 <div id="word"></div>
 </div>
 
@@ -328,6 +344,10 @@ let prefixes=new Set()
 let validWords=new Set()
 let maxScore=0
 
+let lineCanvas=document.getElementById("lineCanvas")
+let ctx=lineCanvas.getContext("2d")
+
+  
 let dice=[
 "AAEIOU","AEIOUY","AEIOUY","AAEIOU",
 "NNRSTL","NNRSTL","RSTLNA","RSTLNA",
@@ -478,10 +498,42 @@ div.dataset.y=Math.floor(i/4)
 grid.appendChild(div)
 tiles.push(div)
 
-}
+lineCanvas.width=grid.offsetWidth
+lineCanvas.height=grid.offsetHeight
 
 }
 
+}
+
+function drawLines(){
+
+ctx.clearRect(0,0,lineCanvas.width,lineCanvas.height)
+
+if(usedTiles.length<2) return
+
+ctx.strokeStyle="rgba(255,230,120,0.8)"
+ctx.lineWidth=6
+ctx.lineCap="round"
+
+ctx.beginPath()
+
+for(let i=0;i<usedTiles.length;i++){
+
+let rect=usedTiles[i].getBoundingClientRect()
+let gridRect=grid.getBoundingClientRect()
+
+let x=rect.left-gridRect.left+rect.width/2
+let y=rect.top-gridRect.top+rect.height/2
+
+if(i===0) ctx.moveTo(x,y)
+else ctx.lineTo(x,y)
+
+}
+
+ctx.stroke()
+
+}
+  
 function findAllWords(){
 
 validWords.clear()
@@ -598,7 +650,7 @@ usedTiles.push(tile)
 
 currentWord+=tile.textContent
 document.getElementById("word").textContent=currentWord
-
+drawLines()
 }
 
 function getPoints(word){
