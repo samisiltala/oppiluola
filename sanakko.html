@@ -349,6 +349,8 @@ margin-top:25px;
 font-size:22px;
 line-height:1.7;
 text-align:left;
+max-height:200px;
+overflow:auto;
 }
 
 #leaderboard h3{
@@ -1163,11 +1165,11 @@ ${validWords.size} sanaa
 <div class="endStatsSmall">
 löysit ${Math.round(foundWords.size/validWords.size*100)} % sanoista
 </div>
-
+<button class="startButton" onclick="newGame()">Uusi peli</button>
 <br>
 
 <div id="leaderboard"></div>
-<button class="startButton" onclick="newGame()">Uusi peli</button>
+
 
 
 
