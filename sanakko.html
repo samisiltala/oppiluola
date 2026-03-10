@@ -81,6 +81,19 @@ margin:0;
 color:#e8e8e8;
 }
 
+.tile.error{
+background:linear-gradient(#ffb3b3,#ff6b6b);
+animation:shake 0.25s;
+}
+
+@keyframes shake{
+0%{transform:translateX(0)}
+25%{transform:translateX(-4px)}
+50%{transform:translateX(4px)}
+75%{transform:translateX(-3px)}
+100%{transform:translateX(0)}
+}
+
 #nameInput{
 font-family:'Cinzel', serif;
 font-size:24px;
@@ -688,6 +701,12 @@ if(foundWords.has(w) && validWords.has(w)){
 let moka=document.getElementById("moka")
 moka.currentTime=0
 moka.play()
+
+usedTiles.forEach(t=>t.classList.add("error"))
+
+setTimeout(()=>{
+usedTiles.forEach(t=>t.classList.remove("error"))
+},300)
 
 return
 }
