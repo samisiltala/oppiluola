@@ -349,36 +349,16 @@ right:35px;
 bottom:30px;
 
 font-family:'Cinzel', serif;
-font-size:40px;
+font-size:26px;
 
-color:red;
-
+color:rgba(255,255,255,0.22);
 letter-spacing:4px;
 
 pointer-events:none;
-
 z-index:500;
 
 animation:greekFloat 8s ease-in-out infinite;
 text-shadow:0 0 8px rgba(255,255,255,0.2);
-}
-  
-#low{
-position:fixed;
-right:40px;
-bottom:35px;
-
-font-family:'Cinzel', serif;
-font-size:26px;
-
-color:rgba(255,255,255,0.18);
-letter-spacing:4px;
-
-pointer-events:none;
-z-index:20;
-
-animation:greekFloat 8s ease-in-out infinite;
-text-shadow:0 0 8px rgba(255,255,255,0.15);
 }
 
 @keyframes greekFloat{
@@ -507,7 +487,7 @@ transform:translate(-50%,-140%);
 </div>
 
 </div>
-<div id="greekGlow">ἐν ἀρχῇ ἦν ὁ λόγος</div>
+
 <script>
 
 let grid=document.getElementById("grid")
@@ -1209,6 +1189,11 @@ startMatrix()
 animateTitle()
 })
 
+let greek=document.createElement("div")
+greek.id="greekGlow"
+greek.textContent="ἐν ἀρχῇ ἦν ὁ λόγος"
+document.body.appendChild(greek)
+  
 document.addEventListener("keydown",e=>{
 if(e.key==="End"){
 endGame()
