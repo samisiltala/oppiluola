@@ -380,7 +380,16 @@ text-shadow:
 0 0 10px rgba(255,255,255,0.8),
 0 0 20px rgba(255,255,255,0.5);
 }
-  
+
+.logosFlash{
+text-shadow:
+0 0 20px rgba(255,255,255,1),
+0 0 40px rgba(255,255,255,0.9),
+0 0 60px rgba(106,255,156,0.8);
+
+color:white;
+}
+
 @media (max-width:900px) and (orientation:portrait){
 
 body{
@@ -920,7 +929,9 @@ t.classList.remove("success")
 foundWords.add(w)
 
 let pts = getPoints(w)
-
+if(w.length>=6){
+flashLogos()
+}
 score+=pts
 showFloatingScore(pts)
 
@@ -976,7 +987,19 @@ el.remove()
 },900)
 
 }
-  
+
+function flashLogos(){
+
+let el=document.querySelector(".logosWord")
+if(!el) return
+
+el.classList.add("logosFlash")
+
+setTimeout(()=>{
+el.classList.remove("logosFlash")
+},300)
+
+}
   
 function startTimer(){
 
