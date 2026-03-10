@@ -54,6 +54,12 @@ opacity:0.18;
 z-index:0;
 }
 
+#nameInput{
+background:rgba(255,255,255,0.85);
+color:black;
+box-shadow:0 0 6px rgba(106,255,156,0.25);
+}
+  
 .overlayBox{
 text-transform:uppercase;
 letter-spacing:1px;
@@ -115,7 +121,24 @@ text-shadow:0 0 8px rgba(106,255,156,0.4);
 .overlayBox{
 min-width:560px;
 }
-  
+
+.overlayBox button{
+background:white;
+border:none;
+padding:12px 22px;
+border-radius:8px;
+
+box-shadow:0 0 6px rgba(106,255,156,0.25);
+
+transition:all 0.15s;
+}
+
+.overlayBox button:hover{
+box-shadow:0 0 12px rgba(106,255,156,0.45);
+transform:translateY(-1px);
+color:#6aff9c;
+}
+
 .endTitle{
 font-size:52px;
 margin-bottom:10px;
