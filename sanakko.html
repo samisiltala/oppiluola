@@ -256,17 +256,19 @@ width:100%;
 #grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:3vw;
-width:min(92vw,520px);
-margin-top:30px;
+gap:2vmin;
+
+width:min(92vw,70vh);
+max-width:520px;
+
+margin-top:20px;
 touch-action:none;
-margin-left:auto;
-margin-right:auto;
 }
 
 .tile{
 aspect-ratio:1/1;
 width:100%;
+height:auto;
 display:flex;
 align-items:center;
 justify-content:center;
