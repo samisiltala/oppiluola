@@ -696,16 +696,19 @@ let w=currentWord.toLowerCase()
 if(foundWords.has(w)){
 
 let moka=document.getElementById("moka")
-
+moka.pause()
 moka.currentTime=0
-moka.volume=1
 moka.play().catch(()=>{})
 
-usedTiles.forEach(t=>t.classList.add("error"))
+/* kopioidaan tilet talteen */
+
+let errorTiles=[...usedTiles]
+
+errorTiles.forEach(t=>t.classList.add("error"))
 
 setTimeout(()=>{
 
-usedTiles.forEach(t=>{
+errorTiles.forEach(t=>{
 t.classList.remove("error")
 t.classList.remove("active")
 })
