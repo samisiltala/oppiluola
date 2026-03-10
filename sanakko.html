@@ -109,6 +109,7 @@ text-transform:uppercase;
 display:inline-block;
 width:16ch;
 text-align:center;
+text-shadow:0 0 8px rgba(106,255,156,0.4);
 }
 
 .overlayBox{
@@ -962,8 +963,6 @@ text+=original[i]
 continue
 }
 
-/* satunnaisia merkkejä ennen lukittumista */
-
 if(Math.random() < frame/25){
 locked[i]=true
 text+=original[i]
@@ -975,14 +974,18 @@ text+=chars[Math.floor(Math.random()*chars.length)]
 
 el.textContent=text
 
-if(bip){
+/* piippaus vain välillä */
+
+if(bip && Math.random()<0.25){
 bip.currentTime=0
 bip.play().catch(()=>{})
 }
 
 frame++
 
-if(locked.every(v=>v)){
+/* lopetus */
+
+if(frame>40 || locked.every(v=>v)){
 clearInterval(interval)
 el.textContent=original
 }
