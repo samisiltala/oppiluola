@@ -499,11 +499,9 @@ div.dataset.y=Math.floor(i/4)
 grid.appendChild(div)
 tiles.push(div)
 
+}
 lineCanvas.width=grid.offsetWidth
 lineCanvas.height=grid.offsetHeight
-
-}
-
 }
 
 function drawLines(){
@@ -654,7 +652,7 @@ usedTiles.push(tile)
 currentWord+=tile.textContent
 document.getElementById("word").textContent=currentWord
 drawLines()
-ctx.clearRect(0,0,lineCanvas.width,lineCanvas.height)
+
 }
 
 function getPoints(word){
@@ -683,7 +681,10 @@ function checkWord(){
 let w=currentWord.toLowerCase()
 
 if(foundWords.has(w)){
-document.getElementById("moka").play()
+
+let moka=document.getElementById("moka")
+moka.currentTime=0
+moka.play()
 return
 }
 
@@ -718,7 +719,7 @@ usedTiles=[]
 currentWord=""
 
 document.getElementById("word").textContent=""
-
+ctx.clearRect(0,0,lineCanvas.width,lineCanvas.height)
 }
 
 function startTimer(){
