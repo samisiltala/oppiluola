@@ -27,14 +27,18 @@ body{
 }
 
 .cell{
-    width:40px;
-    height:40px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:32px;
-    cursor:pointer;
-    user-select:none;
+  width:40px;
+  height:40px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:30px;
+  cursor:pointer;
+  user-select:none;
+
+  border:1px solid transparent;
 }
 
 /* pieni käsintehty vinous */
@@ -53,57 +57,42 @@ body{
     margin-top:20px;
 }
 
-#paper{
-
-  width:860px;
-  margin:auto;
-  margin-top:40px;
-
-  background:white;
-
-  box-shadow:0 10px 25px rgba(0,0,0,0.25);
-
-  position:relative;
-
-  padding-bottom:40px;
-
-}
-
-/* vihkon punainen marginaali */
-
-#paper:before{
-
-  content:"";
-
-  position:absolute;
-
-  top:0;
-  bottom:0;
-  left:60px;
-
-  width:2px;
-
-  background:#e88;
-
-}
 
 #board{
-    display:grid;
-    grid-template-columns:repeat(20,40px);
-    width:800px;
-    margin-left:80px;
-    margin-top:40px;
+  display:grid;
+  grid-template-columns:repeat(20,40px);
+  grid-template-rows:repeat(20,40px);
+
+  margin-left:80px;
+  margin-top:40px;
+}
+
+.draw line,
+.draw circle{
+  stroke:#222;
+  stroke-width:3;
+  fill:none;
+
+  stroke-dasharray:100;
+  stroke-dashoffset:100;
+
+  animation:draw 0.35s ease forwards;
+}
+
+@keyframes draw{
+  to{
+    stroke-dashoffset:0;
+  }
 }
     
 </style>
 </head>
 
 <body>
-<div id="paper">
 <div id="title">Ristinolla</div>
 
 <div id="board"></div>
-</div>
+
 
 <script>
 
@@ -128,7 +117,20 @@ for(let y=0;y<size;y++){
             if(grid[y][x]!="") return
 
             grid[y][x]=current
-            cell.textContent=current
+            if(current=="X"){
+  cell.innerHTML = `
+  <svg class="draw" width="32" height="32">
+    <line x1="6" y1="6" x2="26" y2="26"/>
+    <line x1="26" y1="6" x2="6" y2="26"/>
+  </svg>`
+}
+
+if(current=="O"){
+  cell.innerHTML = `
+  <svg class="draw" width="32" height="32">
+    <circle cx="16" cy="16" r="10"/>
+  </svg>`
+}
 
             checkWin(x,y)
 
@@ -137,6 +139,7 @@ for(let y=0;y<size;y++){
 
         board.appendChild(cell)
     }
+cell.style.transform = "rotate("+(Math.random()*10-5)+"deg)"
 }
 
 function checkWin(x,y){
