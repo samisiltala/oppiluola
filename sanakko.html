@@ -78,8 +78,24 @@ position:relative;
 
 .endTitle{
 font-size:52px;
+text-align:left;
 letter-spacing:4px;
 margin-bottom:2px;
+animation:gameOverReveal 0.6s ease-out;
+}
+
+.topRight{
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+gap:8px;
+}
+
+.topStats{
+font-size:16px;
+line-height:1.4;
+text-align:right;
+opacity:0.9;
 }
 
 .overlayBox h2{
@@ -92,6 +108,11 @@ color:#e8e8e8;
 background:linear-gradient(#ffb3b3,#ff6b6b);
 animation:shake 0.25s;
 transition:background 0.25s;
+}
+
+@keyframes gameOverReveal{
+0%{opacity:0; transform:scale(0.85);}
+100%{opacity:1; transform:scale(1);}
 }
 
 @keyframes shake{
@@ -150,6 +171,22 @@ margin-bottom:10px;
 font-size:24px;
 margin:4px 0;
 }
+
+.endTop{
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+align-items:start;
+width:100%;
+max-width:1000px;
+margin-bottom:20px;
+}
+
+.endStatsTop{
+font-size:30px;
+text-align:right;
+}
+
+
 .endGrid{
 display:grid;
 grid-template-columns:3fr 1.3fr;
@@ -159,6 +196,7 @@ margin-top:10px;
 }
 
 .overlayBox.endScreen{
+position:relative;
 margin-top:-60px;
 padding:40px 60px 30px 60px;
 align-items:stretch;
@@ -190,7 +228,8 @@ display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:flex-start;
-margin-top:0;
+gap:10px;
+
 }
   
 .wordWall{
@@ -358,19 +397,21 @@ font-weight:bold;
 }
 
 #leaderboard{
-margin-top:20px;
-font-size:22px;
+margin-top:10px;
+font-size:15px;
 line-height:1.7;
 text-align:left;
-max-height:180px;
-overflow:auto;
 }
 
 #leaderboard h3{
-letter-spacing:2px;
-margin-bottom:10px;
+margin-top:20px;
+letter-spacing:3px;
 }
-  
+
+#leaderboard div{
+margin:3px 0;
+}
+
 #lineCanvas{
 position:absolute;
 top:30px;   /* sama kuin grid margin-top */
@@ -450,6 +491,33 @@ text-align:center;
 padding:40px;
 }
 }
+
+.playerResult{
+font-size:38px;
+color:#6aff9c;
+letter-spacing:2px;
+text-align:center;
+text-shadow:0 0 12px rgba(106,255,156,0.5);
+}
+
+.playerStats{
+font-size:20px;
+color:white;
+opacity:0.9;
+margin-top:6px;
+}
+
+.wordWallHeader{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:8px;
+}
+
+.wordLegend span{
+margin-left:10px;
+}
+
 @media (max-width:900px){
 
 #grid{
@@ -470,6 +538,28 @@ font-size:clamp(26px,6vw,40px);
 .leftPanel{
 flex-direction:row;
 justify-content:space-between;
+}
+
+.startButton{
+justify-self:end;
+margin-top:8px;
+margin-top:6px;position:absolute;
+top:20px;
+right:40px;
+letter-spacing:2px;
+font-size:18px;
+background:white;
+border:none;
+padding:12px 22px;
+border-radius:8px;
+font-family:'Cinzel', serif;
+
+box-shadow:0 0 8px rgba(106,255,156,0.35);
+}
+
+.startButton:hover{
+box-shadow:0 0 14px rgba(106,255,156,0.6);
+transform:translateY(-1px);
 }
 
 .container{
@@ -1140,20 +1230,44 @@ wordHTML+=`<span class="wordMissed">${w}</span> `
 })
 
 overlay.innerHTML=`
+
 <div class="overlayBox endScreen">
 
+<div class="endTop">
 <div class="endTitle">Peli ohi!</div>
+
+<div class="playerResult">
+${playerName}
+<div class="playerStats">
+${score} pistettä • ${foundWords.size} sanaa
+</div>
+</div>
+
+<div class="topRight">
+<button class="startButton" onclick="newGame()">Uusi peli</button>
+
+<div class="topStats">
+<div>pisin sanasi: ${longestWord.toUpperCase()} (${longestWord.length})</div>
+<div>maksimi: ${maxScore} pistettä / ${validWords.size} sanaa</div>
+<div>löysit ${Math.round(foundWords.size/validWords.size*100)} %</div>
+</div>
+</div>
+
+</div>
+
 
 <div class="endGrid">
 
 <div class="wordWallWrapper">
 
+<div class="wordWallHeader">
 <div class="wordWallTitle">Kaikki sanat</div>
 
 <div class="wordLegend">
-<span class="legendFound">■ löydetty</span> 
-<span class="legendMissed">■ puuttuu</span> 
+<span class="legendFound">■ löydetty</span>
+<span class="legendMissed">■ puuttuu</span>
 <span class="legendLong">■ pitkä sana</span>
+</div>
 </div>
 
 <div class="wordWall" id="wordWall"></div>
@@ -1162,30 +1276,11 @@ overlay.innerHTML=`
 
 <div class="endRight">
 
-<div class="endStats">
-${playerName}: ${score} pistettä<br>
-${foundWords.size} sanaa
-</div>
 <div class="endStatsSmall">
-pisin sanasi: ${longestWord.toUpperCase()} (${longestWord.length})
+📜 Päivän pisin sana
 </div>
-
-<div class="endStatsSmall">
-maksimi: ${maxScore} pistettä<br>
-${validWords.size} sanaa
-</div>
-
-<div class="endStatsSmall">
-löysit ${Math.round(foundWords.size/validWords.size*100)} % sanoista
-</div>
-<button class="startButton" onclick="newGame()">Uusi peli</button>
-<br>
 
 <div id="leaderboard"></div>
-
-
-
-
 
 </div>
 
@@ -1193,6 +1288,7 @@ löysit ${Math.round(foundWords.size/validWords.size*100)} % sanoista
 
 </div>
 `
+
 loadSanaluolaTop()
 startWordWall()
 
