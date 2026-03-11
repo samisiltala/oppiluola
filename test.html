@@ -372,6 +372,17 @@ justify-content:flex-start;
 gap:10px;
 }
 
+.endTop{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+width:100%;
+}
+
+.endStatsTop{
+text-align:right;
+font-size:30px;
+}
   
 #leaderboard{
 margin-top:12px;
@@ -1160,14 +1171,15 @@ wordHTML+=`<span class="wordMissed">${w}</span> `
 overlay.innerHTML=`
 <div class="overlayBox endScreen">
 
-<div class="endGrid">
+<div class="endTop">
 
 <div class="endTitle">Peli ohi!</div>
 
-<div class="endStatsTop">
 ${playerName}: ${score} pistettä<br>
 ${foundWords.size} sanaa
 </div>
+
+<div class="endGrid">
 
 <div class="wordWallWrapper">
 
