@@ -77,9 +77,11 @@ position:relative;
 }
 
 .endTitle{
+grid-column:1 / span 2;
 font-size:52px;
 letter-spacing:4px;
-margin-bottom:2px;
+margin-bottom:10px;
+text-align:center;
 }
 
 .overlayBox h2{
@@ -141,18 +143,16 @@ transform:translateY(-1px);
 color:#6aff9c;
 }
 
-.endTitle{
-font-size:52px;
-margin-bottom:10px;
-}
 
 .endStats{
 font-size:24px;
 margin:4px 0;
 }
+
 .endGrid{
 display:grid;
 grid-template-columns:3fr 1.3fr;
+grid-template-rows:auto 1fr;
 gap:40px;
 align-items:start;
 margin-top:10px;
@@ -1160,9 +1160,9 @@ wordHTML+=`<span class="wordMissed">${w}</span> `
 overlay.innerHTML=`
 <div class="overlayBox endScreen">
 
-<div class="endTitle">Peli ohi!</div>
-
 <div class="endGrid">
+
+<div class="endTitle">Peli ohi!</div>
 
 <div class="wordWallWrapper">
 
