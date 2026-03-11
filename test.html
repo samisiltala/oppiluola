@@ -77,11 +77,9 @@ position:relative;
 }
 
 .endTitle{
-grid-column:1 / span 2;
+grid-column:1;
 font-size:52px;
 letter-spacing:4px;
-margin-bottom:10px;
-text-align:center;
 }
 
 .overlayBox h2{
@@ -149,16 +147,17 @@ font-size:24px;
 margin:4px 0;
 }
 
+
 .endGrid{
 display:grid;
 grid-template-columns:3fr 1.3fr;
 grid-template-rows:auto 1fr;
-gap:40px;
+gap:30px 40px;
 align-items:start;
-margin-top:10px;
 }
 
 .overlayBox.endScreen{
+align-items:flex-start;
 padding:40px 60px 30px 60px;
 align-items:stretch;
 max-height:90vh;
@@ -1164,6 +1163,11 @@ overlay.innerHTML=`
 <div class="endGrid">
 
 <div class="endTitle">Peli ohi!</div>
+
+<div class="endStatsTop">
+${playerName}: ${score} pistettä<br>
+${foundWords.size} sanaa
+</div>
 
 <div class="wordWallWrapper">
 
