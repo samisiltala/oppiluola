@@ -1284,9 +1284,7 @@ ${score} pistettä • ${foundWords.size} sanaa
 
 <div class="endRight">
 
-<div class="endStatsSmall">
-📜 Päivän pisin sana
-</div>
+
 
 <div id="leaderboard"></div>
 
@@ -1308,6 +1306,9 @@ function loadSanaluolaTop(){
 fetch(WEB_APP_URL + "?level=10")
 .then(r=>r.json())
 .then(data=>{
+
+console.log(data)
+
 
 let sorted=data.sort((a,b)=>b[1]-a[1])
 
