@@ -876,6 +876,7 @@ if(!e.target.classList.contains("tile"))return
 
 selecting=true
 grid.setPointerCapture(e.pointerId)
+e.preventDefault()
 addTile(e.target)
 
 })
