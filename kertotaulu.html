@@ -604,7 +604,8 @@ if (musicOn) {
     bgMusic.currentTime = 0;
     bgMusic.play().catch(()=>{});
 }
- let name=document.getElementById("name").value.trim();
+ 
+let name=document.getElementById("name").value.trim().slice(0,6);
  if(!name){ alert("Kirjoita nimi 🙂"); return; }
 
 level = Number(document.getElementById("levelSelect").value);
@@ -917,6 +918,7 @@ loadScores();
 
 </body>
 </html>
+
 
 
 
