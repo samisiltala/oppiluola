@@ -1,1 +1,120 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Luther-haku</title>
+
+<style>
+
+body{
+font-family: Georgia, serif;
+max-width:900px;
+margin:auto;
+padding:30px;
+}
+
+input{
+width:100%;
+font-size:20px;
+padding:10px;
+margin:20px 0;
+}
+
+.result{
+margin-bottom:25px;
+padding:10px;
+border-left:4px solid #999;
+}
+
+mark{
+background:yellow;
+}
+
+</style>
+
+</head>
+<body>
+
+<h1>Luther-haku</h1>
+
+<input id="search" placeholder="Hae sana..." oninput="search()">
+
+<div id="results"></div>
+
+<script>
+
+let files=[]
+
+for(let i=1;i<=120;i++){
+let n=i.toString().padStart(3,"0")
+files.push("luther/txt/"+n+".txt")
+}
+
+let corpus=[]
+
+async function load(){
+
+for(let f of files){
+
+try{
+
+let r=await fetch(f)
+let t=await r.text()
+
+corpus.push({file:f,text:t})
+
+}catch{}
+
+}
+
+}
+
+load()
+
+function search(){
+
+let q=document.getElementById("search").value.toLowerCase()
+
+let results=document.getElementById("results")
+results.innerHTML=""
+
+if(q.length<2)return
+
+corpus.forEach(doc=>{
+
+let t=doc.text.toLowerCase()
+
+if(t.includes(q)){
+
+let pos=t.indexOf(q)
+
+let snippet=doc.text.substring(pos-80,pos+120)
+
+snippet=snippet.replace(
+new RegExp(q,"gi"),
+m=>"<mark>"+m+"</mark>"
+)
+
+results.innerHTML+=`
+
+<div class="result">
+
+<b>${doc.file}</b>
+
+<div>${snippet}</div>
+
+</div>
+
+`
+
+}
+
+})
+
+}
+
+</script>
+
+</body>
+</html>
