@@ -405,6 +405,7 @@ transform:scale(1.05);
 
 <div id="question"></div>
 <div id="statusMessage"></div>
+<div id="ranking"></div>
 
 <div class="buttonContainer">
 <button id="btn0" onclick="choose(0)"></button>
@@ -887,6 +888,13 @@ if(found){
 
    let html=sorted.map((row,i)=> (i+1)+". "+row[0]+": "+row[1]).join("<br>");
    document.getElementById("leaderboard").innerHTML=html;
+
+if(rankIndex !== -1){
+    let rank = rankIndex + 1;
+    document.getElementById("ranking").innerText =
+    "⭐ Olet sijalla " + rank + ".";
+}
+   
 
  });
 }
