@@ -12,6 +12,7 @@ max-width:900px;
 margin:auto;
 padding:30px;
 background:#fafafa;
+line-height:1.7;
 }
 
 h1{
@@ -30,6 +31,11 @@ background:white;
 margin-bottom:25px;
 padding:15px;
 border-left:5px solid #999;
+cursor:pointer;
+}
+
+.result:hover{
+background:#f0f0f0;
 }
 
 .book{
@@ -40,11 +46,41 @@ font-size:18px;
 .page{
 color:#666;
 font-size:14px;
-margin-bottom:6px;
+margin-bottom:8px;
 }
 
 mark{
 background:yellow;
+}
+
+
+#readerTitle{
+font-size:24px;
+margin-bottom:10px;
+}
+
+#readerPage{
+color:#666;
+margin-bottom:20px;
+}
+
+#close{
+margin-bottom:20px;
+}
+
+#reader{
+display:none;
+background:white;
+padding:40px;
+margin-top:40px;
+border-top:4px solid #444;
+max-height:80vh;
+overflow:auto;
+}
+
+#readerText{
+font-size:18px;
+line-height:1.8;
 }
 
 </style>
@@ -58,16 +94,20 @@ background:yellow;
 
 <div id="results"></div>
 
+<div id="reader">
+<button id="close" onclick="closeReader()">Sulje</button>
+<div id="readerTitle"></div>
+<div id="readerPage"></div>
+<div id="readerText"></div>
+</div>
+
 <script>
 
 let files=[]
 
-// kuinka monta tiedostoa
 for(let i=1;i<=120;i++){
-
 let n=i.toString().padStart(3,"0")
 files.push("luther/txt/"+n+".txt")
-
 }
 
 let corpus=[]
@@ -103,14 +143,23 @@ results.innerHTML=""
 
 if(q.length<2)return
 
+let count=0
+let MAX=40
+
 corpus.forEach(doc=>{
 
 let text=doc.text
 let lower=text.toLowerCase()
 
-let pos=lower.indexOf(q)
+let title=text.split("\n")[0]
 
-if(pos!==-1){
+let pos=0
+
+while(count<MAX){
+
+pos=lower.indexOf(q,pos)
+
+if(pos==-1) break
 
 // sivunumero
 let before=text.substring(0,pos)
@@ -122,10 +171,7 @@ if(pages){
 page=pages[pages.length-1].replace(/[^0-9]/g,"")
 }
 
-// teoksen nimi
-let title=text.split("\n")[0]
-
-// tekstikatkelma
+// katkelma
 let start=Math.max(pos-80,0)
 let end=pos+120
 
@@ -138,21 +184,67 @@ m=>"<mark>"+m+"</mark>"
 
 results.innerHTML+=`
 
-<div class="result">
+<div class="result" onclick="openPage('${title}','${page}',${pos},'${doc.file}')">
 
 <div class="book">${title}</div>
 
 <div class="page">s.${page}</div>
 
-<div>${snippet}</div>
+<div>${snippet}...</div>
 
 </div>
 
 `
 
+pos+=q.length
+count++
+
 }
 
 })
+
+if(count==MAX){
+results.innerHTML+="<p><i>Näytetään ensimmäiset "+MAX+" osumaa...</i></p>"
+}
+
+}
+
+async function openPage(title,page,pos,file){
+
+let r=await fetch(file)
+let text=await r.text()
+
+let reader=document.getElementById("reader")
+
+let clean=text.replace(/<<<(\d+)>>>/g,"<hr><b>Sivu $1</b><br><br>")
+
+document.getElementById("readerTitle").innerText=title
+document.getElementById("readerPage").innerText="sivu "+page
+document.getElementById("readerText").innerHTML=clean
+
+reader.style.display="block"
+
+setTimeout(()=>{
+
+let target=document.getElementById("readerText")
+
+let pages=target.innerHTML.split("Sivu "+page)
+
+if(pages.length>1){
+
+target.scrollTop=target.innerHTML.indexOf("Sivu "+page)
+
+}
+
+},100)
+
+window.scrollTo(0,document.body.scrollHeight)
+
+}
+
+function closeReader(){
+
+document.getElementById("reader").style.display="none"
 
 }
 
