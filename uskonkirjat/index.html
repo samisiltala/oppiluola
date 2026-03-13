@@ -1,232 +1,312 @@
 <!DOCTYPE html>
-<html lang="fi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
 
-<title>Teologinen kirjasto</title>
+<head>
+
+<meta charset="UTF-8">
+<title>Uskonkirjat</title>
 
 <style>
 
 body{
 margin:0;
-font-family: Georgia, serif;
-background:#f4f4f4;
-color:#222;
+font-family:serif;
 }
 
-/* YLÄPALKKI */
-
-header{
-background:#222;
-color:white;
-padding:10px 15px;
+#container{
 display:flex;
-align-items:center;
-gap:10px;
+height:100vh;
 }
 
-header input{
-flex:1;
-padding:6px;
-font-size:16px;
-}
-
-/* KIRJASTORAKENNE */
-
-.container{
-display:flex;
-height:calc(100vh - 48px);
-}
-
-/* VASEN NAVIGAATIO */
-
-nav{
-width:240px;
-background:#e9e9e9;
-padding:15px;
-overflow-y:auto;
-}
-
-nav h3{
-margin-top:20px;
-}
-
-nav div{
-margin:6px 0;
-cursor:pointer;
-}
-
-/* LUKUTILA */
-
-main{
-flex:1;
-overflow-y:auto;
-padding:40px 20px;
-}
-
-.article{
-max-width:720px;
-margin:auto;
-line-height:1.7;
-font-size:18px;
-}
-
-/* LUKUSÄÄTIMET */
-
-.controls{
-position:fixed;
-bottom:15px;
-right:15px;
-background:white;
+#search{
+width:100%;
 padding:8px;
-border-radius:8px;
-box-shadow:0 0 6px rgba(0,0,0,0.2);
+margin-bottom:8px;
+border:1px solid #ccc;
+border-radius:4px;
+font-size:14px;
+box-sizing:border-box;
 }
 
-.controls button{
-margin:3px;
+#resultCount{
+font-size:12px;
+color:#666;
+margin-bottom:10px;
 }
 
-/* DARK MODE */
-
-.dark{
-background:#111;
-color:#ddd;
+mark{
+background:yellow;
 }
 
-.dark nav{
-background:#1c1c1c;
+mark.m2{
+background:#9df59d;
 }
 
-.dark header{
-background:#000;
+#sidebar{
+width:320px;
+overflow-y:auto;
+border-right:1px solid #ccc;
+padding:10px;
+background:#f5f5f5;
 }
 
-.dark .controls{
-background:#222;
+#content{
+flex:1;
+padding:40px;
+overflow-y:auto;
+max-width:900px;
+margin:auto;
+line-height:1.6;
 }
 
-/* MOBIILI */
-
-@media (max-width:700px){
-
-nav{
-display:none;
+#sidebar div:hover{
+background:#eaeaea;
 }
 
-.container{
-flex-direction:column;
+#list div{
+border-bottom:1px solid #ddd;
+padding-bottom:6px;
 }
 
+#list div:hover{
+background:#eee;
 }
 
 </style>
+
 </head>
+
 
 <body>
 
-<header>
+<div id="container">
 
-<div>📚</div>
+<div id="sidebar">
+<h3>Laestadiuksen saarnat</h3>
+<input id="search" placeholder="Hae saarnasta..." style="width:100%;padding:6px;margin-bottom:10px;">
 
-<input placeholder="Hae kirjastosta...">
-
-<button onclick="toggleDark()">🌙</button>
-
-</header>
-
-
-<div class="container">
-
-<nav>
-
-<h3>Raamattu</h3>
-<div>Vanha testamentti</div>
-<div>Uusi testamentti</div>
-
-<h3>Luther</h3>
-<div>Galatalaiskirjeen selitys</div>
-<div>Roomalaiskirje</div>
-
-<h3>Laestadius</h3>
-<div>Saarna 1</div>
-<div>Saarna 2</div>
-<div>Saarna 3</div>
-
-</nav>
-
-
-<main>
-
-<div class="article" id="content">
-
-<h1>Teologinen kirjasto</h1>
-
-<p>
-Tämä on kirjaston lukutila.  
-Tähän tulee myöhemmin:
-</p>
-
-<ul>
-<li>Raamatun tekstit</li>
-<li>Lutherin tekstit</li>
-<li>Laestadiuksen saarnat</li>
-</ul>
-
-<p>
-Navigaatio on vasemmalla ja teksti näkyy keskellä.  
-Mobiilissa navigaatio piilotetaan, jotta lukutila on suurempi.
-</p>
-
+<div id="resultCount"></div>
+<div id="list"></div>
+<div style="font-size:12px;color:#666;margin-bottom:8px">
+katkaisu: *
+</div>
 </div>
 
-</main>
-
+<div id="content">
+<h2 id="title"></h2>
+<div id="text"></div>
 </div>
-
-
-<div class="controls">
-
-<button onclick="fontMinus()">A-</button>
-<button onclick="fontPlus()">A+</button>
 
 </div>
 
 
 <script>
 
-let size = 18;
+let sermons=[];
 
-function fontPlus(){
-size += 2;
-document.getElementById("content").style.fontSize = size + "px";
+fetch("data/lll_sermons.json")
+.then(r=>r.json())
+.then(data=>{
+    sermons=data;
+    buildList();
+    showSermon(1);
+});
+
+function buildList(){
+
+    let sidebar=document.getElementById("list");
+    sidebar.innerHTML="";
+
+    sermons.forEach(s=>{
+
+        let div=document.createElement("div");
+
+        div.textContent=s.id+" "+cleanTitle(s.title);
+
+        div.style.cursor="pointer";
+        div.style.padding="4px";
+
+        div.onclick=()=>showSermon(s.id);
+
+        sidebar.appendChild(div);
+
+    });
+
 }
 
-function fontMinus(){
-size -= 2;
-document.getElementById("content").style.fontSize = size + "px";
+function showSermon(id){
+
+let s = sermons.find(x => x.id == id);
+
+document.getElementById("title").textContent = cleanTitle(s.title);
+
+let txt = s.text;
+
+let q = document.getElementById("search").value.toLowerCase().trim();
+
+if(q !== ""){
+
+let phraseMatch = q.match(/"(.*?)"/);
+
+if(phraseMatch){
+
+let phrase = phraseMatch[1];
+
+let re = new RegExp(phrase,"gi");
+
+txt = txt.replace(re,"<mark>$&</mark>");
+
+}
+else{
+
+let words = q.split(/\s+/);
+
+words.forEach(function(w,i){
+
+let pattern = "\\b" + w.replace(/\*/g,"\\w*");
+
+let re = new RegExp(pattern,"gi");
+
+if(i===0){
+txt = txt.replace(re,"<mark>$&</mark>");
+}
+else{
+txt = txt.replace(re,"<mark class='m2'>$&</mark>");
 }
 
-function toggleDark(){
-document.body.classList.toggle("dark");
+});
+
+}
+
+}
+
+document.getElementById("text").innerHTML = txt;
+
+}
+function cleanTitle(t){
+    return t.replace(/^\d+\.\s*/,"");
+}
+
+document.getElementById("search").addEventListener("input", function(){
+
+let q=this.value.toLowerCase().trim();
+
+if(q===""){
+buildList();
+document.getElementById("resultCount").textContent=
+sermons.length+" saarnaa";
+return;
+}
+
+/* tarkista onko fraasi */
+
+let phraseMatch=q.match(/"(.*?)"/);
+
+let words;
+
+if(phraseMatch){
+
+words=[phraseMatch[1]];
+
+}
+else{
+
+words=q.split(/\s+/);
+
+}
+
+let filtered=sermons.filter(function(s){
+
+let text=(s.title+" "+s.text).toLowerCase();
+
+return words.every(function(w){
+
+let pattern="\\b"+w.replace(/\*/g,"\\w*");
+
+let re=new RegExp(pattern,"i");
+
+return re.test(text);
+
+});
+
+});
+
+document.getElementById("resultCount").textContent=
+filtered.length+" osumaa";
+
+buildFilteredList(filtered);
+
+});
+
+function makeSnippet(text,words){
+
+let lower=text.toLowerCase();
+
+for(let w of words){
+
+let pattern="\\b"+w.replace(/\*/g,"\\w*");
+
+let re=new RegExp(pattern,"i");
+
+let m=lower.match(re);
+
+if(m){
+
+let pos=m.index;
+
+let start=Math.max(0,pos-60);
+let end=Math.min(text.length,pos+120);
+
+let snippet=text.substring(start,end);
+
+snippet="…"+snippet+"…";
+
+snippet=snippet.replace(re,"<mark>$&</mark>");
+
+return snippet;
+
+}
+
+}
+
+return text.substring(0,120)+"…";
+
+}
+
+function buildFilteredList(arr){
+
+let sidebar=document.getElementById("list");
+
+sidebar.innerHTML="";
+
+let q=document.getElementById("search").value.toLowerCase().trim();
+
+let words=q.split(/\s+/);
+
+arr.forEach(function(s){
+
+let div=document.createElement("div");
+
+div.style.cursor="pointer";
+div.style.padding="6px";
+div.style.marginBottom="8px";
+
+let title=s.id+" "+cleanTitle(s.title);
+
+let snippet=makeSnippet(s.text,words);
+
+div.innerHTML="<b>"+title+"</b><br><span style='font-size:12px;color:#555'>"+snippet+"</span>";
+
+div.onclick=function(){showSermon(s.id)};
+
+sidebar.appendChild(div);
+
+});
+
 }
 
 </script>
 
-</body>
-</html>
-
-<h1>Laestadiuksen saarnat</h1>
-
-<a href="post_fix.pdf">Saarnat I–III</a>
-<a href="post1.pdf">Saarnat I</a>
-<a href="post2.pdf">Saarnat II</a>
-<a href="post3.pdf">Saarnat III</a>
-<a href="liitteet.pdf">Liitteet</a>
-<a href="Raamattu.pdf">Raamattu</a>
-<a href="rekisteri.pdf">Saarnarekisteri</a>
-<a href="luettelo.pdf">Saarnaluettelo</a>
 
 </body>
 </html>
