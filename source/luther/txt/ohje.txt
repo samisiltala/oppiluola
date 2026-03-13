@@ -1,0 +1,27 @@
+Käyttöohje
+
+Rekisteröinti, tekninen tuki ja virheiden ilmoittaminen tapahtuu osoitteessa: www.du.fi/luthercd/
+
+Rekisteröitymällä ohjelman käyttäjäksi saat jatkossa tietoa ohjelman uusista versioista ja mahdollisuuden päivityksiin.
+
+Erilaisissa ongelmatilanteissa autamme sinua mielellämme, ota yhteyttä tekniseen tukeemme.
+
+Olemme pyrkineet oikolukemaan CD:llä olevat tekstit mahdollisimman hyvin, mutta mikäli löydät virheellisen kohdan, niin toivottavasti ilmoitat virheestä osoitteessa: www.du.fi/luthercd/
+
+Luther CD 2 koostuu kahdesta osasta:
+- Raamattuohjelmasta (joka sisältää vanhan ja uuden käännöksen) ja
+- muusta sisällöstä.
+
+Raamattuohjelma pitää asentaa kiintolevylle, jotta raamattulinkit toimisivat. Raamattuohjelman Ohje-valikosta löydät Raamattuohjelman ohjeet.
+
+Muu sisältö toimii Internet-selaimessa. Suositellut selaimet ovat Internet Explorer 5.0 tai uudempi ja Mozilla FireFox® 1.0 tai uudempi Windows XP-ympäristössä.
+
+Huomaa, että et tarvitse internet-yhteyttä käyttääksesi Luther CD:tä.
+
+Voit avata haluamasi kirjan painamalla kirjan nimen päällä.
+
+Seuraava ja edellinen painikkeilla voit siirtyä seuraavaan ja edelliseen hakusanaan.
+
+Voit myös muuttaa hakusanaa erilaiseksi. Huomaa, että kirjaikkunan päällä oleva hakusana ei muuta haku-kohdassa tekemääsi hakua.
+
+Voit klikata raamatunpaikkojen päällä ja raamattuohjelma aukeaa tästä kohdasta.
