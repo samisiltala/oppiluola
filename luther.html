@@ -114,21 +114,8 @@ let corpus=[]
 
 async function load(){
 
-for(let f of files){
-
-try{
-
-let r=await fetch(f)
-let t=await r.text()
-
-corpus.push({
-file:f,
-text:t
-})
-
-}catch{}
-
-}
+let r = await fetch("luther/txt/luther_index.json")
+corpus = await r.json()
 
 }
 
@@ -211,7 +198,7 @@ results.innerHTML+="<p><i>Näytetään ensimmäiset "+MAX+" osumaa...</i></p>"
 
 async function openPage(title,page,pos,file){
 
-let r=await fetch(file)
+let r=await fetch("luther/txt/"+file)
 let text=await r.text()
 
 let reader=document.getElementById("reader")
