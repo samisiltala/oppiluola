@@ -50,6 +50,19 @@ padding:10px;
 background:#f5f5f5;
 }
 
+#biblePopup{
+position:absolute;
+max-width:320px;
+background:white;
+border:1px solid #ccc;
+padding:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+font-size:14px;
+line-height:1.4;
+display:none;
+z-index:1000;
+}
+
 #content{
 flex:1;
 padding:40px;
@@ -72,6 +85,86 @@ padding-bottom:6px;
 background:#eee;
 }
 
+
+#nav button{
+font-size:18px;
+padding:4px 10px;
+cursor:pointer;
+}
+
+#subtitle{
+font-size:1.05em;
+margin-top:6px;
+color:#444;
+}
+
+#subtitle2{
+font-size:0.95em;
+margin-bottom:18px;
+color:#666;
+font-style:italic;
+}
+
+#titleBlock{
+margin-bottom:10px;
+}
+
+#nav{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+#titleText{
+flex:1;
+}
+
+#title{
+font-size:1.7em;
+font-weight:700;
+line-height:1.25;
+word-break:normal;
+overflow-wrap:break-word;
+}
+
+.bibleref{
+color:#1a4;
+cursor:pointer;
+text-decoration:underline;
+}
+
+.bibleref:hover{
+color:#070;
+}
+
+body.dark{
+background:#111;
+color:#ddd;
+}
+
+body.dark #sidebar{
+background:#1a1a1a;
+border-right:1px solid #333;
+}
+
+body.dark #list div:hover{
+background:#222;
+}
+
+body.dark #search{
+background:#222;
+color:#ddd;
+border:1px solid #444;
+}
+
+body.dark .bibleref{
+color:#7fd97f;
+}
+
+#text{
+font-size:18px;
+}
+
 </style>
 
 </head>
@@ -84,43 +177,263 @@ background:#eee;
 <div id="sidebar">
 <h3>Laestadiuksen saarnat</h3>
 <input id="search" placeholder="Hae saarnasta..." style="width:100%;padding:6px;margin-bottom:10px;">
-
+<div style="margin-bottom:10px">
+<button onclick="toggleDark()">🌙</button>
+<button onclick="fontMinus()">A−</button>
+<button onclick="fontPlus()">A+</button>
+</div>
+<div style="font-size:12px;color:#666;margin-bottom:8px">
+AND: useita sanoja<br>
+katkaisu: *<br>
+fraasi: "..."<br>
+raamatunpaikka: Matt 25
+</div>
 <div id="resultCount"></div>
 <div id="list"></div>
-<div style="font-size:12px;color:#666;margin-bottom:8px">
-katkaisu: *
-</div>
 </div>
 
 <div id="content">
-<h2 id="title"></h2>
+
+    
+<div id="titleBlock">
+
+<div id="nav">
+
+<button onclick="prevSermon()">◀</button>
+
+<div id="titleText">
+<div id="title"></div>
+</div>
+
+<button onclick="nextSermon()">▶</button>
+
+</div>
+
+</div>
+
+<div id="subtitle"></div>
+<div id="subtitle2"></div>
+
 <div id="text"></div>
 </div>
 
-</div>
+
 
 
 <script>
+let bible=[];
 
+let bibleBooks={
+
+// Vanha testamentti
+
+"1 moos":"ensimmäinen mooseksen kirja",
+"2 moos":"toinen mooseksen kirja",
+"3 moos":"kolmas mooseksen kirja",
+"4 moos":"neljäs mooseksen kirja",
+"5 moos":"viides mooseksen kirja",
+
+"joos":"joosuan kirja",
+"tuom":"tuomarien kirja",
+"ruut":"ruutin kirja",
+
+"1 sam":"1 samuelin kirja",
+"2 sam":"2 samuelin kirja",
+
+"1 kun":"1 kuninkaiden kirja",
+"2 kun":"2 kuninkaiden kirja",
+
+"1 aik":"1 aikakirja",
+"2 aik":"2 aikakirja",
+
+"esra":"esran kirja",
+"neh":"nehemian kirja",
+"est":"esterin kirja",
+
+"job":"jobin kirja",
+"ps":"psalmit",
+"sananl":"sananlaskut",
+"saarn":"saarnajan kirja",
+"laul":"laulujen laulu",
+
+"jes":"jesajan kirja",
+"jer":"jeremian kirja",
+"valit":"valitusvirret",
+"hes":"hesekielin kirja",
+"dan":"danielin kirja",
+
+"hoos":"hoosean kirja",
+"joel":"joelin kirja",
+"aamos":"aamoksen kirja",
+"obad":"obadjan kirja",
+"joona":"joonan kirja",
+"miika":"miikan kirja",
+"nah":"nahumin kirja",
+"hab":"habakukin kirja",
+"sef":"sefanjan kirja",
+"hagg":"haggain kirja",
+"sak":"sakarjan kirja",
+"mal":"malakian kirja",
+
+// Uusi testamentti
+
+"matt":"matteuksen evankeliumi",
+"mark":"markuksen evankeliumi",
+"luuk":"luukkaan evankeliumi",
+"joh":"johanneksen evankeliumi",
+
+"apt":"apostolien teot",
+
+"room":"roomalaiskirje",
+"1 kor":"1 korinttilaiskirje",
+"2 kor":"2 korinttilaiskirje",
+
+"gal":"galatalaiskirje",
+"ef":"efesolaiskirje",
+"fil":"filippiläiskirje",
+"kol":"kolossalaiskirje",
+
+"1 tess":"1 tessalonikalaiskirje",
+"2 tess":"2 tessalonikalaiskirje",
+
+"1 tim":"1 timoteuskirje",
+"2 tim":"2 timoteuskirje",
+
+"tit":"tituksen kirje",
+"filem":"filemonin kirje",
+
+"hepr":"heprealaiskirje",
+"jaak":"jaakobin kirje",
+
+"1 piet":"1 pietarin kirje",
+"2 piet":"2 pietarin kirje",
+
+"1 joh":"1 johanneksen kirje",
+"2 joh":"2 johanneksen kirje",
+"3 joh":"3 johanneksen kirje",
+
+"juud":"juudaan kirje",
+
+"ilm":"ilmestyskirja"
+
+};
+
+
+
+let churchIndex={};
+
+fetch("data/church_year.json")
+.then(r=>r.json())
+.then(data=>{
+churchIndex=data;
+buildChurchMenu();
+});
+
+let currentList=[];
+let currentIndex=0;
+let wordIndex={};
 let sermons=[];
 
 fetch("data/lll_sermons.json")
 .then(r=>r.json())
 .then(data=>{
-    sermons=data;
-    buildList();
-    showSermon(1);
+sermons=data;
+buildIndex();
+buildList();
+showSermon(1);
 });
+
+let bibleIndex={};
+
+fetch("data/bible_index.json")
+.then(r=>r.json())
+.then(data=>{
+bibleIndex=data;
+});
+
+fetch("data/bible.json")
+.then(r=>r.json())
+.then(data=>{
+bible=data;
+});
+
+
+
+function buildIndex(){
+
+sermons.forEach(function(s){
+
+let text=(s.title+" "+s.text).toLowerCase();
+
+let words=text.match(/\b\w+\b/g);
+
+if(!words) return;
+
+words.forEach(function(w){
+
+if(!wordIndex[w]) wordIndex[w]=[];
+
+if(!wordIndex[w].includes(s.id)){
+wordIndex[w].push(s.id);
+}
+
+});
+
+});
+
+}
+
+function buildChurchMenu(){
+
+let sidebar=document.getElementById("sidebar");
+
+let div=document.createElement("div");
+
+div.innerHTML="<h3>Kirkkovuosi</h3>";
+
+Object.keys(churchIndex).forEach(function(k){
+
+let item=document.createElement("div");
+
+item.textContent=k;
+
+item.style.cursor="pointer";
+item.style.padding="4px";
+
+item.onclick=function(){
+
+let ids=churchIndex[k];
+
+let arr=sermons.filter(s=>ids.includes(s.id));
+
+buildFilteredList(arr);
+
+document.getElementById("resultCount").textContent=
+k;
+
+showSermon(arr[0].id);
+
+};
+
+div.appendChild(item);
+
+});
+
+sidebar.appendChild(div);
+
+}
 
 function buildList(){
 
     let sidebar=document.getElementById("list");
     sidebar.innerHTML="";
 
+    currentList=sermons;
+
     sermons.forEach(s=>{
 
         let div=document.createElement("div");
-
+       
         div.textContent=s.id+" "+cleanTitle(s.title);
 
         div.style.cursor="pointer";
@@ -136,66 +449,189 @@ function buildList(){
 
 function showSermon(id){
 
-let s = sermons.find(x => x.id == id);
+currentIndex = currentList.findIndex(s => s.id == id);
 
-document.getElementById("title").textContent = cleanTitle(s.title);
+let s = currentList[currentIndex];
 
-let txt = s.text;
+let lines = s.text.split(/\n+/);
 
-let q = document.getElementById("search").value.toLowerCase().trim();
+let titleExtra="";
+let subtitle="";
+let subtitle2="";
+let body="";
 
-if(q !== ""){
+let start=0;
 
-let phraseMatch = q.match(/"(.*?)"/);
+/* tarkista kuuluuko toinen rivi otsikkoon */
 
-if(phraseMatch){
+if(lines[1] && !lines[1].match(/sunnuntai|päivänä|vuonna|\d{3,4}/i)){
 
-let phrase = phraseMatch[1];
+titleExtra = lines[1];
+start=2;
 
-let re = new RegExp(phrase,"gi");
+}else{
 
-txt = txt.replace(re,"<mark>$&</mark>");
-
-}
-else{
-
-let words = q.split(/\s+/);
-
-words.forEach(function(w,i){
-
-let pattern = "\\b" + w.replace(/\*/g,"\\w*");
-
-let re = new RegExp(pattern,"gi");
-
-if(i===0){
-txt = txt.replace(re,"<mark>$&</mark>");
-}
-else{
-txt = txt.replace(re,"<mark class='m2'>$&</mark>");
-}
-
-});
+start=1;
 
 }
 
+/* alaotsikot */
+
+if(lines[start] && lines[start].match(/sunnuntai|päivänä/i)){
+
+subtitle = lines[start];
+start++;
+
 }
 
-document.getElementById("text").innerHTML = txt;
+if(lines[start] && lines[start].match(/vuonna|\d{3,4}|luku/i)){
+
+subtitle2 = lines[start];
+start++;
 
 }
+
+body = lines.slice(start).join("\n");
+
+/* otsikko */
+
+document.getElementById("title").textContent =
+s.id + " " + cleanTitle(s.title);
+
+document.getElementById("subtitle").textContent = subtitle;
+document.getElementById("subtitle2").textContent = subtitle2;
+
+let q=document.getElementById("search").value.toLowerCase().trim();
+
+let words=q.split(/\s+/);
+
+let html=highlightWords(body,words);
+
+html=linkBibleRefs(html);
+
+document.getElementById("text").innerHTML = html;
+
+window.scrollTo(0,0);
+
+}
+
 function cleanTitle(t){
     return t.replace(/^\d+\.\s*/,"");
 }
+
 
 document.getElementById("search").addEventListener("input", function(){
 
 let q=this.value.toLowerCase().trim();
 
+let bibleRef=q.match(/^([a-zåäö0-9\s\.]+)\s+(\d+)(?::(\d+))?$/i);
+
+if(bibleRef){
+
+let book=bibleRef[1].trim().replace(/\./g,"");
+
+if(bibleBooks[book]){
+book=bibleBooks[book];
+}
+let chapter=parseInt(bibleRef[2]);
+let verse=bibleRef[3] ? parseInt(bibleRef[3]) : null;
+
+if(verse){
+
+showBibleVerse(book,chapter,verse);
+
+}else{
+
+showBibleChapter(book,chapter);
+
+}
+
+document.getElementById("resultCount").textContent=
+"Raamattu";
+
+return;
+
+}
+
 if(q===""){
+
 buildList();
+
 document.getElementById("resultCount").textContent=
 sermons.length+" saarnaa";
+
 return;
+
+}
+
+/* SANATILASTO */
+
+if(q.startsWith("#")){
+
+let w=q.substring(1);
+
+if(w==="top"){
+
+let arr=Object.entries(wordIndex)
+.map(([k,v])=>[k,v.length])
+.sort((a,b)=>b[1]-a[1])
+.slice(0,30);
+
+let sidebar=document.getElementById("list");
+
+sidebar.innerHTML="";
+
+arr.forEach(function(r){
+
+let div=document.createElement("div");
+
+div.textContent=r[0]+" → "+r[1];
+
+sidebar.appendChild(div);
+
+});
+
+document.getElementById("resultCount").textContent=
+"yleisimmät sanat";
+
+return;
+
+}
+
+let count=wordIndex[w] ? wordIndex[w].length : 0;
+
+document.getElementById("list").innerHTML=
+"<div>"+w+" → "+count+" esiintymää</div>";
+
+document.getElementById("resultCount").textContent=
+"sanatilasto";
+
+return;
+
+}
+/* RAAMATUNPAIKKAHaku */
+
+let ref=q.match(/^([a-zåäö]+)\s*(\d+)/i);
+
+if(ref){
+
+let key=(ref[1]+" "+ref[2]).toLowerCase();
+
+if(bibleIndex[key]){
+
+let ids=bibleIndex[key];
+
+let filtered=sermons.filter(s=>ids.includes(s.id));
+
+buildFilteredList(filtered);
+
+document.getElementById("resultCount").textContent=
+filtered.length+" saarnaa";
+
+return;
+
+}
+
 }
 
 /* tarkista onko fraasi */
@@ -279,6 +715,8 @@ let sidebar=document.getElementById("list");
 
 sidebar.innerHTML="";
 
+currentList=arr;
+
 let q=document.getElementById("search").value.toLowerCase().trim();
 
 let words=q.split(/\s+/);
@@ -305,8 +743,195 @@ sidebar.appendChild(div);
 
 }
 
-</script>
+function nextSermon(){
 
+if(currentIndex < currentList.length-1){
+
+currentIndex++;
+
+showSermon(currentList[currentIndex].id);
+
+}
+
+}
+
+function prevSermon(){
+
+if(currentIndex > 0){
+
+currentIndex--;
+
+showSermon(currentList[currentIndex].id);
+
+}
+
+}
+
+function showBibleVerse(book,chapter,verse){
+
+let v=bible.find(x =>
+x.chapter==chapter &&
+x.verse==verse &&
+x.book.toLowerCase().includes(book.toLowerCase())
+);
+
+if(!v) return;
+
+document.getElementById("title").textContent=
+book+" "+chapter+":"+verse;
+
+document.getElementById("subtitle").textContent="";
+document.getElementById("subtitle2").textContent="";
+
+document.getElementById("text").innerText=
+verse+" "+v.text;
+
+window.scrollTo(0,0);
+
+}
+
+function showBibleChapter(book,chapter){
+
+let verses=bible.filter(x =>
+x.chapter==chapter &&
+x.book.toLowerCase().includes(book.toLowerCase())
+);
+
+if(verses.length==0) return;
+
+document.getElementById("title").textContent=
+book+" "+chapter;
+
+document.getElementById("subtitle").textContent="";
+document.getElementById("subtitle2").textContent="";
+
+let html="";
+
+verses.forEach(v=>{
+html+=v.verse+" "+v.text+"\n\n";
+});
+
+document.getElementById("text").innerText=html;
+
+window.scrollTo(0,0);
+
+}
+
+function highlightWords(text,words){
+
+words.forEach(function(w,i){
+
+let pattern="\\b"+w.replace(/\*/g,"\\w*");
+
+let re=new RegExp(pattern,"gi");
+
+if(i==0){
+
+text=text.replace(re,"<mark>$&</mark>");
+
+}else{
+
+text=text.replace(re,"<mark class='m2'>$&</mark>");
+
+}
+
+});
+
+return text;
+
+}
+
+function linkBibleRefs(text){
+
+let re=/([\(]?)([1-3]?\s?[A-Za-zÅÄÖåäö]+\.?)\s*(\d+)\s*:\s*(\d+)/g;
+
+return text.replace(re,function(match,prefix,book,chapter,verse){
+
+let ref=(book+" "+chapter+":"+verse)
+.replace(/\./g,"")
+.toLowerCase();
+
+return prefix+"<span class='bibleref' data-ref='"+ref+"'>"+book+" "+chapter+":"+verse+"</span>";
+
+});
+
+}
+
+document.addEventListener("click",function(e){
+
+if(e.target.classList.contains("bibleref")){
+
+let ref=e.target.dataset.ref.replace(/\./g,"").toLowerCase();
+
+document.getElementById("search").value=ref;
+
+document.getElementById("search").dispatchEvent(new Event("input"));
+
+}
+
+});
+document.addEventListener("mouseover",function(e){
+
+if(e.target.classList.contains("bibleref")){
+
+let ref=e.target.dataset.ref;
+
+let m=ref.match(/^(.+)\s(\d+):(\d+)$/);
+
+if(!m) return;
+
+let book=m[1];
+let chapter=parseInt(m[2]);
+let verse=parseInt(m[3]);
+
+let v=bible.find(x =>
+x.chapter==chapter &&
+x.verse==verse
+);
+
+if(!v) return;
+
+let popup=document.getElementById("biblePopup");
+if(!popup) return;
+
+popup.innerHTML="<b>"+ref+"</b><br>"+v.text;
+
+popup.style.left=Math.min(e.pageX+10, window.innerWidth-340)+"px";
+popup.style.top=(e.pageY+10)+"px";
+popup.style.display="block";
+
+}
+
+});
+
+document.addEventListener("mouseout",function(e){
+
+if(e.target.classList.contains("bibleref")){
+
+document.getElementById("biblePopup").style.display="none";
+
+}
+
+});
+
+let fontSize=18;
+
+function fontPlus(){
+fontSize+=2;
+document.getElementById("text").style.fontSize=fontSize+"px";
+}
+
+function fontMinus(){
+fontSize-=2;
+document.getElementById("text").style.fontSize=fontSize+"px";
+}
+
+function toggleDark(){
+document.body.classList.toggle("dark");
+}
+
+</script>
+<div id="biblePopup"></div>
 
 </body>
 </html>
