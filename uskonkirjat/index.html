@@ -86,6 +86,36 @@ font-size:18px;
 background:#e8f0ff;
 }
 
+.sermonTitle{
+font-size:1.7em;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.sermonDay{
+font-size:1.1em;
+margin-bottom:4px;
+}
+
+.sermonMeta{
+font-style:italic;
+color:#666;
+margin-bottom:18px;
+}
+
+.sermonText{
+line-height:1.7;
+}
+
+.backLink{
+cursor:pointer;
+color:#1a4;
+margin-right:8px;
+}
+.backLink:hover{
+text-decoration:underline;
+}
+
 #sidebar{
 width:320px;
 overflow-y:auto;
@@ -124,6 +154,11 @@ border-right:1px solid #ccc;
 padding:15px;
 }
 
+#library h3{
+font-size:1.1em;
+margin-top:18px;
+}
+
 #bibleNav{
 display:flex;
 justify-content:space-between;
@@ -134,6 +169,12 @@ margin-bottom:15px;
 padding:4px 10px;
 font-size:14px;
 cursor:pointer;
+}
+
+.sermonFilter{
+font-weight:600;
+color:#666;
+margin-bottom:10px;
 }
 
 #list div{
@@ -318,9 +359,7 @@ border-bottom:1px solid #eee;
 <button onclick="toggleDark()">🌙</button>
 <button onclick="fontMinus()">A−</button>
 <button onclick="fontPlus()">A+</button>
-<label><input type="checkbox" id="toggleBible" checked> Raamattu</label>
-<label><input type="checkbox" id="toggleLuther"> Luther</label>
-<label><input type="checkbox" id="toggleLestadius"> Lestadius</label>
+
 </div>
 
 </div>
@@ -331,18 +370,29 @@ border-bottom:1px solid #eee;
 
 <div id="library">
 
-<h3>Raamattu</h3>
+<h3>
+<label>
+<input type="checkbox" id="toggleBible">
+Raamattu
+</label>
+</h3>
 <div id="bibleBooks"></div>
 
-<h3>Luther</h3>
+<h3>
+<label>
+<input type="checkbox" id="toggleLuther">
+Luther
+</label>
+</h3>
 <div id="lutherBooks"></div>
 
-<h3>Lestadius</h3>
+<h3 style="cursor:pointer">
+<label>
+<input type="checkbox" id="toggleLestadius">
+Lestadius
+</label>
+</h3>
 
-<div class="tabs">
-<button onclick="showSermonsByNumber()">Numero</button>
-<button onclick="showSermonsByYear()">Kirkkovuosi</button>
-</div>
 
 <div id="sermonList"></div>
 
@@ -537,7 +587,7 @@ sermons=data;
 currentList=sermons;
 buildIndex();
 buildLestadiusMenu();
-showSermon(sermons[0].id);
+/*showSermon(sermons[0].id);*/
 });
 
 
@@ -643,6 +693,7 @@ head.style.marginTop="10px";
 head.style.cursor="pointer";
 
 let list=document.createElement("div");
+list.style.display="none";
 
 head.onclick=function(){
 
@@ -664,22 +715,53 @@ return list;
 
 let numList=section("Saarnat numeroittain");
 
-sermons.forEach(function(s){
+sermons.sort((a,b)=>a.id-b.id);
+
+let groupSize=50;
+
+for(let i=0;i<sermons.length;i+=groupSize){
+
+let group=sermons.slice(i,i+groupSize);
+
+let start=group[0].id;
+let end=group[group.length-1].id;
+
+let container=document.createElement("div");
+
+let head=document.createElement("div");
+head.textContent="▼ "+start+"–"+end;
+head.style.cursor="pointer";
+head.style.paddingLeft="12px";
+
+let list=document.createElement("div");
+list.style.display="none";
+
+head.onclick=function(){
+list.style.display=list.style.display=="none"?"block":"none";
+};
+
+group.forEach(function(s){
 
 let item=document.createElement("div");
 
 item.textContent=s.id+" "+cleanTitle(s.title);
-
+item.style.paddingLeft="25px";
 item.style.cursor="pointer";
-item.style.paddingLeft="12px";
 
 item.onclick=function(){
 showSermon(s.id);
 };
 
-numList.appendChild(item);
+list.appendChild(item);
 
 });
+
+container.appendChild(head);
+container.appendChild(list);
+
+numList.appendChild(container);
+
+}
 
 
 /* KIRKKOVUOSI */
@@ -690,21 +772,41 @@ Object.keys(churchIndex).forEach(function(k){
 
 let item=document.createElement("div");
 
-item.textContent=k;
+let ids=churchIndex[k];
+item.textContent = k + " (" + ids.length + ")";
 
 item.style.cursor="pointer";
 item.style.paddingLeft="12px";
 
 item.onclick=function(){
 
-console.log("Index löytyy:", bibleIndex[(book+" "+chapter).toLowerCase()]);
 let ids=churchIndex[k];
 
 let arr=sermons.filter(s=>ids.includes(s.id));
 
-buildFilteredList(arr);
+let sidebar=document.getElementById("sermonList");
 
-showSermon(arr[0].id);
+sidebar.innerHTML=
+"<div class='sermonFilter'>" +
+"<span class='backLink' onclick='buildLestadiusMenu()'>← takaisin</span> " +
+"Saarnat: "+k+
+"</div>";
+
+arr.forEach(function(s){
+
+let div=document.createElement("div");
+
+div.textContent=s.id+" "+cleanTitle(s.title);
+div.style.cursor="pointer";
+div.style.padding="6px";
+
+div.onclick=function(){
+showSermon(s.id);
+};
+
+sidebar.appendChild(div);
+
+});
 
 };
 
@@ -773,6 +875,9 @@ RAKENNETAAN RAAMATUN KIRJALISTA
 ============================= */
 function buildBibleBooks(){
 
+let list=document.createElement("div");
+list.style.display="none";
+
 let div=document.getElementById("bibleBooks");
 
 div.innerHTML="";
@@ -788,6 +893,7 @@ head.style.marginTop="10px";
 head.style.cursor="pointer";
 
 let list=document.createElement("div");
+list.style.display="none";
 
 books.forEach(function(b){
 
@@ -902,21 +1008,68 @@ document.getElementById("toggleLestadius").onchange=updatePanels;
 NÄYTÄ SAARNA
 ============================= */
 
-function showSermon(id){
+function showSermon(id,openPanel=true){
+
+if(openPanel){
+document.getElementById("toggleLestadius").checked=true;
+updatePanels();
+}
 
 currentIndex=currentList.findIndex(s=>s.id==id);
-
 let s=currentList[currentIndex];
 
-let text=s.text;
-
 let q=document.getElementById("search").value.toLowerCase().trim();
-
 let words=q.split(/\s+/);
 
-let html=highlightWords(text,words);
+/* pilkotaan teksti riveihin */
 
-html=linkBibleRefs(html);
+let lines=(s.text || "").split("\n");
+
+/* pääotsikko */
+
+let title = s.id + ". " + cleanTitle(s.title || "");
+
+/* otsikon jatko ensimmäiseltä riviltä */
+
+if(lines.length && lines[0].length<80){
+title += " " + lines.shift();
+}
+
+/* alaotsikot */
+
+let subtitle1="";
+let subtitle2="";
+
+if(lines.length && lines[0].length<80){
+subtitle1=lines.shift();
+}
+
+if(lines.length && lines[0].length<80){
+subtitle2=lines.shift();
+}
+
+/* varsinainen teksti */
+
+let text=lines.join("\n");
+
+text=highlightWords(text,words);
+text=linkBibleRefs(text);
+
+/* rakennetaan html */
+
+let html="";
+
+html+="<div class='sermonTitle'>"+title+"</div>";
+
+if(subtitle1){
+html+="<div class='sermonDay'>"+subtitle1+"</div>";
+}
+
+if(subtitle2){
+html+="<div class='sermonMeta'>"+subtitle2+"</div>";
+}
+
+html+="<div class='sermonText'>"+text+"</div>";
 
 document.querySelector("#lestadiusPanel .text").innerHTML=html;
 
@@ -959,13 +1112,8 @@ sidebar.innerHTML="";
 
 /* palautetaan napit */
 
-let tabs=document.createElement("div");
-tabs.className="tabs";
 
-tabs.innerHTML=`
-<button onclick="showSermonsByNumber()">Numero</button>
-<button onclick="showSermonsByYear()">Kirkkovuosi</button>
-`;
+
 
 sidebar.appendChild(tabs);
 
@@ -1123,13 +1271,17 @@ RAAMATUN LINKITYS
 
 function linkBibleRefs(text){
 
-let re=/([\(]?)([1-3]?\s?[A-Za-zÅÄÖåäö]+\.?)\s*(\d+)\s*:\s*(\d+)/g;
+let re=/(\()?((?:[1-3]\.?\s*)?[A-Za-zÅÄÖåäö\.]+)\s*(\d+)\s*:\s*(\d+(?:[-–]\d+)?)/g;
+
 
 return text.replace(re,function(match,prefix,book,chapter,verse){
 
 let ref=(book+" "+chapter+":"+verse)
 .replace(/\./g,"")
 .toLowerCase();
+if(verse.includes("-")){
+verse=verse.split("-")[0];
+}
 
 return prefix+"<span class='bibleref' data-ref='"+ref+"'>"+book+" "+chapter+":"+verse+"</span>";
 
@@ -1274,7 +1426,23 @@ LUKUTILA
 ============================= */
 
 function toggleReadMode(){
+
 document.body.classList.toggle("readMode");
+
+if(document.body.classList.contains("readMode")){
+
+if(!document.fullscreenElement){
+document.documentElement.requestFullscreen();
+}
+
+}else{
+
+if(document.fullscreenElement){
+document.exitFullscreen();
+}
+
+}
+
 }
 
 
