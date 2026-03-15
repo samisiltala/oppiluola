@@ -579,7 +579,6 @@ Lestadius
 <div id="readerSettings">
 
 <label>Fontti</label>
-<select id="fontSelect">
 <option value="Georgia">Georgia</option>
 <option value="Times">Times</option>
 <option value="Arial">Arial</option>
@@ -587,7 +586,6 @@ Lestadius
 </select>
 
 <label>Tausta</label>
-<select id="bgSelect">
 <option value="white">Valkoinen</option>
 <option value="sepia">Sepia</option>
 <option value="dark">Tumma</option>
@@ -599,7 +597,7 @@ Lestadius
 </div>
 
 <script>
-let bibleBooksAll = [...bibleBooksOT, ...bibleBooksNT];
+
 
 let bibleBooksOT = [
 "gen","exod","lev","num","deut",
@@ -628,6 +626,9 @@ let bibleBooksNT = [
 "juud",
 "ilm"
 ];
+
+let bibleBooksAll = [...bibleBooksOT, ...bibleBooksNT];
+
 let bibleNames = {
 
 gen:"1 Mooses",
@@ -828,7 +829,7 @@ updatePanels();
 
 showBibleChapter(book,ch);
 currentBibleBook = book;
-currentBibleChapter = chapter;
+currentBibleChapter = ch;
 };
 
 list.appendChild(div);
@@ -1281,10 +1282,6 @@ sidebar.innerHTML="";
 /* palautetaan napit */
 
 
-
-
-sidebar.appendChild(tabs);
-
 currentList=arr;
 
 arr.forEach(function(s){
@@ -1400,30 +1397,6 @@ showBibleChapter(currentBook,prev);
 
 }
 
-function nextChapter(){
-
-if(!currentBibleBook) return;
-
-let key = (currentBibleBook+" "+(currentBibleChapter+1)).toLowerCase();
-
-if(bibleIndex[key]){
-showBibleChapter(currentBibleBook,currentBibleChapter+1);
-return;
-}
-
-/* siirry seuraavaan kirjaan */
-
-let i = bibleBooksAll.indexOf(currentBibleBook);
-
-if(i < bibleBooksAll.length-1){
-
-let nextBook = bibleBooksAll[i+1];
-
-showBibleChapter(nextBook,1);
-
-}
-
-}
 
 /* =============================
 SANA KOROSTUS
@@ -1524,6 +1497,7 @@ let verse=parseInt(m[3]);
 let book = m[1].replace(/\./g,"").replace(/\s/g,"").toLowerCase();
 
 let prev=bible.find(x =>
+x.book==book &&
 x.chapter==chapter &&
 x.verse==verse-1
 );
@@ -1646,12 +1620,18 @@ return t.replace(/^\d+\.\s*/,"");
 }
 
 /* asetuspaneeli */
-document.getElementById("settingsBtn").onclick=function(){
+let settingsBtn=document.getElementById("settingsBtn");
+
+if(settingsBtn){
+
+settingsBtn.onclick=function(){
 
 document.getElementById("readerSettings")
 .classList.toggle("open");
 
 };
+
+}
 
 window.addEventListener("load",function(){
 
@@ -1721,7 +1701,7 @@ if(Math.abs(diff) < 50) return;
 
 if(diff > 0){
 
-previousChapter();
+prevChapter();
 animateBible("right");
 
 }else{
@@ -1785,6 +1765,13 @@ showBibleChapter(prevBook,chapter);
 }
 
 }
+
+document.getElementById("menuOverlay").onclick=function(){
+
+document.getElementById("library").classList.remove("open");
+this.classList.remove("open");
+
+};
 
 </script>
 
