@@ -539,6 +539,8 @@ Lestadius
 
 
 <script>
+let bibleBooksAll = [...bibleBooksOT, ...bibleBooksNT];
+
 let bibleBooksOT = [
 "gen","exod","lev","num","deut",
 "jos","tuom","ruut",
@@ -1340,11 +1342,26 @@ showBibleChapter(currentBook,prev);
 
 function nextChapter(){
 
-if(!currentBook) return;
+if(!currentBibleBook) return;
 
-let next=currentChapter+1;
+let key = (currentBibleBook+" "+(currentBibleChapter+1)).toLowerCase();
 
-showBibleChapter(currentBook,next);
+if(bibleIndex[key]){
+showBibleChapter(currentBibleBook,currentBibleChapter+1);
+return;
+}
+
+/* siirry seuraavaan kirjaan */
+
+let i = bibleBooksAll.indexOf(currentBibleBook);
+
+if(i < bibleBooksAll.length-1){
+
+let nextBook = bibleBooksAll[i+1];
+
+showBibleChapter(nextBook,1);
+
+}
 
 }
 
@@ -1655,7 +1672,28 @@ function previousChapter(){
 if(!currentBibleBook) return;
 
 if(currentBibleChapter > 1){
-showBibleChapter(currentBibleBook, currentBibleChapter - 1);
+showBibleChapter(currentBibleBook,currentBibleChapter-1);
+return;
+}
+
+/* edellinen kirja */
+
+let i = bibleBooksAll.indexOf(currentBibleBook);
+
+if(i > 0){
+
+let prevBook = bibleBooksAll[i-1];
+
+/* etsi viimeinen luku */
+
+let chapter = 1;
+
+while(bibleIndex[(prevBook+" "+(chapter+1)).toLowerCase()]){
+chapter++;
+}
+
+showBibleChapter(prevBook,chapter);
+
 }
 
 }
