@@ -532,6 +532,7 @@ overflow-x:hidden;
 <div id="topbar">
 <button id="menuBtn">☰</button>
 <input id="search" placeholder="Hae teksteistä...">
+<button onclick="clearSearch()">✕</button>
 
 <div id="controls">
 
@@ -626,11 +627,11 @@ Lestadius
 </div>
 
 <div class="panel" id="lutherPanel">
+
 <h2>Luther</h2>
 
-<div id="lutherResults"></div>
-
 <div class="text"></div>
+
 </div>
 
 <div class="panel" id="lestadiusPanel">
@@ -1365,8 +1366,8 @@ document.getElementById("toggleLestadius").checked=true;
 updatePanels();
 }
 
-currentIndex=currentList.findIndex(s=>s.id==id);
-let s=currentList[currentIndex];
+let s = sermons.find(s => s.id == id);
+if(!s) return;
 
 let q=document.getElementById("search").value.toLowerCase().trim();
 let words=q.split(/\s+/);
@@ -1832,6 +1833,18 @@ APU
 
 function cleanTitle(t){
 return t.replace(/^\d+\.\s*/,"");
+}
+
+function clearSearch(){
+
+let input = document.getElementById("search");
+
+input.value = "";
+
+runSearch("");
+
+input.focus();
+
 }
 
 /* asetuspaneeli */

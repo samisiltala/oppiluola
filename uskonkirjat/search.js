@@ -10,168 +10,375 @@ fetch("data/luther_corpus.json")
 
 });
 
-function searchLuther(query){
-
-query = query.toLowerCase();
-
-let results = [];
-
-lutherCorpus.forEach(book => {
-
-    let textLower = book.text.toLowerCase();
-
-    let pos = textLower.indexOf(query);
-
-    if(pos !== -1){
-
-        let start = Math.max(0, pos - 80);
-        let end = Math.min(book.text.length, pos + 80);
-
-        let snippet = book.text.substring(start,end);
-
-        results.push({
-            title: book.title,
-            id: book.id,
-            snippet: snippet
-        });
-
-    }
-
-});
-
-return results;
-
-}
 
 async function loadJSON(path){
     const res = await fetch(path);
     return await res.json();
 }
 
-async function doSearch(){
+function parseQuery(q){
 
-    const query = document.getElementById("searchBox").value;
+q = q.trim().toLowerCase();
 
-    const results = await searchText(query);
+if(q.startsWith('"') && q.endsWith('"')){
+return { type:"phrase", value:q.slice(1,-1) };
+}
 
-    const container = document.getElementById("results");
+let words = q.split(/\s+/);
 
-    container.innerHTML = "";
-
-    for(const r of results){
-
-        const div = document.createElement("div");
-
-        div.innerHTML = `
-            <h3>${r.title}</h3>
-            <p>${r.snippet}...</p>
-            <hr>
-        `;
-
-        container.appendChild(div);
-
-    }
+return { type:"words", value:words };
 
 }
 
-async function searchText(query){
+function matchText(text,query){
 
-    query = query.toLowerCase();
+text = text.toLowerCase();
 
-    const lutherIndex = await loadJSON("data/json/luther_index.json");
+if(query.type==="phrase"){
+return text.includes(query.value);
+}
 
-    let results = [];
-
-    for(const book of lutherIndex){
-
-        const bookData = await loadJSON("data/json/" + book.file);
-
-        const text = bookData.text;
-        const textLower = text.toLowerCase();
-
-        let pos = textLower.indexOf(query);
-
-        if(pos !== -1){
-
-            const start = Math.max(0, pos - 80);
-            const end = Math.min(text.length, pos + 80);
-
-            const snippet = text.substring(start, end);
-
-            results.push({
-                title: bookData.title,
-                id: bookData.id,
-                collection: "Luther",
-                snippet: snippet
-            });
-
-        }
-
-    }
-
-    return results;
+return query.value.every(w => text.includes(w));
 
 }
 
-document.getElementById("search").addEventListener("input", async function(){
+function searchAll(query){
 
-    let q = this.value.toLowerCase().trim();
+return {
+bible: searchBible(query),
+luther: searchLuther(query),
+lestadius: searchLestadius(query)
+};
 
-    if(q.length < 3){
-        document.getElementById("lutherResults").innerHTML = "";
-        return;
-    }
+}
 
-    let results = await searchText(q);
+function searchLuther(q){
 
-    let container = document.getElementById("lutherResults");
+let query = parseQuery(q);
 
-    container.innerHTML = "";
+let results=[];
 
-   results.slice(0,20).forEach(r => {
+lutherCorpus.forEach(book=>{
 
-let div = document.createElement("div");
+if(!matchText(book.text,query)) return;
 
-div.innerHTML =
-"<b>"+r.title+"</b><br>" +
-r.snippet + "...";
+let pos=book.text.toLowerCase().indexOf(query.value[0] || query.value);if(pos!==-1){
 
-div.onclick = function(){
+let start=Math.max(0,pos-80);
+let end=Math.min(book.text.length,pos+80);
 
-openLutherResult(r.id, q);
+results.push({
+collection:"luther",
+id:book.id,
+title:book.title,
+snippet:book.text.substring(start,end)
+});
+
+}
+
+});
+
+return results.slice(0,20);
+
+}
+
+function searchBible(q){
+
+let query = parseQuery(q);
+
+let results = [];
+
+bible.forEach(v => {
+
+let text = v.text.toLowerCase();
+
+if(query.type === "phrase"){
+
+if(text.includes(query.value)){
+
+results.push({
+book:v.book,
+chapter:v.chapter,
+verse:v.verse,
+text:v.text
+});
+
+}
+
+}else{
+
+let ok = query.value.every(w => text.includes(w));
+
+if(ok){
+
+results.push({
+collection:"bible",
+book:v.book,
+chapter:v.chapter,
+verse:v.verse,
+text:v.text
+});
+
+}
+
+}
+
+});
+
+return results.slice(0,20);
+
+}
+function searchLestadius(q){
+
+q=q.toLowerCase();
+
+let results=[];
+
+sermons.forEach(s=>{
+
+let text=(s.title+" "+s.text).toLowerCase();
+
+if(matchText(text,parseQuery(q)))
+    {
+
+results.push({
+collection:"lestadius",
+id:s.id,
+title:s.title
+});
+
+}
+
+});
+
+return results.slice(0,20);
+
+}
+
+function showSearchResults(res){
+
+let container = document.getElementById("sermonList");
+
+container.innerHTML="";
+
+function section(title,list){
+
+let div=document.createElement("div");
+
+div.innerHTML = `
+<h3>
+<label>
+<input type="checkbox" checked disabled>
+${title} (${list.length})
+</label>
+</h3>
+`;
+
+let box=document.createElement("div");
+
+box.style.maxHeight="105px";
+box.style.overflowY="auto";
+box.style.paddingRight="6px";
+box.style.fontSize="14px";
+
+list.forEach(item=>{
+
+let row=document.createElement("div");
+
+row.style.cursor="pointer";
+row.style.padding="3px 0";
+row.style.marginBottom="6px";
+row.onmouseover=()=>row.style.background="#f0f0f0";
+row.onmouseout=()=>row.style.background="";
+
+let snippet = item.snippet || item.text || "";
+if(item.collection==="lestadius"){
+snippet = item.title;
+}
+
+let q = document.getElementById("search").value.trim().toLowerCase();
+
+if(q){
+let re = new RegExp("("+q.replace(/\*/g,"\\w*")+")","gi");
+snippet = snippet.replace(re,"<mark>$1</mark>");
+}
+
+let source = "";
+
+if(item.collection==="bible"){
+source = item.book+" "+item.chapter+":"+item.verse;
+}
+
+if(item.collection==="luther"){
+source = item.title;
+}
+
+if(item.collection==="lestadius"){
+source = item.id+" "+item.title;
+}
+
+row.innerHTML = "<b>"+source+"</b><br>"+snippet;
+
+
+row.onclick = function(){
+
+if(item.collection === "bible"){
+
+document.getElementById("toggleBible").checked = true;
+document.getElementById("toggleLuther").checked = false;
+document.getElementById("toggleLestadius").checked = false;
+
+updatePanels();
+
+showBibleChapter(item.book, item.chapter);
+
+return;
+}
+
+if(item.collection === "luther"){
+
+document.getElementById("toggleBible").checked = false;
+document.getElementById("toggleLuther").checked = true;
+document.getElementById("toggleLestadius").checked = false;
+
+updatePanels();
+
+openLutherResult(item.id, document.getElementById("search").value);
+
+return;
+}
+
+if(item.collection === "lestadius"){
+
+document.getElementById("toggleBible").checked = false;
+document.getElementById("toggleLuther").checked = false;
+document.getElementById("toggleLestadius").checked = true;
+
+updatePanels();
+
+showSermon(item.id);
+
+return;
+}
 
 };
 
-container.appendChild(div);
+box.appendChild(row);
 
 });
 
+div.appendChild(box);
 
-  function openLutherResult(id,query){
+container.appendChild(div);
+
+}
+
+section("Raamattu",res.bible);
+section("Luther",res.luther);
+section("Lestadius",res.lestadius);
+
+}
+
+
+document.getElementById("search").addEventListener("input",function(){
+
+let q=this.value.trim();
+
+if(q.length<2){
+
+runSearch("");
+return;
+
+}
+
+let results=searchAll(q);
+
+showSearchResults(results);
+
+});
+
+function runSearch(q){
+
+q = q.trim();
+
+if(q.length < 2){
+
+/* palautetaan normaali kirjasto */
+
+let library = document.getElementById("sermonList");
+
+library.innerHTML = `
+<h3>
+<label>
+<input type="checkbox" id="toggleBible">
+Raamattu
+</label>
+</h3>
+<div id="bibleBooks"></div>
+
+<h3>
+<label>
+<input type="checkbox" id="toggleLuther">
+Luther
+</label>
+</h3>
+<div id="lutherBooks"></div>
+
+<h3>
+<label>
+<input type="checkbox" id="toggleLestadius">
+Lestadius
+</label>
+</h3>
+<div id="sermonList"></div>
+`;
+
+/* rakennetaan sisältö */
+
+buildBibleBooks();
+buildLestadiusMenu();
+
+return;
+
+}
+
+let results = searchAll(q);
+
+showSearchResults(results);
+
+}
+
+function openLutherResult(id,query){
 
 let book = lutherCorpus.find(b => b.id == id);
-
 if(!book) return;
 
+/* avataan Luther-paneeli */
 document.getElementById("toggleLuther").checked = true;
 updatePanels();
 
-let text = book.text;
+let text = book.text.toLowerCase();
+let pos = text.indexOf(query.toLowerCase());
 
-let pos = text.toLowerCase().indexOf(query.toLowerCase());
+/* jos hakukohta löytyy */
+let snippet = book.text;
 
 if(pos !== -1){
 
-let start = Math.max(0,pos-200);
-text = text.substring(start);
+let start = Math.max(0,pos-400);
+let end = Math.min(book.text.length,pos+800);
+
+snippet = book.text.substring(start,end);
 
 }
 
-text = highlightWords(text,[query]);
+/* korostus */
+snippet = highlightWords(snippet,[query]);
 
-document.querySelector("#lutherPanel .text").innerHTML =
-text.replace(/\n/g,"<br>");
+let html = "<div class='sermonTitle'>"+book.title+"</div>";
+html += snippet.replace(/\n/g,"<br>");
+
+document.querySelector("#lutherPanel .text").innerHTML = html;
 
 }
 
-});
