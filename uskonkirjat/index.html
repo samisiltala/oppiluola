@@ -205,6 +205,21 @@ color:#666;
 margin-bottom:10px;
 }
 
+#menuOverlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.35);
+z-index:900;
+display:none;
+}
+
+#menuOverlay.open{
+display:block;
+}
+
 #list div{
 border-bottom:1px solid #ddd;
 padding-bottom:6px;
@@ -485,7 +500,7 @@ Lestadius
 
 </div>
 
-
+<div id="menuOverlay"></div>
 
 <div id="reader">
 
@@ -1589,7 +1604,10 @@ if(v==="dark") document.body.classList.add("bg-dark");
 };
 
 document.getElementById("menuBtn").onclick=function(){
+
 document.getElementById("library").classList.toggle("open");
+document.getElementById("menuOverlay").classList.toggle("open");
+
 };
 
 </script>
