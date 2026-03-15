@@ -317,6 +317,49 @@ margin-top:6px;
 color:#000;
 }
 
+#startScreen{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:5000;
+overflow:hidden;
+}
+
+#startScreen img{
+position:absolute;
+width:100%;
+height:100%;
+object-fit:cover;
+opacity:0.85;
+}
+
+#startText{
+position:relative;
+color:white;
+font-size:48px;
+font-family:Georgia, serif;
+text-align:center;
+animation:floatText 4s ease-in-out infinite;
+}
+
+#startHint{
+font-size:16px;
+margin-top:15px;
+opacity:0.8;
+}
+
+@keyframes floatText{
+0%{transform:translateY(0px);}
+50%{transform:translateY(-6px);}
+100%{transform:translateY(0px);}
+}
+
 .tabs button{
 margin-right:5px;
 }
@@ -544,6 +587,17 @@ Lestadius
 
 <div id="reader">
 
+<div id="startScreen">
+
+<img src="img/joh1.jpg">
+
+<div id="startText">
+Ἐν ἀρχῇ ἦν ὁ λόγος
+<div id="startHint">klikkaa</div>
+</div>
+
+</div>
+
 <div class="panel" id="biblePanel">
 <h2 onclick="closeBible()" style="cursor:pointer">Raamattu</h2>
 
@@ -579,6 +633,7 @@ Lestadius
 <div id="readerSettings">
 
 <label>Fontti</label>
+<select>
 <option value="Georgia">Georgia</option>
 <option value="Times">Times</option>
 <option value="Arial">Arial</option>
@@ -586,6 +641,7 @@ Lestadius
 </select>
 
 <label>Tausta</label>
+<select>
 <option value="white">Valkoinen</option>
 <option value="sepia">Sepia</option>
 <option value="dark">Tumma</option>
@@ -779,6 +835,25 @@ churchIndex=data;
 if(sermons.length) buildLestadiusMenu();
 
 });
+
+/* =============================
+PIILOTA ALOITUSKUVA
+============================= */
+function hideStartScreen(){
+
+let s=document.getElementById("startScreen");
+
+if(!s) return;
+
+s.classList.add("hide");
+
+setTimeout(function(){
+s.remove();
+},400);
+
+}
+
+
 
 /* =============================
 RAAMATUN KAPPALEJAKO MENUUN
@@ -1177,6 +1252,8 @@ NÄYTÄ SAARNA
 
 function showSermon(id,openPanel=true){
 
+hideStartScreen();
+
 if(openPanel){
 document.getElementById("toggleLestadius").checked=true;
 updatePanels();
@@ -1329,8 +1406,11 @@ RAAMATUN KAPPALE
 
 function showBibleChapter(book,chapter){
 
+hideStartScreen();
 currentBook=book;
 currentChapter=chapter;
+currentBibleBook = book;
+currentBibleChapter = chapter;
 
 console.log("BOOK RAW:", book);
 console.log("BOOK NORMALIZED:", book.replace(/\s/g,""));
@@ -1637,7 +1717,7 @@ window.addEventListener("load",function(){
 
 updatePanels();
 
-showBibleChapter("gen",1);
+
 window.scrollTo(0,0);
 
 });
@@ -1772,6 +1852,23 @@ document.getElementById("library").classList.remove("open");
 this.classList.remove("open");
 
 };
+
+let start = document.getElementById("startScreen");
+
+if(start){
+start.onclick=function(){
+
+hideStartScreen();
+
+document.getElementById("toggleBible").checked=true;
+updatePanels();
+
+showBibleChapter("gen",1);
+
+};
+}
+
+
 
 </script>
 
