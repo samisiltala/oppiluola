@@ -10,7 +10,22 @@
 
 body{
 margin:0;
-font-family:serif;
+font-family:Georgia, serif;
+}
+
+body.bg-sepia{
+background:#f4ecd8;
+color:#3a2f1b;
+}
+
+body.bg-soft{
+background:#f2f2f2;
+color:#222;
+}
+
+body.bg-dark{
+background:#111;
+color:#ddd;
 }
 
 #topbar{
@@ -78,8 +93,20 @@ background:#9df59d;
 .text{
 max-width:70ch;
 margin:auto;
-line-height:1.7;
+line-height:1.75;
 font-size:18px;
+text-align:justify;
+hyphens:auto;
+letter-spacing:0.01em;
+}
+
+.sermonText{
+text-align:justify;
+hyphens:auto;
+}
+
+#biblePanel .text{
+text-align:left;
 }
 
 .active{
@@ -115,6 +142,7 @@ margin-right:8px;
 .backLink:hover{
 text-decoration:underline;
 }
+
 
 #sidebar{
 width:320px;
@@ -315,6 +343,11 @@ border:none;
 flex-direction:column;
 }
 
+#fontSelect{
+margin-left:8px;
+font-size:14px;
+}
+
 #reader{
 flex-direction:column;
 }
@@ -359,6 +392,19 @@ border-bottom:1px solid #eee;
 <button onclick="toggleDark()">🌙</button>
 <button onclick="fontMinus()">A−</button>
 <button onclick="fontPlus()">A+</button>
+<select id="fontSelect">
+<option value="georgia" selected>Georgia</option>
+<option value="garamond">Garamond</option>
+<option value="serif">Serif</option>
+<option value="sans">Sans-serif</option>
+</select>
+
+<select id="bgSelect">
+<option value="white">Valkoinen</option>
+<option value="sepia">Seepia</option>
+<option value="soft">Pehmeä</option>
+<option value="dark">Tumma</option>
+</select>
 
 </div>
 
@@ -1334,17 +1380,21 @@ if(!m) return;
 let chapter=parseInt(m[2]);
 let verse=parseInt(m[3]);
 
+let book = m[1].replace(/\./g,"").replace(/\s/g,"").toLowerCase();
+
 let prev=bible.find(x =>
 x.chapter==chapter &&
 x.verse==verse-1
 );
 
 let curr=bible.find(x =>
+x.book==book &&
 x.chapter==chapter &&
 x.verse==verse
 );
 
 let next=bible.find(x =>
+x.book==book &&
 x.chapter==chapter &&
 x.verse==verse+1
 );
@@ -1462,6 +1512,34 @@ showBibleChapter("gen",1);
 window.scrollTo(0,0);
 
 });
+
+document.getElementById("fontSelect").onchange=function(){
+
+let f=this.value;
+
+let family="Georgia, serif";
+
+if(f==="georgia") family="Georgia, serif";
+if(f==="garamond") family="Garamond, serif";
+if(f==="sans") family="Arial, sans-serif";
+
+document.querySelectorAll(".text").forEach(el=>{
+el.style.fontFamily=family;
+});
+
+};
+
+document.getElementById("bgSelect").onchange=function(){
+
+document.body.classList.remove("bg-sepia","bg-soft","bg-dark");
+
+let v=this.value;
+
+if(v==="sepia") document.body.classList.add("bg-sepia");
+if(v==="soft") document.body.classList.add("bg-soft");
+if(v==="dark") document.body.classList.add("bg-dark");
+
+};
 
 </script>
 
