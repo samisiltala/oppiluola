@@ -205,6 +205,24 @@ color:#666;
 margin-bottom:10px;
 }
 
+.bibleSlideLeft{
+animation:slideLeft 0.25s ease;
+}
+
+.bibleSlideRight{
+animation:slideRight 0.25s ease;
+}
+
+@keyframes slideLeft{
+from{transform:translateX(40px); opacity:0.3;}
+to{transform:translateX(0); opacity:1;}
+}
+
+@keyframes slideRight{
+from{transform:translateX(-40px); opacity:0.3;}
+to{transform:translateX(0); opacity:1;}
+}
+
 #menuOverlay{
 position:fixed;
 top:0;
@@ -1652,9 +1670,29 @@ let diff = touchEndX - touchStartX;
 if(Math.abs(diff) < 50) return;
 
 if(diff > 0){
+
 previousChapter();
+animateBible("right");
+
 }else{
+
 nextChapter();
+animateBible("left");
+
+}
+
+}
+
+function animateBible(direction){
+
+let panel = document.querySelector("#biblePanel .text");
+
+panel.classList.remove("bibleSlideLeft","bibleSlideRight");
+
+if(direction==="left"){
+panel.classList.add("bibleSlideLeft");
+}else{
+panel.classList.add("bibleSlideRight");
 }
 
 }
